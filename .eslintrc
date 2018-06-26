@@ -1,0 +1,4 @@
+{
+  "extends": ["react-app", "airbnb"],
+  "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION__"] }],
+}

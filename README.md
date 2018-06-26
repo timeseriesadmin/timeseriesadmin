@@ -1,3 +1,16 @@
+# InfAdmin
+
+## Decisions
+
+- connect multiple components approach advised by https://redux.js.org/faq/react-redux#react-multiple-components
+
+## TODO
+
+- encrypt cookies and create some kind of security for cookie saved content
+- clean results cache on each app reload, or implement own persistence solution e.g. cookies
+
+# Create React App default readme
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
