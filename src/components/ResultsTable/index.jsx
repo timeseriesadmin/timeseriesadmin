@@ -11,7 +11,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
 
 function getSorting(order, orderBy) {
@@ -38,13 +37,6 @@ class EnhancedTableHead extends React.Component<HeadProps> {
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell>
           {headers.map((cell, index) => {
             return (
               <TableCell
@@ -205,9 +197,6 @@ class ResultsTable extends React.Component<Props, State> {
                       key={index}
                       selected={isSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={isSelected} />
-                      </TableCell>
                       {row.map((cell, index) => (
                         <TableCell key={index} padding="dense" numeric>{cell}</TableCell>
                       ))}
