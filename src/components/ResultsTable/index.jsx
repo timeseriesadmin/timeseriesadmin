@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import gql from 'graphql-tag';
+// $FlowFixMe
 import { compose, graphql } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -19,12 +20,9 @@ function getSorting(order, orderBy) {
 
 type HeadProps = {
   headers: string[],
-  onSelectAllClick: Function,
   onRequestSort: Function,
   order: 'asc' | 'desc',
   orderBy: number,
-  numSelected: number,
-  rowCount: number,
 };
 class EnhancedTableHead extends React.Component<HeadProps> {
   createSortHandler = property => event => {
@@ -32,7 +30,7 @@ class EnhancedTableHead extends React.Component<HeadProps> {
   };
 
   render() {
-    const { headers, onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
+    const { headers, order, orderBy } = this.props;
 
     return (
       <TableHead>
@@ -114,35 +112,6 @@ class ResultsTable extends React.Component<Props, State> {
     this.setState({ order, orderBy });
   };
 
-  handleSelectAllClick = (event, checked) => {
-    if (checked) {
-      this.setState(state => ({ selected: this.props.data.map(n => n.id) }));
-      return;
-    }
-    this.setState({ selected: [] });
-  };
-
-  handleClick = (event, id) => {
-    const { selected } = this.state;
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    this.setState({ selected: newSelected });
-  };
-
   handleChangePage = (event, page) => {
     this.setState({ page });
   };
@@ -150,8 +119,6 @@ class ResultsTable extends React.Component<Props, State> {
   handleChangeRowsPerPage = event => {
     this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
   };
-
-  isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
     const { classes, data } = this.props;
@@ -173,12 +140,9 @@ class ResultsTable extends React.Component<Props, State> {
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
               onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
               headers={headers}
             />
             <TableBody>
@@ -186,16 +150,12 @@ class ResultsTable extends React.Component<Props, State> {
                 .sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isSelected = this.isSelected(index);
                   return (
                     <TableRow
                       hover
-                      onClick={event => this.handleClick(event, index)}
                       role="checkbox"
-                      aria-checked={isSelected}
                       tabIndex={-1}
                       key={index}
-                      selected={isSelected}
                     >
                       {row.map((cell, index) => (
                         <TableCell key={index} padding="dense" numeric>{cell}</TableCell>
