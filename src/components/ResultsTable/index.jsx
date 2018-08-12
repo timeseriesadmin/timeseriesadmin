@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 
 function getSorting(order, orderBy) {
-  return order === 'desc' ? (a, b) => b[orderBy] - a[orderBy] : (a, b) => a[orderBy] - b[orderBy];
+  return order === 'desc' ? (a, b) => a[orderBy] > b[orderBy] : (a, b) => b[orderBy] > a[orderBy];
 }
 
 type HeadProps = {
