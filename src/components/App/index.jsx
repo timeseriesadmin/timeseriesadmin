@@ -49,6 +49,21 @@ type Props = {
 };
 const App = (props: Props) => {
   const { classes } = props;
+  let updateReady = false;
+
+  let ipcRenderer;
+  let installUpdates;
+  if (process.env.REACT_APP_ELECTRON) {
+    ipcRenderer = require('electron').ipcRenderer;
+
+    ipcRenderer.on('updateReady', function(event, text) {
+      updateReady = true;
+    });
+
+    installUpdates = (event) => {
+      ipcRenderer.send('quitAndInstall');
+    };
+  }
 
   return (
     <div className={classes.root}>
@@ -59,6 +74,11 @@ const App = (props: Props) => {
           </Typography>
           <Typography variant="title" color="inherit" className={classes.flex}>
             Version: <span id="version">{process.env.REACT_APP_VERSION}</span>
+            {process.env.REACT_APP_ELECTRON && updateReady &&
+              <Button onClick={installUpdates}>
+              Update
+              </Button>
+            }
           </Typography>
         </Toolbar>
       </AppBar>

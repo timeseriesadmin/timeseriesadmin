@@ -9,6 +9,8 @@
 - encrypt cookies and create some kind of security for cookie saved content
 - clean results cache on each app reload, or implement own persistence solution e.g. cookies
 - Cookies seems to be not working in Electron App
+- Support Electron autoUpdater: https://github.com/electron-userland/electron-builder/issues/3053#issuecomment-401001573
+- add `APP_ELECTRON=true` to preelectron:stag and prod, it doesn't work now because of misconfigured updates
 
 ## Electron
 

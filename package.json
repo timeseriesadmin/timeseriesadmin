@@ -1,5 +1,7 @@
 {
   "name": "infadmin-flow",
+  "description": "InfuxDB query editor",
+  "author": "Jan Grzegorowski",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,6 +11,7 @@
     "apollo-client": "^2.3.8",
     "apollo-link-state": "^0.4.1",
     "axios": "^0.18.0",
+    "electron-updater": "^3.1.1",
     "final-form": "^4.9.1",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
@@ -27,15 +30,15 @@
   },
   "scripts": {
     "start": "APP_VERSION=$(git describe --abbrev=0 --tags) react-scripts start",
-    "build": "react-scripts build",
+    "build": "APP_VERSION=$(git describe --abbrev=0 --tags) react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
-    "electron": "APP_VERSION=$(git describe --abbrev=0 --tags);APP_ELECTRON=true electron .",
+    "electron": "electron .",
     "preelectron:stag": "yarn build",
-    "electron:stag": "APP_VERSION=$(git describe --abbrev=0 --tags);APP_ELECTRON=true electron-builder -m -c.compression=store -c.extraMetadata.main=build/electron.js",
+    "electron:stag": "electron-builder -m -c.compression=store -c.extraMetadata.main=build/electron.js",
     "preelectron:prod": "yarn build",
-    "electron:prod": "APP_VERSION=$(git describe --abbrev=0 --tags);APP_ELECTRON=true electron-builder -m -c.extraMetadata.main=build/electron.js"
+    "electron:prod": "electron-builder -m -c.extraMetadata.main=build/electron.js"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
