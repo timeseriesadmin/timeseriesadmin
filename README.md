@@ -6,12 +6,16 @@
 
 ## TODO
 
-- encrypt cookies and create some kind of security for cookie saved content
-- clean results cache on each app reload, or implement own persistence solution e.g. cookies
-- Cookies seems to be not working in Electron App
-- Support Electron autoUpdater: https://github.com/electron-userland/electron-builder/issues/3053#issuecomment-401001573
-- add `APP_ELECTRON=true` to preelectron:stag and prod, it doesn't work now because of misconfigured updates
-- secure localStorage e.g. with password encryption of stored data (?) see: https://stackoverflow.com/questions/3220660/local-storage-vs-cookies
+- CORE: writing data
+- CORE: error handling
+- UI: Add examples
+- UX: Query log
+- UX: cmd+enter submit
+- UX: opt-in password saving
+- UX: password show/hide
+- CORE: Support Electron autoUpdater: https://github.com/electron-userland/electron-builder/issues/3053#issuecomment-401001573
+- CORE: add `APP_ELECTRON=true` to preelectron:stag and prod, it doesn't work now because of misconfigured updates
+- CORE: secure localStorage e.g. with password encryption of stored data (?) see: https://stackoverflow.com/questions/3220660/local-storage-vs-cookies
 
 ## Electron
 
