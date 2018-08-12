@@ -26,14 +26,16 @@
     "react-scripts": "^1.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "APP_VERSION=$(git describe --abbrev=0 --tags) react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
-    "electron": "electron .",
-    "electron:prod": "electron-builder -m -c.extraMetadata.main=build/electron.js",
-    "preelectron:prod": "yarn build"
+    "electron": "APP_VERSION=$(git describe --abbrev=0 --tags);APP_ELECTRON=true electron .",
+    "preelectron:stag": "yarn build",
+    "electron:stag": "APP_VERSION=$(git describe --abbrev=0 --tags);APP_ELECTRON=true electron-builder -m -c.compression=store -c.extraMetadata.main=build/electron.js",
+    "preelectron:prod": "yarn build",
+    "electron:prod": "APP_VERSION=$(git describe --abbrev=0 --tags);APP_ELECTRON=true electron-builder -m -c.extraMetadata.main=build/electron.js"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -59,7 +61,7 @@
       "build/**/*",
       "node_modules/**/*"
     ],
-    "directories":{
+    "directories": {
       "buildResources": "assets"
     },
     "mac": {

@@ -1,5 +1,5 @@
 // @flow
-import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Route } from 'react-router-dom';
@@ -56,6 +56,9 @@ const App = (props: Props) => {
         <Toolbar disableGutters className={classes.toolbar}>
           <Typography variant="title" color="inherit" className={classes.flex}>
             Influx Admin
+          </Typography>
+          <Typography variant="title" color="inherit" className={classes.flex}>
+            Version: <span id="version">{process.env.REACT_APP_VERSION}</span>
           </Typography>
         </Toolbar>
       </AppBar>
