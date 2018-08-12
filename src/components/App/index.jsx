@@ -1,5 +1,5 @@
 // @flow
-import { AppBar, Toolbar, Typography, Button } from '@material-ui/core';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Route } from 'react-router-dom';
@@ -14,16 +14,21 @@ const styles = theme => ({
     position: 'relative',
     width: '100%',
     zIndex: 1,
+    minHeight: '100vh',
   },
   flex: {
     flex: 1,
   },
   toolbar: {
     ...theme.mixins.toolbar,
-    paddingLeft: 0,
-    [theme.breakpoints.up('md')]: {
-      paddingLeft: theme.spacing.unit * 2,
-    },
+    paddingLeft: theme.spacing.unit * 2,
+    // paddingLeft: 0,
+    // [theme.breakpoints.up('md')]: {
+    //   paddingLeft: theme.spacing.unit * 2,
+    // },
+  },
+  rightPanel: {
+    paddingRight: theme.spacing.unit * 2,
   },
   content: {
     maxWidth: '100%',
@@ -49,11 +54,11 @@ type Props = {
 };
 const App = (props: Props) => {
   const { classes } = props;
-  let updateReady = false;
+  // let updateReady = false;
 
-  let ipcRenderer;
-  let installUpdates;
-  if (process.env.REACT_APP_ELECTRON) {
+  // let ipcRenderer;
+  // let installUpdates;
+  /*if (process.env.REACT_APP_ELECTRON) {
     ipcRenderer = require('electron').ipcRenderer;
 
     ipcRenderer.on('updateReady', function(event, text) {
@@ -63,7 +68,7 @@ const App = (props: Props) => {
     installUpdates = (event) => {
       ipcRenderer.send('quitAndInstall');
     };
-  }
+  }*/
 
   return (
     <div className={classes.root}>
@@ -72,13 +77,13 @@ const App = (props: Props) => {
           <Typography variant="title" color="inherit" className={classes.flex}>
             Influx Admin
           </Typography>
-          <Typography variant="title" color="inherit" className={classes.flex}>
-            Version: <span id="version">{process.env.REACT_APP_VERSION}</span>
-            {process.env.REACT_APP_ELECTRON && updateReady &&
+          <Typography variant="caption" color="inherit" className={classes.rightPanel}>
+            ver. <span id="version">{process.env.REACT_APP_VERSION}</span>
+            {/*process.env.REACT_APP_ELECTRON && updateReady &&
               <Button onClick={installUpdates}>
               Update
               </Button>
-            }
+            */}
           </Typography>
         </Toolbar>
       </AppBar>

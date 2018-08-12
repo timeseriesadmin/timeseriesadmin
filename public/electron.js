@@ -1,6 +1,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require('electron');
-const { autoUpdater } = require('electron-updater');
+// const { autoUpdater } = require('electron-updater');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -37,18 +37,18 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', function () {
   createWindow();
-  autoUpdater.checkForUpdates();
+  // autoUpdater.checkForUpdates();
 });
 
 // when the update has been downloaded and is ready to be installed, notify the BrowserWindow
-autoUpdater.on('update-downloaded', (info) => {
-  mainWindow.webContents.send('updateReady');
-});
+// autoUpdater.on('update-downloaded', (info) => {
+  // mainWindow.webContents.send('updateReady');
+// });
 
 // when receiving a quitAndInstall signal, quit and install the new version ;)
-ipcMain.on('quitAndInstall', (event, arg) => {
-  autoUpdater.quitAndInstall();
-});
+// ipcMain.on('quitAndInstall', (event, arg) => {
+  // autoUpdater.quitAndInstall();
+// });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
