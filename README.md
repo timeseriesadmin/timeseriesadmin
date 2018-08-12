@@ -8,6 +8,13 @@
 
 - encrypt cookies and create some kind of security for cookie saved content
 - clean results cache on each app reload, or implement own persistence solution e.g. cookies
+- Cookies seems to be not working in Electron App
+
+## Electron
+
+Distribution configuration based on https://medium.freecodecamp.org/building-an-electron-application-with-create-react-app-97945861647c and https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3.
+
+Check `electron:prod` command it has to be updated to work properly.
 
 # Create React App default readme
 

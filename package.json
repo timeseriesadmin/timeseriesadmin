@@ -29,11 +29,17 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
+    "electron": "electron .",
+    "electron:prod": "electron-builder -m -c.extraMetadata.main=build/electron.js",
+    "preelectron:prod": "yarn build"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "benchmark": "^2.1.4",
+    "electron": "^2.0.7",
+    "electron-builder": "^20.27.1",
     "eslint": "^4.1.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-config-react-app": "^2.1.0",
@@ -44,5 +50,20 @@
     "eslint-plugin-react": "^7.1.0",
     "flow-bin": "^0.75.0",
     "flow-typed": "^2.5.1"
+  },
+  "main": "public/electron.js",
+  "homepage": ".",
+  "build": {
+    "appId": "pl.jmarceli.infadmin",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories":{
+      "buildResources": "assets"
+    },
+    "mac": {
+      "category": "utilities"
+    }
   }
 }
