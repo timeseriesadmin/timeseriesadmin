@@ -2,11 +2,11 @@
 // Local apollo-link-state resolvers
 // import gql from 'graphql-tag';
 import { query } from '../providers/influx';
-import Cookies from 'js-cookie';
+import storage from '../helpers/storage';
 
 import type { QueryParams } from '../providers/influx/types';
 
-const form = Cookies.get('form');
+const form = storage.get('form');
 export const defaults = {
   form: !form ? null : { url: '', u: '', p: '', db: '', q: '', ...JSON.parse(form) },
   results: null,
@@ -19,7 +19,7 @@ export const resolvers = {
         ...submitted,
         __typename: 'FormData',
       };
-      Cookies.set('form', JSON.stringify(form))
+      storage.set('form', JSON.stringify(form))
       cache.writeData({
         data: {
           form,

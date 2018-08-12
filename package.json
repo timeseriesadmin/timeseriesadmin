@@ -16,7 +16,6 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "history": "^4.7.2",
-    "js-cookie": "^2.2.0",
     "lodash": "^4.17.10",
     "qs": "^6.5.2",
     "react": "^16.4.1",
@@ -33,11 +32,11 @@
     "build": "APP_VERSION=$(git describe --abbrev=0 --tags) react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "start:electron": "APP_ELECTRON=true APP_VERSION=$(git describe --abbrev=0 --tags) react-scripts start",
+    "build:electron": "APP_ELECTRON=true APP_VERSION=$(git describe --abbrev=0 --tags) react-scripts build",
     "electron:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
     "electron": "electron .",
-    "preelectron:stag": "yarn build",
     "electron:stag": "electron-builder -m -c.compression=store -c.extraMetadata.main=build/electron.js",
-    "preelectron:prod": "yarn build",
     "electron:prod": "electron-builder -m -c.extraMetadata.main=build/electron.js"
   },
   "devDependencies": {
@@ -68,7 +67,8 @@
       "buildResources": "assets"
     },
     "mac": {
-      "category": "utilities"
+      "category": "utilities",
+      "type": "development"
     }
   }
 }
