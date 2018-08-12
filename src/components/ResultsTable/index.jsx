@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import gql from 'graphql-tag';
-// $FlowFixMe
 import { compose, graphql } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -14,12 +13,13 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 
-const getSorting = (order: 'asc'|'desc', orderBy: number) => {
-  return order === 'desc' ? (a, b) => b[orderBy] < a[orderBy] : (a, b) => a[orderBy] < b[orderBy];
+function getSorting(order, orderBy) {
+  return order === 'desc' ? (a, b) => b[orderBy] - a[orderBy] : (a, b) => a[orderBy] - b[orderBy];
 }
 
 type HeadProps = {
   headers: string[],
+  onSelectAllClick: Function,
   onRequestSort: Function,
   order: 'asc' | 'desc',
   orderBy: number,
@@ -32,7 +32,7 @@ class EnhancedTableHead extends React.Component<HeadProps> {
   };
 
   render() {
-    const { headers, order, orderBy } = this.props;
+    const { headers, onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
 
     return (
       <TableHead>
@@ -114,6 +114,35 @@ class ResultsTable extends React.Component<Props, State> {
     this.setState({ order, orderBy });
   };
 
+  handleSelectAllClick = (event, checked) => {
+    if (checked) {
+      this.setState(state => ({ selected: this.props.data.map(n => n.id) }));
+      return;
+    }
+    this.setState({ selected: [] });
+  };
+
+  handleClick = (event, id) => {
+    const { selected } = this.state;
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
+    this.setState({ selected: newSelected });
+  };
+
   handleChangePage = (event, page) => {
     this.setState({ page });
   };
@@ -121,6 +150,8 @@ class ResultsTable extends React.Component<Props, State> {
   handleChangeRowsPerPage = event => {
     this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
   };
+
+  isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
     const { classes, data } = this.props;
@@ -131,39 +162,11 @@ class ResultsTable extends React.Component<Props, State> {
       return null;
     }
 
-    // filtering empty columns
-    let nonEmptyCols = new Set();
-    // TODO: move this to graphql decorator to recompute only on data changes
-    let results = data.results.data.split('\n')
-      .filter(line => line !== ''); // remove empty lines
-    let headers = results.shift().split(',');
+    const results = data.results.data.split('\n')
+      .filter(line => line !== '') // remove empty lines
+      .map(line => line.split(',')); // create array of values for each line
 
-    results = results.map(line => {
-        const cells = line.split(',');
-        // filtering empty columns
-        cells.forEach((val, index) => {
-          if (val !== '') {
-            nonEmptyCols.add(index);
-          }
-        });
-        return cells;
-      }); // create array of values for each line
-
-    // filtering empty columns
-    headers = headers.filter((val, index) => {
-      return nonEmptyCols.has(index);
-    });
-    results = results.map(line => {
-      return line.reduce((acc, val, index) => {
-        if (nonEmptyCols.has(index)) {
-          acc.push(val);
-        }
-        return acc;
-      }, []);
-    });
-
-    results.sort(getSorting(order, orderBy));
-    results = results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    const headers = results.shift();
 
     return (
       <Paper className={classes.root}>
@@ -173,18 +176,26 @@ class ResultsTable extends React.Component<Props, State> {
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
+              onSelectAllClick={this.handleSelectAllClick}
               onRequestSort={this.handleRequestSort}
               rowCount={data.length}
               headers={headers}
             />
             <TableBody>
-              {results.map((row, index) => {
+              {results
+                .sort(getSorting(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isSelected = this.isSelected(index);
                   return (
                     <TableRow
                       hover
+                      onClick={event => this.handleClick(event, index)}
                       role="checkbox"
+                      aria-checked={isSelected}
                       tabIndex={-1}
                       key={index}
+                      selected={isSelected}
                     >
                       {row.map((cell, index) => (
                         <TableCell key={index} padding="dense" numeric>{cell}</TableCell>
