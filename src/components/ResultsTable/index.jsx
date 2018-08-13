@@ -97,7 +97,7 @@ class ResultsTable extends React.Component<Props, State> {
       orderBy: 0,
       selected: [],
       page: 0,
-      rowsPerPage: 100,
+      rowsPerPage: 10,
     };
   }
 
@@ -121,19 +121,12 @@ class ResultsTable extends React.Component<Props, State> {
   };
 
   render() {
-    const { classes, data } = this.props;
+    const { classes, data: { results, headers } } = this.props;
     const { order, orderBy, selected, rowsPerPage, page } = this.state;
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
-    if (!data || !data.results || !data.results.data) {
+    if (!results || !results.length) {
       return null;
     }
-
-    const results = data.results.data.split('\n')
-      .filter(line => line !== '') // remove empty lines
-      .map(line => line.split(',')); // create array of values for each line
-
-    const headers = results.shift();
 
     return (
       <Paper className={classes.root}>
@@ -163,11 +156,6 @@ class ResultsTable extends React.Component<Props, State> {
                     </TableRow>
                   );
                 })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell padding="dense"  colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </div>
@@ -200,5 +188,18 @@ const GET_RESULTS = gql`
 `;
 
 export default compose(
-  graphql(GET_RESULTS),
+  graphql(GET_RESULTS, { 
+    props: ({ data }) => {
+      let opts = { data: { ...data, results: [], headers: [] } };
+      if (!data.results) return opts;
+
+      opts.data.results = data.results.data.split('\n')
+        .filter(line => line !== '') // remove empty lines
+        .map(line => line.split(',')); // create array of values for each line
+
+      opts.data.headers = opts.data.results.shift();
+
+      return opts;
+    },
+  }),
 )(withStyles(styles)(ResultsTable));
