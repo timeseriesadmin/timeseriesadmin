@@ -6,6 +6,7 @@
 
 ## TODO
 
+- UX: copy/paste/selectAll shortcuts https://pracucci.com/atom-electron-enable-copy-and-paste.html
 - CORE: writing data
 - CORE: error handling
 - UI: Add examples

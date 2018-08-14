@@ -20,6 +20,7 @@ const typeDefs = `
   type Results {
     type: String
     data: String
+    error: String
   }
   type Mutation {
     influxQuery(url: String!, u: String, p: String, db: String, q: String!): Boolean

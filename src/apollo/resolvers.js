@@ -3,12 +3,15 @@
 // import gql from 'graphql-tag';
 import { query } from '../providers/influx';
 import storage from '../helpers/storage';
+import { ApolloError } from 'apollo-client';
 
 import type { QueryParams } from '../providers/influx/types';
 
 const form = storage.get('form');
 export const defaults = {
-  form: !form ? null : { url: '', u: '', p: '', db: '', q: '', ...JSON.parse(form) },
+  form: !form ? null : {
+    url: '', u: '', p: '', db: '', q: '', __typename: 'FormData', ...JSON.parse(form)
+  },
   results: null,
 };
 
@@ -41,13 +44,30 @@ export const resolvers = {
         q += ' limit 10'; // TODO: increase LIMIT value
       }
 
-      const result = await query({ url, u, p, db, q, responseType: 'csv' });
+
+      let result;
+      try {
+        result = await query({ url, u, p, db, q, responseType: 'csv' });
+      } catch (error) {
+        cache.writeData({
+          data: {
+            results: {
+              data: null,
+              type: 'error',
+              error: JSON.stringify({ details: error, data: { q } }),
+              __typename: 'Results',
+            },
+          },
+        });
+        return null;
+      }
 
       cache.writeData({
         data: {
           results: {
             data: result.data,
             type: 'csv',
+            error: null,
             __typename: 'Results',
           },
         },
