@@ -14,7 +14,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import Inspector from 'react-inspector';
+import QueryError from '../QueryError';
 
 function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => a[orderBy] > b[orderBy] : (a, b) => b[orderBy] > a[orderBy];
@@ -71,9 +71,6 @@ const styles = theme => ({
     width: '100%',
     marginTop: theme.spacing.unit * 3,
   },
-  error: {
-    padding: theme.spacing.unit * 2,
-  },
   tableWrapper: {
     overflowX: 'auto',
   },
@@ -127,44 +124,9 @@ class ResultsTable extends React.Component<Props, State> {
     const { order, orderBy, rowsPerPage, page } = this.state;
 
     if (error) {
-      const errorData = JSON.parse(error);
-      let msg;
-      try {
-        const response = errorData.error.response.data.split('\n');
-        if (response.length > 1) {
-          try {
-            msg = JSON.parse(response[1]);
-          } catch(error) {
-            msg = response[1];
-          }
-        } else {
-          msg = JSON.parse(response);
-        }
-      } catch(error) {
-        msg = 'Unknown error, please check Error details section';
-      }
-
       return (
         <Paper className={classes.root}>
-          <div className={classes.error}>
-            <Typography variant="headline" component="h3" style={{ marginBottom: 8 }}>
-              Error message
-            </Typography>
-            <Typography component="p">
-              {msg}
-            </Typography>
-            <Typography variant="subheading" component="h4" style={{ margin: '18px 0 6px' }}>
-              Error details
-            </Typography>
-            <Typography variant="caption" component="p" style={{ margin: '6px 0 6px' }}>
-              You should probably look at "response" key
-            </Typography>
-            <Inspector
-              theme="chromeLight"
-              data={errorData.details}
-              expandLevel={2}
-            />
-          </div>
+          <QueryError error={error} />
         </Paper>
       );
     }
