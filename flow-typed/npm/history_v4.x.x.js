@@ -1,5 +1,5 @@
-// flow-typed signature: eb8bd974b677b08dfca89de9ac05b60b
-// flow-typed version: 43b30482ac/history_v4.x.x/flow_>=v0.25.x
+// flow-typed signature: c4269b3834a09058b9e01393a6a21a98
+// flow-typed version: e3b0d72636/history_v4.x.x/flow_>=v0.25.x
 
 declare module "history/createBrowserHistory" {
   declare function Unblock(): void;
@@ -19,8 +19,8 @@ declare module "history/createBrowserHistory" {
     length: number,
     location: BrowserLocation,
     action: Action,
-    push: (path: string, Array<mixed>) => void,
-    replace: (path: string, Array<mixed>) => void,
+    push: (path: string, state?: {}) => void,
+    replace: (path: string, state?: {}) => void,
     go: (n: number) => void,
     goBack: () => void,
     goForward: () => void,
@@ -28,7 +28,6 @@ declare module "history/createBrowserHistory" {
     block: (message: string) => Unblock,
     block: ((location: BrowserLocation, action: Action) => string) => Unblock,
     push: (path: string) => void,
-    replace: (path: string) => void,
   };
 
   declare type HistoryOpts = {
@@ -63,8 +62,8 @@ declare module "history/createMemoryHistory" {
     action: Action,
     index: number,
     entries: Array<string>,
-    push: (path: string, Array<mixed>) => void,
-    replace: (path: string, Array<mixed>) => void,
+    push: (path: string, state?: {}) => void,
+    replace: (path: string, state?: {}) => void,
     go: (n: number) => void,
     goBack: () => void,
     goForward: () => void,
@@ -104,8 +103,8 @@ declare module "history/createHashHistory" {
     length: number,
     location: HashLocation,
     action: Action,
-    push: (path: string, Array<mixed>) => void,
-    replace: (path: string, Array<mixed>) => void,
+    push: (path: string, state?: {}) => void,
+    replace: (path: string, state?: {}) => void,
     go: (n: number) => void,
     goBack: () => void,
     goForward: () => void,
