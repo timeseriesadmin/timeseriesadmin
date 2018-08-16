@@ -11,7 +11,6 @@ export const defaults = {
   form: !form ? null : {
     url: '', u: '', p: '', db: '', q: '', __typename: 'FormData', ...JSON.parse(form)
   },
-  results: null,
 };
 
 export const resolvers = {
@@ -32,46 +31,15 @@ export const resolvers = {
     },
     influxQuery: async (_: void, { url, u, p, db, q }: QueryParams, { cache }: any): Promise<null> => {
       q = q.toLowerCase();
-      // cache.writeData({
-        // data: {
-          // connection: { url, u, p, db },
-        // },
-      // });
 
       // ensure LIMIT if not provided
       if (q.indexOf('select') === 0 && q.indexOf('limit') === -1) {
-        q += ' limit 10'; // TODO: increase LIMIT value
+        q += ' limit 100'; // TODO: increase LIMIT value
       }
 
+      const queryResult = await query({ url, u, p, db, q, responseType: 'csv' });
 
-      let result;
-      try {
-        result = await query({ url, u, p, db, q, responseType: 'csv' });
-      } catch (error) {
-        cache.writeData({
-          data: {
-            results: {
-              data: null,
-              type: 'error',
-              error: JSON.stringify({ details: error, data: { q } }),
-              __typename: 'Results',
-            },
-          },
-        });
-        return null;
-      }
-
-      cache.writeData({
-        data: {
-          results: {
-            data: result.data,
-            type: 'csv',
-            error: null,
-            __typename: 'Results',
-          },
-        },
-      });
-      return null;
+      return queryResult;
     },
  },
 };

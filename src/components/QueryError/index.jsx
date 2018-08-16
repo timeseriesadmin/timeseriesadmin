@@ -3,7 +3,9 @@ import React from 'react';
 import Inspector from 'react-inspector';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
+import { get } from 'lodash';
+
+import type { ApolloError } from 'apollo-client';
 
 const styles = theme => ({
   root: {
@@ -11,60 +13,50 @@ const styles = theme => ({
   },
 });
 
-const stringifyError = (errorObj: any): string => {
-  let msg;
-  // TODO: refactor to use less try-catch'es ...
-  try {
-    const response = errorObj.details.response.data.split('\n');
-    if (response.length > 1) {
-      try {
-        msg = JSON.parse(response[1]);
-      } catch(error) {
-        msg = response[1];
-      }
-    } else {
-      msg = JSON.parse(response);
-    }
-  } catch(error) {
-    try {
-      msg = errorObj.details.response.statusText;
-    } catch(error) {
-      msg = 'Unknown error, please check Error details section';
-    }
+// Converts ApolloError to string
+// TODO: cover all possible cases
+const parseErrorMessage = (error: ApolloError): string => {
+  const errorStatus = get(error, 'networkError.response.status', null);
+  const errorMessage = get(error, 'networkError.response.data', null);
+
+  if (errorStatus === 400 && errorMessage) {
+    // this is probably a bug in query string
+    // TODO: it should possible to show some suggestions connected with fixing it
+    return `${errorStatus}: ${errorMessage}`;
   }
-  return msg;
+
+  const errorDetails = get(error, 'networkError.response.data.error', null);
+  if (errorDetails) {
+    return `${errorStatus ? errorStatus + ': ' : ''}${errorDetails}`;
+  }
+
+  return `${errorStatus ? errorStatus + ': ' : ''}${errorMessage}`;
 };
 
 type Props = {
   classes: any,
-  error: string, // error details
+  error: ApolloError,
 };
-const QueryError = ({ classes, error }: Props) => {
-  const errorObj = JSON.parse(error);
-
-  const errorText = stringifyError(errorObj);
-
-  return (
-    <div className={classes.root}>
-      <Typography variant="headline" component="h3" style={{ marginBottom: 8 }}>
-        Error message
-      </Typography>
-      <Typography component="p">
-        {errorText}
-      </Typography>
-      <Typography variant="subheading" component="h4" style={{ margin: '18px 0 6px' }}>
-        Error details
-      </Typography>
-      <Typography variant="caption" component="p" style={{ margin: '6px 0 6px' }}>
-        You should probably look at "response" key
-      </Typography>
-      <Inspector
-        theme="chromeLight"
-        data={errorObj.details}
-        expandLevel={2}
-      />
-    </div>
-  );
-};
+const QueryError = ({ classes, error }: Props) => (
+  <div className={classes.root}>
+    <Typography variant="headline" component="h3" style={{ marginBottom: 8 }}>
+      Error message
+    </Typography>
+    <Typography component="p">
+      {parseErrorMessage(error)}
+    </Typography>
+    <Typography variant="subheading" component="h4" style={{ margin: '18px 0 6px' }}>
+      Error details
+    </Typography>
+    <Typography variant="caption" component="p" style={{ margin: '6px 0 6px' }}>
+      You should probably look at "response" key
+    </Typography>
+    <Inspector
+      theme="chromeLight"
+      data={error.networkError}
+      expandLevel={2}
+    />
+  </div>
+);
 
 export default withStyles(styles)(QueryError);

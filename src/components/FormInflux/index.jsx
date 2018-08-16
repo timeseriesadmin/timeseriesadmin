@@ -1,11 +1,9 @@
 // @flow
 import React from 'react';
 import gql from 'graphql-tag';
-// $FlowFixMe
-import { withApollo, compose, graphql } from 'react-apollo';
+import { Query } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import { Button, Grid } from '@material-ui/core';
-// import CircularProgress from '@material-ui/core/CircularProgress';
 import { Form, Field } from 'react-final-form'
 
 import { composeValidators, isRequired } from '../../helpers/validators';
@@ -31,111 +29,94 @@ const styles = (theme: Object) => ({
 
 type Props = {
   classes: any,
-  client: any,
-  initialValues: any,
+  onSubmit: Function,
 };
 const FormInflux = (props: Props) => {
-  const { classes, client, initialValues } = props;
+  const { classes, onSubmit } = props;
 
-  const onSubmit = async (values): Promise<void> => {
-    client.mutate({
-      mutation: gql`
-        mutation updateForm($url: String, $u: String, $p: String, $db: String, $q: String) {
-          updateForm(url: $url, u: $u, p: $p, db: $db, q: $q) @client 
-        }
-      `,
-      variables: values,
-    });
-    await client.mutate({
-      mutation: gql`
-        mutation influxQuery($url: String, $u: String, $p: String, $db: String, $q: String) {
-          influxQuery(url: $url, u: $u, p: $p, db: $db, q: $q) @client
-        }
-      `,
-      fetchPolicy: 'no-cache',
-      variables: values,
-    });
-  };
-
-              // {submitting ? (
-                // <CircularProgress className={classes.downloading} size={24} thickness={7} />
-              // ) : ''}
   return (
-    <Form onSubmit={onSubmit}
-      initialValues={initialValues}
-      render={({ handleSubmit, form, submitting, pristine, values }) => (
-        <form onSubmit={handleSubmit} className={classes.form}>
-          <Grid container spacing={16}>
+    <Query query={GET_INITIAL} >
+      {({ loading, error, data }) => {
+      const initialValues = data ? data.form : {};
+      return (
+        <Form onSubmit={onSubmit}
+          initialValues={initialValues}
+          render={({ handleSubmit, form, submitting, pristine, values }) => (
+            <form onSubmit={handleSubmit} className={classes.form}>
+              <Grid container spacing={16}>
 
-            <Grid item xs={6}>
-              <Field
-                disabled={submitting}
-                name="url"
-                component={renderField}
-                label="Database URL"
-                validate={composeValidators(isRequired)}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Field
-                disabled={submitting}
-                name="u"
-                component={renderField}
-                label="User"
-              />
-            </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    disabled={submitting || loading}
+                    name="url"
+                    component={renderField}
+                    label="Database URL"
+                    validate={composeValidators(isRequired)}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    disabled={submitting || loading}
+                    name="u"
+                    component={renderField}
+                    label="User"
+                  />
+                </Grid>
 
-            <Grid item xs={6}>
-              <Field
-                disabled={submitting}
-                name="p"
-                component={renderField}
-                label="Password"
-                type="password"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Field
-                disabled={submitting}
-                name="db"
-                component={renderField}
-                label="Database"
-              />
-            </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    disabled={submitting || loading}
+                    name="p"
+                    component={renderField}
+                    label="Password"
+                    type="password"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    disabled={submitting || loading}
+                    name="db"
+                    component={renderField}
+                    label="Database"
+                  />
+                </Grid>
 
-            <Grid item xs={12}>
-              <Field
-                disabled={submitting}
-                name="q"
-                component={renderField}
-                label="Query"
-                validate={composeValidators(isRequired)}
-                multiline
-                rows={5}
-              />
-            </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    disabled={submitting || loading}
+                    name="q"
+                    component={renderField}
+                    label="Query"
+                    validate={composeValidators(isRequired)}
+                    multiline
+                    rows={5}
+                  />
+                </Grid>
 
-            <Grid item xs={12} className={classes.footer}>
-              <Button
-                disabled={submitting}
-                type="submit"
-                variant="contained"
-                color="secondary"
-                className={classes.submit}
-                classes={{root: classes.submit, disabled: classes.disabled}}
-              >
-                {submitting ? 'Executing query...' : 'Run query'}
-              </Button>
-            </Grid>
+                <Grid item xs={12} className={classes.footer}>
+                  <Button
+                    disabled={submitting || loading}
+                    type="submit"
+                    variant="contained"
+                    color="secondary"
+                    className={classes.submit}
+                    classes={{root: classes.submit, disabled: classes.disabled}}
+                  >
+                    {submitting ? 'Executing query...' : loading ? 'Loading saved' : 'Run query'}
+                  </Button>
+                </Grid>
 
-          </Grid>
-        </form>
-      )}
-    />
+              </Grid>
+            </form>
+          )}
+        />
+      );
+      }}
+    </Query>
   );
 };
 
-const initialValues = gql`
+const GET_INITIAL = gql`
   {
     form @client {
       url
@@ -147,10 +128,4 @@ const initialValues = gql`
   }
 `;
 
-export default withApollo(compose(
-  graphql(initialValues, {
-    props: ({ data }) => ({
-      initialValues: data.form
-    }),
-  }),
-)(withStyles(styles)(FormInflux)));
+export default withStyles(styles)(FormInflux);

@@ -17,18 +17,12 @@ const typeDefs = `
     db: String
     q: String
   }
-  type Results {
-    type: String
-    data: String
-    error: String
-  }
   type Mutation {
     influxQuery(url: String!, u: String, p: String, db: String, q: String!): Boolean
     updateForm(url: String!, u: String, p: String, db: String, q: String!): Boolean
   }
   type Query {
     connection: Connection
-    results: Results
     form: FormData
   }
 `;

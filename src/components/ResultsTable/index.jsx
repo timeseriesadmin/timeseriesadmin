@@ -76,9 +76,32 @@ const styles = theme => ({
   },
 });
 
+type parsedQuery = {
+  headers: string[],
+  results: Array<?string[]>,
+};
+const parseQueryResults = (resultsString: string): parsedQuery => {
+  let data = {
+    headers: [],
+    results: [],
+  };
+  // if (!data.results) return data;
+
+  data.results = resultsString.split('\n')
+    .filter(line => line !== '') // remove empty lines
+    .map(line => line.split(',')); // create array of values for each line
+
+  if (data.results.length > 0) {
+    data.headers = data.results.shift();
+  }
+
+  return data;
+};
+
 type Props = {
   classes: any,
-  data: any,
+  // data: any,
+  queryState: any,
 };
 type State = {
   order: 'asc'|'desc',
@@ -120,7 +143,8 @@ class ResultsTable extends React.Component<Props, State> {
   };
 
   render() {
-    const { classes, data: { results, headers, error } } = this.props;
+    console.log(this.props.queryState);
+    const { classes, queryState: { called, loading, data, error } } = this.props;//results, headers, error } } = this.props;
     const { order, orderBy, rowsPerPage, page } = this.state;
 
     if (error) {
@@ -130,6 +154,25 @@ class ResultsTable extends React.Component<Props, State> {
         </Paper>
       );
     }
+
+    if (!called) {
+      return (
+        <Paper className={classes.root}>
+          Go query InfluxDB!
+        </Paper>
+      );
+    }
+
+    if (loading) {
+      return (
+        <Paper className={classes.root}>
+          Executing query please wait...
+        </Paper>
+      );
+    }
+
+    // no point in parsing before error check
+    const { results, headers } = parseQueryResults(data.influxQuery.data);
 
     // TODO: maybe move query logic to ResultsTable so the errors will be automatically available
     // thanks to Apollo
@@ -197,33 +240,34 @@ class ResultsTable extends React.Component<Props, State> {
   }
 }
 
-const GET_RESULTS = gql`
-  {
-    results @client {
-      data
-      type
-      error
-    }
-  }
-`;
+// const GET_RESULTS = gql`
+//   {
+//     results @client {
+//       data
+//       type
+//       error
+//     }
+//   }
+// `;
 
-export default compose(
-  graphql(GET_RESULTS, { 
-    props: ({ data }) => {
-      let opts = { data: { ...data, results: [], headers: [] } };
-      if (!data.results) return opts;
+export default withStyles(styles)(ResultsTable);
+// export default compose(
+//   graphql(GET_RESULTS, { 
+//     props: ({ data }) => {
+//       let opts = { data: { ...data, results: [], headers: [] } };
+//       if (!data.results) return opts;
 
-      if (data.results.error) {
-        opts.data.error = data.results.error;
-        return opts;
-      }
-      opts.data.results = data.results.data.split('\n')
-        .filter(line => line !== '') // remove empty lines
-        .map(line => line.split(',')); // create array of values for each line
+//       if (data.results.error) {
+//         opts.data.error = data.results.error;
+//         return opts;
+//       }
+//       opts.data.results = data.results.data.split('\n')
+//         .filter(line => line !== '') // remove empty lines
+//         .map(line => line.split(',')); // create array of values for each line
 
-      opts.data.headers = opts.data.results.shift();
+//       opts.data.headers = opts.data.results.shift();
 
-      return opts;
-    },
-  }),
-)(withStyles(styles)(ResultsTable));
+//       return opts;
+//     },
+//   }),
+// )(withStyles(styles)(ResultsTable));
