@@ -124,7 +124,7 @@ class ResultsTable extends React.Component<Props, State> {
 
   render() {
     const { classes, data: { results, headers, error } } = this.props;
-    const { order, orderBy, selected, rowsPerPage, page } = this.state;
+    const { order, orderBy, rowsPerPage, page } = this.state;
 
     if (error) {
       const errorData = JSON.parse(error);
@@ -204,7 +204,6 @@ class ResultsTable extends React.Component<Props, State> {
                   return (
                     <TableRow
                       hover
-                      role="checkbox"
                       tabIndex={-1}
                       key={index}
                     >

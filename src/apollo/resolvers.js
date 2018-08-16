@@ -3,7 +3,6 @@
 // import gql from 'graphql-tag';
 import { query } from '../providers/influx';
 import storage from '../helpers/storage';
-import { ApolloError } from 'apollo-client';
 
 import type { QueryParams } from '../providers/influx/types';
 
