@@ -8,6 +8,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import QueryError from '../QueryError';
 import ResultsTableHead from '../ResultsTableHead';
@@ -23,6 +24,9 @@ const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
+  },
+  contentNoTable: {
+    padding: theme.spacing.unit * 4,
   },
   tableWrapper: {
     overflowX: 'auto',
@@ -95,14 +99,15 @@ class ResultsTable extends React.Component<Props, State> {
   };
 
   render() {
-    console.log(this.props.queryState);
-    const { classes, queryState: { called, loading, data, error } } = this.props;//results, headers, error } } = this.props;
+    const { classes, queryState: { called, loading, data, error } } = this.props;
     const { order, orderBy, rowsPerPage, page } = this.state;
 
     if (error) {
       return (
         <Paper className={classes.root}>
-          <QueryError error={error} />
+          <div className={classes.contentNoTable}>
+            <QueryError error={error} />
+          </div>
         </Paper>
       );
     }
@@ -110,7 +115,11 @@ class ResultsTable extends React.Component<Props, State> {
     if (!called) {
       return (
         <Paper className={classes.root}>
-          Go query InfluxDB!
+          <div className={classes.contentNoTable}>
+            <Typography variant="display1" component="p" style={{ textAlign: 'center' }}>
+              Go ahead and "RUN QUERY"!
+            </Typography>
+          </div>
         </Paper>
       );
     }
@@ -118,7 +127,14 @@ class ResultsTable extends React.Component<Props, State> {
     if (loading) {
       return (
         <Paper className={classes.root}>
-          Executing query please wait...
+          <div className={classes.contentNoTable}>
+            <div style={{ textAlign: 'center' }}>
+              <CircularProgress color="secondary" />
+              <Typography variant="headline">
+                Executing query please wait...
+              </Typography>
+            </div>
+          </div>
         </Paper>
       );
     }
@@ -126,17 +142,18 @@ class ResultsTable extends React.Component<Props, State> {
     // no point in parsing before error check
     const { results, headers } = parseQueryResults(data.influxQuery.data);
 
-    // TODO: maybe move query logic to ResultsTable so the errors will be automatically available
-    // thanks to Apollo
     if (!results || !results.length) {
       return (
         <Paper className={classes.root}>
-          <div className={classes.error}>
+          <div className={classes.contentNoTable}>
             <Typography variant="headline" component="h3" style={{ marginBottom: 8 }}>
               Empty server response
             </Typography>
             <Typography component="p">
               Maybe queried measurement doesn't exist ?
+            </Typography>
+            <Typography component="p">
+              Maybe you query only for TAGS (your query should contain at least one field) ?
             </Typography>
           </div>
         </Paper>

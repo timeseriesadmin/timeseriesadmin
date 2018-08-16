@@ -1,17 +1,10 @@
 // @flow
 import React from 'react';
 import Inspector from 'react-inspector';
-import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { get } from 'lodash';
 
 import type { ApolloError } from 'apollo-client';
-
-const styles = theme => ({
-  root: {
-    padding: theme.spacing.unit * 2,
-  },
-});
 
 // Converts ApolloError to string
 // TODO: cover all possible cases
@@ -34,11 +27,10 @@ const parseErrorMessage = (error: ApolloError): string => {
 };
 
 type Props = {
-  classes: any,
   error: ApolloError,
 };
-const QueryError = ({ classes, error }: Props) => (
-  <div className={classes.root}>
+const QueryError = ({ error }: Props) => (
+  <div>
     <Typography variant="headline" component="h3" style={{ marginBottom: 8 }}>
       Error message
     </Typography>
@@ -59,4 +51,4 @@ const QueryError = ({ classes, error }: Props) => (
   </div>
 );
 
-export default withStyles(styles)(QueryError);
+export default QueryError;
