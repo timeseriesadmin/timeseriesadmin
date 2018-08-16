@@ -5,6 +5,7 @@ import { Query } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import { Button, Grid } from '@material-ui/core';
 import { Form, Field } from 'react-final-form'
+import get from 'lodash/get';
 
 import { composeValidators, isRequired } from '../../helpers/validators';
 import { renderField } from '../../helpers/form';
@@ -37,7 +38,7 @@ const FormInflux = (props: Props) => {
   return (
     <Query query={GET_INITIAL} >
       {({ loading, error, data }) => {
-      const initialValues = data ? data.form : {};
+      const initialValues = get(data, 'form', {});
       return (
         <Form onSubmit={onSubmit}
           initialValues={initialValues}

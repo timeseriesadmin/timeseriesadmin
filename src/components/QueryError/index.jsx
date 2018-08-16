@@ -2,7 +2,7 @@
 import React from 'react';
 import Inspector from 'react-inspector';
 import Typography from '@material-ui/core/Typography';
-import { get } from 'lodash';
+import get from 'lodash/get';
 
 import type { ApolloError } from 'apollo-client';
 

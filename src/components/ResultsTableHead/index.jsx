@@ -13,7 +13,7 @@ type Props = {
   orderBy: number,
 };
 class ResultsTableHead extends React.Component<Props> {
-  createSortHandler = property => event => {
+  createSortHandler = (property: string) => (event: Event) => {
     this.props.onRequestSort(event, property);
   };
 
@@ -38,7 +38,7 @@ class ResultsTableHead extends React.Component<Props> {
                   <TableSortLabel
                     active={orderBy === index}
                     direction={order}
-                    onClick={this.createSortHandler(index)}
+                    onClick={this.createSortHandler(index.toString())}
                   >
                     {cell}
                   </TableSortLabel>
