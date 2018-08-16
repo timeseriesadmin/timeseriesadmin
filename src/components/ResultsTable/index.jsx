@@ -1,69 +1,22 @@
 // @flow
 import React from 'react';
-import gql from 'graphql-tag';
-// $FlowFixMe
-import { compose, graphql } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+
 import QueryError from '../QueryError';
+import ResultsTableHead from '../ResultsTableHead';
 
-function getSorting(order, orderBy) {
-  return order === 'desc' ? (a, b) => a[orderBy] > b[orderBy] : (a, b) => b[orderBy] > a[orderBy];
-}
-
-type HeadProps = {
-  headers: string[],
-  onRequestSort: Function,
-  order: 'asc' | 'desc',
-  orderBy: number,
-};
-class EnhancedTableHead extends React.Component<HeadProps> {
-  createSortHandler = property => event => {
-    this.props.onRequestSort(event, property);
-  };
-
-  render() {
-    const { headers, order, orderBy } = this.props;
-
-    return (
-      <TableHead>
-        <TableRow>
-          {headers.map((cell, index) => {
-            return (
-              <TableCell
-                padding="dense" 
-                key={index}
-                sortDirection={orderBy === index ? order : false}
-                numeric
-              >
-                <Tooltip
-                  title="Sort"
-                  enterDelay={300}
-                >
-                  <TableSortLabel
-                    active={orderBy === index}
-                    direction={order}
-                    onClick={this.createSortHandler(index)}
-                  >
-                    {cell}
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-            );
-          }, this)}
-        </TableRow>
-      </TableHead>
-    );
+function getSorting(order, orderBy): (a: any, b: any) => number {
+  if (order === 'desc') {
+    return (a, b) => a[orderBy] > b[orderBy] ? 1 : -1;
   }
+  return (a, b) => b[orderBy] > a[orderBy] ? -1 : 1;
 }
 
 const styles = theme => ({
@@ -85,14 +38,13 @@ const parseQueryResults = (resultsString: string): parsedQuery => {
     headers: [],
     results: [],
   };
-  // if (!data.results) return data;
 
   data.results = resultsString.split('\n')
     .filter(line => line !== '') // remove empty lines
     .map(line => line.split(',')); // create array of values for each line
 
   if (data.results.length > 0) {
-    data.headers = data.results.shift();
+    data.headers = data.results.shift() || [];
   }
 
   return data;
@@ -195,29 +147,27 @@ class ResultsTable extends React.Component<Props, State> {
       <Paper className={classes.root}>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
-            <EnhancedTableHead
+            <ResultsTableHead
               order={order}
               orderBy={orderBy}
               onRequestSort={this.handleRequestSort}
               headers={headers}
             />
             <TableBody>
-              {results
-                .sort(getSorting(order, orderBy))
+              {results.sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  return (
-                    <TableRow
-                      hover
-                      tabIndex={-1}
-                      key={index}
-                    >
-                      {row.map((cell, index) => (
-                        <TableCell key={index} padding="dense" numeric>{cell}</TableCell>
-                      ))}
-                    </TableRow>
-                  );
-                })}
+                .map((row, index) => row ? (
+                  <TableRow
+                    hover
+                    tabIndex={-1}
+                    key={index}
+                  >
+                    {row.map((cell, index) => (
+                      <TableCell key={index} padding="dense" numeric>{cell}</TableCell>
+                    ))}
+                  </TableRow>
+                ) : null)
+              }
             </TableBody>
           </Table>
         </div>
@@ -240,34 +190,4 @@ class ResultsTable extends React.Component<Props, State> {
   }
 }
 
-// const GET_RESULTS = gql`
-//   {
-//     results @client {
-//       data
-//       type
-//       error
-//     }
-//   }
-// `;
-
 export default withStyles(styles)(ResultsTable);
-// export default compose(
-//   graphql(GET_RESULTS, { 
-//     props: ({ data }) => {
-//       let opts = { data: { ...data, results: [], headers: [] } };
-//       if (!data.results) return opts;
-
-//       if (data.results.error) {
-//         opts.data.error = data.results.error;
-//         return opts;
-//       }
-//       opts.data.results = data.results.data.split('\n')
-//         .filter(line => line !== '') // remove empty lines
-//         .map(line => line.split(',')); // create array of values for each line
-
-//       opts.data.headers = opts.data.results.shift();
-
-//       return opts;
-//     },
-//   }),
-// )(withStyles(styles)(ResultsTable));
