@@ -49,8 +49,6 @@ const styles = theme => ({
 
 type Props = {
   classes: any;
-  router: any;
-  theme: any;
 };
 const App = (props: Props) => {
   const { classes } = props;
