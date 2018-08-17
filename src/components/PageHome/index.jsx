@@ -13,8 +13,8 @@ const PageHome = () => (
         <Mutation mutation={UPDATE_FORM}>
           {(formMutate, formState) => {
             const onSubmit = (values): void => {
-              queryMutate({ variables: values });
               formMutate({ variables: values });
+              queryMutate({ variables: values });
             };
 
             return (

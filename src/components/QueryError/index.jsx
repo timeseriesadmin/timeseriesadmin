@@ -8,9 +8,15 @@ import type { ApolloError } from 'apollo-client';
 
 // Converts ApolloError to string
 // TODO: cover all possible cases
-const parseErrorMessage = (error: ApolloError): string => {
-  const errorStatus = get(error, 'networkError.response.status', null);
-  const errorMessage = get(error, 'networkError.response.data', null);
+const parseErrorMessage = (apolloError: ApolloError): string => {
+  let error;
+  try {
+    error = JSON.parse(apolloError.message.replace('Network error: ',''))
+  } catch (error) {
+    return apolloError.message;
+  }
+  const errorStatus = get(error, 'response.status', null);
+  const errorMessage = get(error, 'response.data', null);
 
   if (errorStatus === 400 && errorMessage) {
     // this is probably a bug in query string
@@ -18,7 +24,7 @@ const parseErrorMessage = (error: ApolloError): string => {
     return `${errorStatus}: ${errorMessage}`;
   }
 
-  const errorDetails = get(error, 'networkError.response.data.error', null);
+  const errorDetails = get(error, 'response.data.error', null);
   if (errorDetails) {
     return `${errorStatus ? errorStatus + ': ' : ''}${errorDetails}`;
   }

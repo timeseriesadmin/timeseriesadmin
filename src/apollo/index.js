@@ -2,9 +2,6 @@ import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
-// import { HttpLink } from 'apollo-link-http';
-
-// import clientStore from './modules';
 
 import { defaults, resolvers } from './resolvers';
 
@@ -35,13 +32,11 @@ const typeDefs = `
 const cache = new InMemoryCache();
 
 const linkState = withClientState({ resolvers, defaults, cache, typeDefs });
-// https://github.com/apollographql/apollo-link/tree/master/packages/apollo-link-http
-// const httpLink = new HttpLink({ uri: 'http://localhost:4000/api' });
 
 const client = new ApolloClient({
   cache,
   // some info about links order https://www.apollographql.com/docs/link/links/state.html#start
-  link: ApolloLink.from([linkState]),//, httpLink]),
+  link: ApolloLink.from([linkState]),
 });
 
 export default client;

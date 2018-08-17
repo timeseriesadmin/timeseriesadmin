@@ -95,7 +95,11 @@ export const resolvers = {
       });
 
       if (queryError) {
-        throw new Error(queryError);
+        // TODO: improve error handling when 
+        // https://github.com/apollographql/apollo-link-state/issues/282
+        // gets resolved
+        throw new Error(JSON.stringify(queryError));
+        // return { data: 'error\n' + JSON.stringify(queryError)};
       }
 
       return queryResult;
