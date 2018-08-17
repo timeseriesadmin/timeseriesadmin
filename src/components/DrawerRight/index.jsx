@@ -28,6 +28,8 @@ const styles = theme => ({
   detailsPanel: {
     flexDirection: 'column',
     textAlign: 'left',
+    maxHeight: 300,
+    overflow: 'auto',
   },
 });
 
