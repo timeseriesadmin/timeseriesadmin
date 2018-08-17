@@ -6,6 +6,7 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { History as QueryHistoryIcon, Flip as QueryExampleIcon } from '@material-ui/icons';
 
 const styles = theme => ({
   root: {
@@ -15,13 +16,21 @@ const styles = theme => ({
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
   },
+  icon: {
+    fontSize: theme.typography.pxToRem(20),
+    marginRight: theme.spacing.unit,
+  },
+  expandedPanel: {
+    margin: 0,
+  }
 });
 
 const DrawerRight = ({ classes }) => (
   <div className={classes.root}>
-    <ExpansionPanel>
+    <ExpansionPanel classes={{ expanded: classes.expandedPanel }} defaultExpanded>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography className={classes.heading}>Expansion Panel 1</Typography>
+        <QueryHistoryIcon className={classes.icon}/>
+        <Typography className={classes.heading}>Query history</Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <Typography>
@@ -30,9 +39,10 @@ const DrawerRight = ({ classes }) => (
         </Typography>
       </ExpansionPanelDetails>
     </ExpansionPanel>
-    <ExpansionPanel>
+    <ExpansionPanel classes={{ expanded: classes.expandedPanel }}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography className={classes.heading}>Expansion Panel 2</Typography>
+        <QueryExampleIcon className={classes.icon}/>
+        <Typography className={classes.heading}>Query Examples</Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <Typography>
@@ -40,11 +50,6 @@ const DrawerRight = ({ classes }) => (
           sit amet blandit leo lobortis eget.
         </Typography>
       </ExpansionPanelDetails>
-    </ExpansionPanel>
-    <ExpansionPanel disabled>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography className={classes.heading}>Disabled Expansion Panel</Typography>
-      </ExpansionPanelSummary>
     </ExpansionPanel>
   </div>
 );
