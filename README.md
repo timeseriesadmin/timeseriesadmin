@@ -18,6 +18,10 @@
 - CORE: add `APP_ELECTRON=true` to preelectron:stag and prod, it doesn't work now because of misconfigured updates
 - CORE: secure localStorage e.g. with password encryption of stored data (?) see: https://stackoverflow.com/questions/3220660/local-storage-vs-cookies
 
+## Known bugs
+
+- problem with e.g. `DROP MEASUREMENT "530A2::1"` query (probably some encoding issue)
+
 ## Electron
 
 Distribution configuration based on https://medium.freecodecamp.org/building-an-electron-application-with-create-react-app-97945861647c and https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3.

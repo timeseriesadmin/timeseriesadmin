@@ -10,6 +10,10 @@ import { defaults, resolvers } from './resolvers';
 
 // TODO: extract separate schema.graphql file see server implementation for more info
 const typeDefs = `
+  type InfluxQuery {
+    query: String!
+    error: String
+  }
   type FormData {
     url: String
     u: String
@@ -19,11 +23,12 @@ const typeDefs = `
   }
   type Mutation {
     influxQuery(url: String!, u: String, p: String, db: String, q: String!): Boolean
-    updateForm(url: String!, u: String, p: String, db: String, q: String!): Boolean
+    updateForm(url: String, u: String, p: String, db: String, q: String): Boolean
   }
   type Query {
     connection: Connection
     form: FormData
+    queryHistory: [InfluxQuery]!
   }
 `;
 
