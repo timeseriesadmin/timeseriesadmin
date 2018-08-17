@@ -25,12 +25,16 @@
 // }
 
 export default {
-  get: (name: string) => {
+  get: (name: string, defaultVal?: any) => {
     // if (process.env.REACT_APP_ELECTRON) {
       // return store.get(name);
     // }
     // return Cookies.get(name);
-    return window.localStorage.getItem(name);
+    const val = window.localStorage.getItem(name);
+    if (val === null && defaultVal !== undefined) {
+      return defaultVal;
+    }
+    return val;
   },
   set: (name: string, value: string) => {
     // if (process.env.REACT_APP_ELECTRON) {
