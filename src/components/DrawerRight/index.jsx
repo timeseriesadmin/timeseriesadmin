@@ -9,6 +9,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { History as QueryHistoryIcon, Flip as QueryExampleIcon } from '@material-ui/icons';
 
 import QueryHistory from '../QueryHistory';
+import QueryExample from '../QueryExample';
 
 const styles = theme => ({
   root: {
@@ -28,7 +29,7 @@ const styles = theme => ({
   detailsPanel: {
     flexDirection: 'column',
     textAlign: 'left',
-    maxHeight: 300,
+    maxHeight: 280,
     overflow: 'auto',
   },
 });
@@ -44,16 +45,13 @@ const DrawerRight = ({ classes }) => (
         <QueryHistory/>
       </ExpansionPanelDetails>
     </ExpansionPanel>
-    <ExpansionPanel classes={{ expanded: classes.expandedPanel }}>
+    <ExpansionPanel classes={{ expanded: classes.expandedPanel }} defaultExpanded>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <QueryExampleIcon className={classes.icon}/>
         <Typography className={classes.heading}>Query Examples</Typography>
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-        <Typography>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-          sit amet blandit leo lobortis eget.
-        </Typography>
+      <ExpansionPanelDetails className={classes.detailsPanel}>
+        <QueryExample/>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   </div>
