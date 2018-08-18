@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -38,7 +39,9 @@ const DrawerRight = ({ classes }) => (
   <div className={classes.root}>
     <ExpansionPanel classes={{ expanded: classes.expandedPanel }} defaultExpanded>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <QueryHistoryIcon className={classes.icon}/>
+        <Tooltip title="100 last queries, they won't dissapear after closing the app">
+          <QueryHistoryIcon className={classes.icon}/>
+        </Tooltip>
         <Typography className={classes.heading}>Query history</Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails className={classes.detailsPanel}>

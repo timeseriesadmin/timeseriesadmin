@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import gql from 'graphql-tag';
-import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Tooltip } from '@material-ui/core';
 import { ErrorOutline as ErrorIcon } from '@material-ui/icons';
 import { Query, Mutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
@@ -61,9 +61,11 @@ const QueryHistory = ({ classes }: Props) => (
               onClick={handleQueryClick(influxQuery.query)}
             >
               {influxQuery.error !== null &&
-              <ListItemIcon>
-                <ErrorIcon color="error" className={classes.btnIcon}/>
-              </ListItemIcon>
+              <Tooltip title={influxQuery.error}>
+                <ListItemIcon>
+                  <ErrorIcon color="error" className={classes.btnIcon}/>
+                </ListItemIcon>
+              </Tooltip>
               }
               <ListItemText primary={influxQuery.query}
                 className={classes.listItemText}
