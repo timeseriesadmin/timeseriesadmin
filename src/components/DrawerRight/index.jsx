@@ -1,12 +1,8 @@
 // @flow
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import { History as QueryHistoryIcon, Flip as QueryReferenceIcon } from '@material-ui/icons';
 
 import QueryHistory from '../QueryHistory';
@@ -16,48 +12,72 @@ const styles = theme => ({
   root: {
     width: '100%',
   },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
-  },
-  icon: {
-    fontSize: theme.typography.pxToRem(20),
-    marginRight: theme.spacing.unit,
-  },
-  expandedPanel: {
-    margin: 0,
-  },
-  detailsPanel: {
+  header: {
+    display: 'flex',
     flexDirection: 'column',
-    textAlign: 'left',
-    maxHeight: 280,
-    overflow: 'auto',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+  tab: {
+    minHeight: 64,
+    // minWidth: (480 - theme.spacing.unit*2) / 3,
+  },
+  tabIcon: {
+    fontSize: theme.typography.pxToRem(20),
+  },
+  content: {
+    // paddingLeft: theme.spacing.unit*2,
+    // paddingRight: theme.spacing.unit*2,
   },
 });
 
-const DrawerRight = ({ classes }) => (
-  <div className={classes.root}>
-    <ExpansionPanel classes={{ expanded: classes.expandedPanel }} defaultExpanded>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Tooltip title="100 last queries, they won't dissapear after closing the app">
-          <QueryHistoryIcon className={classes.icon}/>
-        </Tooltip>
-        <Typography className={classes.heading}>Query history</Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails className={classes.detailsPanel}>
-        <QueryHistory/>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
-    <ExpansionPanel classes={{ expanded: classes.expandedPanel }} defaultExpanded>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <QueryReferenceIcon className={classes.icon}/>
-        <Typography className={classes.heading}>Query References</Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails className={classes.detailsPanel}>
-        <QueryReference/>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
-  </div>
-);
+type Props = {
+  classes: any,
+};
+type State = {
+  activeTab: number,
+};
+class DrawerRight extends React.Component<Props, State> {
+  state = {
+    activeTab: 0,
+  };
+
+  handleChange = (event, value) => {
+    this.setState({ activeTab: value });
+  }
+
+  render = () => {
+    const { classes } = this.props;
+    const { activeTab } = this.state;
+
+    return (
+      <div className={classes.root}>
+        <div className={classes.header}>
+          <Tabs value={activeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={this.handleChange}
+          >
+            <Tab label="History"
+              className={classes.tab}
+              icon={<QueryHistoryIcon className={classes.tabIcon} />}
+            />
+            <Tab label="Reference"
+              className={classes.tab}
+              icon={<QueryReferenceIcon className={classes.tabIcon} />}
+            />
+          </Tabs>
+        </div>
+
+        <div className={classes.content}>
+          {activeTab === 0 && <QueryHistory/>}
+          {activeTab === 1 && <QueryReference/>}
+        </div>
+      </div>
+    );
+  }
+}
 
 export default withStyles(styles)(DrawerRight);

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import gql from 'graphql-tag';
-import { List, ListItem, ListItemIcon, ListItemText, Tooltip } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { ErrorOutline as ErrorIcon } from '@material-ui/icons';
 import { Query, Mutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
@@ -16,8 +16,8 @@ const styles = theme => ({
   listItem: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit*2,
+    paddingRight: theme.spacing.unit*2,
   },
   listItemText: {
     paddingLeft: theme.spacing.unit,

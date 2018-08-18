@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Tooltip, Drawer, IconButton } from '@material-ui/core';
-import { HelpOutline as DrawerOpenIcon, Close as DrawerCloseIcon } from '@material-ui/icons';
+import { AppBar, Toolbar, Typography, IconButton, Tooltip, Drawer } from '@material-ui/core';
+import { HelpOutline as DrawerOpenIcon, ChevronRight as DrawerCloseIcon } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import { Route } from 'react-router-dom';
@@ -68,16 +68,6 @@ const styles = theme => ({
     position: 'relative',
     width: drawerWidth,
   },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  drawerTitle: {
-    paddingLeft: theme.spacing.unit * 2,
-  },
   appBarShiftLeft: {
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
@@ -134,11 +124,20 @@ class App extends React.Component<Props, State> {
               Influx Admin
             </Typography>
             <div className={classes.rightPanel}>
-              <Tooltip title="Additional info">
+              <Tooltip title={isOpenDrawer ? "Close sidebar" : "Additional info"}>
                 <div>
-                  <Button classes={{ disabled: classes.disabledBtn }} size="small" color="inherit" onClick={toggleDrawer(true)} disabled={isOpenDrawer}>
-                    <DrawerOpenIcon />
-                  </Button>
+                  <IconButton
+                    classes={{ disabled: classes.disabledBtn }}
+                    size="small"
+                    color="inherit"
+                    onClick={toggleDrawer(!isOpenDrawer)}
+                  >
+                    {isOpenDrawer ? (
+                      <DrawerCloseIcon />
+                    ) : (
+                      <DrawerOpenIcon />
+                    )}
+                  </IconButton>
                 </div>
               </Tooltip>
             </div>
@@ -170,15 +169,7 @@ class App extends React.Component<Props, State> {
             keepMounted: true, // Better open performance on mobile.
           }}
         >
-          <div className={classes.drawerHeader}>
-            <Typography variant="subheading" color="inherit" className={classNames(classes.flex, classes.drawerTitle)}>
-              Additional info
-            </Typography>
-            <IconButton onClick={toggleDrawer(false)}>
-              <DrawerCloseIcon />
-            </IconButton>
-          </div>
-          <DrawerRight/>
+          <DrawerRight />
         </Drawer>
 
       </div>

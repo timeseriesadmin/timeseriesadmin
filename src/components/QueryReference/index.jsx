@@ -32,8 +32,8 @@ const styles = theme => ({
   listItem: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit*2,
+    paddingRight: theme.spacing.unit*2,
   },
   listItemText: {
     paddingLeft: theme.spacing.unit,
