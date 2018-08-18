@@ -7,10 +7,10 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { History as QueryHistoryIcon, Flip as QueryExampleIcon } from '@material-ui/icons';
+import { History as QueryHistoryIcon, Flip as QueryReferenceIcon } from '@material-ui/icons';
 
 import QueryHistory from '../QueryHistory';
-import QueryExample from '../QueryExample';
+import QueryReference from '../QueryReference';
 
 const styles = theme => ({
   root: {
@@ -50,11 +50,11 @@ const DrawerRight = ({ classes }) => (
     </ExpansionPanel>
     <ExpansionPanel classes={{ expanded: classes.expandedPanel }} defaultExpanded>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <QueryExampleIcon className={classes.icon}/>
-        <Typography className={classes.heading}>Query Examples</Typography>
+        <QueryReferenceIcon className={classes.icon}/>
+        <Typography className={classes.heading}>Query References</Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails className={classes.detailsPanel}>
-        <QueryExample/>
+        <QueryReference/>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   </div>

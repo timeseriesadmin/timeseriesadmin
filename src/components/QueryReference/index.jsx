@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
 import gql from 'graphql-tag';
-import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { List, ListItem, ListItemText } from '@material-ui/core';
 import { Mutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 
-const examples = [
+const references = [
   { query: 'SHOW DATABASES' },
   { query: 'SHOW MEASUREMENTS' },
   { query: 'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]',
@@ -50,7 +50,7 @@ const SET_FORM_QUERY = gql`
 type Props = {
   classes: any,
 };
-const QueryExample = ({ classes }: Props) => (
+const QueryReference = ({ classes }: Props) => (
   <Mutation mutation={SET_FORM_QUERY}>
   {(setFormQuery, mutateState) => {
     const handleQueryClick = (query: string) => (event: Event) => {
@@ -58,7 +58,7 @@ const QueryExample = ({ classes }: Props) => (
     };
     return (
       <List dense>
-        {examples.map((example, index) => (
+        {references.map((example, index) => (
           <ListItem button disableGutters
             className={classes.listItem}
             key={index}
@@ -76,4 +76,4 @@ const QueryExample = ({ classes }: Props) => (
   </Mutation>
 );
 
-export default withStyles(styles)(QueryExample);
+export default withStyles(styles)(QueryReference);
