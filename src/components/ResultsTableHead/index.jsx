@@ -1,10 +1,6 @@
 // @flow
 import React from 'react';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Tooltip from '@material-ui/core/Tooltip';
+import { TableHead, TableCell, TableRow, TableSortLabel, Tooltip } from '@material-ui/core';
 
 type Props = {
   headers: string[],
@@ -23,29 +19,27 @@ class ResultsTableHead extends React.Component<Props> {
     return (
       <TableHead>
         <TableRow>
-          {headers.map((cell, index) => {
-            return (
-              <TableCell
-                padding="dense" 
-                key={index}
-                sortDirection={orderBy === index ? order : false}
-                numeric
-              >
-                <Tooltip
-                  title="Sort"
-                  enterDelay={300}
-                >
-                  <TableSortLabel
-                    active={orderBy === index}
-                    direction={order}
-                    onClick={this.createSortHandler(index.toString())}
-                  >
-                    {cell}
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-            );
-          }, this)}
+          {headers.map((cell, index) => (
+						<TableCell
+							padding="dense" 
+							key={index}
+							sortDirection={orderBy === index ? order : false}
+							numeric
+						>
+							<Tooltip
+								title="Sort"
+								enterDelay={300}
+							>
+								<TableSortLabel
+									active={orderBy === index}
+									direction={order}
+									onClick={this.createSortHandler(index.toString())}
+								>
+									{cell}
+								</TableSortLabel>
+							</Tooltip>
+						</TableCell>
+          ))}
         </TableRow>
       </TableHead>
     );
