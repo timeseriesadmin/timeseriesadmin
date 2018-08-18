@@ -8,17 +8,25 @@ import { History as QueryHistoryIcon, Flip as QueryReferenceIcon } from '@materi
 import QueryHistory from '../QueryHistory';
 import QueryReference from '../QueryReference';
 
+const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
 const styles = theme => ({
   root: {
     width: '100%',
   },
   header: {
+    ...theme.mixins.toolbar,
+		width: 480,
+		position: 'fixed',
+		top: 0,
+		right: 0,
+		boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-end',
     padding: '0 8px',
-    ...theme.mixins.toolbar,
+		background: theme.palette.common.white,
+		zIndex: theme.zIndex.appBar,
   },
   tab: {
     minHeight: 64,
@@ -28,8 +36,14 @@ const styles = theme => ({
     fontSize: theme.typography.pxToRem(20),
   },
   content: {
-    // paddingLeft: theme.spacing.unit*2,
-    // paddingRight: theme.spacing.unit*2,
+    paddingTop: theme.mixins.toolbar.minHeight,
+    // eslint-disable-next-line no-useless-computed-key
+    [mediaRule]: {
+      paddingTop: theme.mixins.toolbar[mediaRule].minHeight,
+    },
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight,
+    },
   },
 });
 

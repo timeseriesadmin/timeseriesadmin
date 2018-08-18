@@ -68,7 +68,7 @@ const styles = theme => ({
     position: 'relative',
     width: drawerWidth,
   },
-  appBarShiftLeft: {
+  appBarShifted: {
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
@@ -117,7 +117,7 @@ class App extends React.Component<Props, State> {
     return (
       <div className={classes.root}>
         <AppBar className={classNames(classes.appBar, {
-          [classes.appBarShiftLeft]: isOpenDrawer,
+          [classes.appBarShifted]: isOpenDrawer,
         })}>
           <Toolbar disableGutters className={classes.toolbar}>
             <Typography variant="title" color="inherit" className={classes.flex}>
