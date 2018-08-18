@@ -42,6 +42,7 @@ const GET_HISTORY = gql`
 type Props = {
   classes: any,
 };
+// TODO: display Error details somehow, not with a Tooltip because of performance issues when there are 100 Tooltips...
 const QueryHistory = ({ classes }: Props) => (
   <Query query={GET_HISTORY}>
   {({ loading, error, data }) => (
@@ -61,11 +62,9 @@ const QueryHistory = ({ classes }: Props) => (
               onClick={handleQueryClick(influxQuery.query)}
             >
               {influxQuery.error !== null &&
-              <Tooltip title={influxQuery.error}>
-                <ListItemIcon>
-                  <ErrorIcon color="error" className={classes.btnIcon}/>
-                </ListItemIcon>
-              </Tooltip>
+              <ListItemIcon>
+                <ErrorIcon color="error" className={classes.btnIcon}/>
+              </ListItemIcon>
               }
               <ListItemText primary={influxQuery.query}
                 className={classes.listItemText}
