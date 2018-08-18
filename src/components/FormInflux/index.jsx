@@ -52,6 +52,7 @@ const FormInflux = (props: Props) => {
                     name="url"
                     component={renderField}
                     label="Database URL"
+                    placeholder="https://myinfluxdb.test:8086"
                     validate={composeValidators(isRequired)}
                   />
                 </Grid>
