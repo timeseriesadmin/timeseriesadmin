@@ -11,7 +11,7 @@ import DrawerRight from '../DrawerRight';
 
 // TODO: remember open/close state in local storage
 
-const drawerWidth = 360;
+const drawerWidth = 480;
 const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
 const styles = theme => ({
   root: {
