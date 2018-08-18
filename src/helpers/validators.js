@@ -1,19 +1,13 @@
 // @flow
 type Validator = (value: any) => void | string;
-// TODO: write some unit tests...
-// const normalizeInt = value => {
-  // console.log(value);
-  // return value.replace(/[^\d]/g, '');
-// }
-export const isRequired: Validator = value => value && `${value}`.length > 0 ? undefined : 'Wartość jest wymagana';
-export const isPositiveInt: Validator = value => value && /^[1-9][0-9]*$/.test(value) ? undefined : 'Wartość musi być dodatnią liczbą całkowitą';
-// const positive = value => parseInt(value, 10) > 0 ? undefined : 'Wartość musi być większa od 0';
+export const isRequired: Validator = value => value && `${value}`.length > 0 ? undefined : 'Value is required';
+export const isPositiveInt: Validator = value => value && /^[1-9][0-9]*$/.test(value) ? undefined : 'Value has to be a positive integer';
 export const inRange = (min: number, max: number): Validator => value => {
   if (!isNaN(value) && value !== null && value !== undefined) {
     if (value > max)
-      return `Wartość musi być mniejsza od ${max}`;
+      return `Value has to be smaller than ${max}`;
     if (value < min)
-      return `Wartość musi być większa od ${min}`;
+      return `Value has to be larger than ${min}`;
   }
 
   return undefined;
@@ -21,9 +15,9 @@ export const inRange = (min: number, max: number): Validator => value => {
 export const hasLength = (min: number, max: number): Validator => value => {
   if (value !== null && value !== undefined) {
     if (value.length > max)
-      return `Maksymalna długość wpisu to ${max}`;
+      return `Maximum length is ${max}`;
     if (value.length < min)
-      return `Minimalna długość wpisu to ${min}`;
+      return `Minimum length is ${min}`;
   }
 
   return undefined;
