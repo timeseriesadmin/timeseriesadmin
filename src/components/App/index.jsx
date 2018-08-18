@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+import gql from 'graphql-tag';
+import { Query, Mutation } from 'react-apollo';
 import { AppBar, Toolbar, Typography, IconButton, Tooltip, Drawer } from '@material-ui/core';
 import { HelpOutline as DrawerOpenIcon, ChevronRight as DrawerCloseIcon } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
@@ -81,100 +83,85 @@ const styles = theme => ({
   },
 });
 
-type Props = {
-  classes: any;
-};
-type State = {
-  isOpenDrawer: boolean;
-};
-class App extends React.Component<Props, State> {
-  state = {
-    isOpenDrawer: true,
-  };
+const IS_OPEN_DRAWER = gql`
+	query isOpenDrawer {
+		isOpenDrawer @client
+	}
+`;
 
-  render = () => {
-    const { classes } = this.props;
-    const { isOpenDrawer } = this.state;
-    // let updateReady = false;
+const SET_OPEN_DRAWER = gql`
+	mutation setOpenDrawer($isOpen: Boolean) {
+		setOpenDrawer(isOpen: $isOpen) @client
+	}
+`;
 
-    // let ipcRenderer;
-    // let installUpdates;
-    /*if (process.env.REACT_APP_ELECTRON) {
-      ipcRenderer = require('electron').ipcRenderer;
+const App = ({ classes }) => (
+	<Query query={IS_OPEN_DRAWER}>
+	{({ data: { isOpenDrawer } }: { data: any }) => (
+	<Mutation mutation={SET_OPEN_DRAWER}>
+	{(setOpenDrawer) => (
+		<div className={classes.root}>
+			<AppBar className={classNames(classes.appBar, {
+				[classes.appBarShifted]: isOpenDrawer,
+			})}>
+				<Toolbar disableGutters className={classes.toolbar}>
+					<Typography variant="title" color="inherit" className={classes.flex}>
+						Influx Admin
+					</Typography>
+					<div className={classes.rightPanel}>
+						<Tooltip title={isOpenDrawer ? "Close sidebar" : "Additional info"}>
+							<div>
+								<IconButton
+									classes={{ disabled: classes.disabledBtn }}
+									size="small"
+									color="inherit"
+									onClick={() => setOpenDrawer({ variables: { isOpen: !isOpenDrawer } })}
+								>
+									{isOpenDrawer ? (
+										<DrawerCloseIcon />
+									) : (
+										<DrawerOpenIcon />
+									)}
+								</IconButton>
+							</div>
+						</Tooltip>
+					</div>
+					{/*<Typography variant="caption" color="inherit" className={classes.rightPanel}>
+						ver. <span id="version">{process.env.REACT_APP_VERSION}</span>
+						{/*process.env.REACT_APP_ELECTRON && updateReady &&
+							<Button onClick={installUpdates}>
+							Update
+							</Button>
+						}
+					</Typography>*/}
+				</Toolbar>
+			</AppBar>
 
-      ipcRenderer.on('updateReady', function(event, text) {
-        updateReady = true;
-      });
+			<main className={classNames(classes.content, {
+				[classes.contentShift]: isOpenDrawer,
+			})}>
+				<Route path="/" component={PageHome} />
+			</main>
 
-      installUpdates = (event) => {
-        ipcRenderer.send('quitAndInstall');
-      };
-    }*/
-    const toggleDrawer = (open: boolean) => (event: Event) => {
-      this.setState({ isOpenDrawer: open });
-    };
+			<Drawer
+				variant="persistent"
+				anchor="right"
+				open={isOpenDrawer}
+				classes={{
+					paper: classes.drawerPaper,
+				}}
+				ModalProps={{
+					keepMounted: true, // Better open performance on mobile.
+				}}
+			>
+				<DrawerRight />
+			</Drawer>
 
-    return (
-      <div className={classes.root}>
-        <AppBar className={classNames(classes.appBar, {
-          [classes.appBarShifted]: isOpenDrawer,
-        })}>
-          <Toolbar disableGutters className={classes.toolbar}>
-            <Typography variant="title" color="inherit" className={classes.flex}>
-              Influx Admin
-            </Typography>
-            <div className={classes.rightPanel}>
-              <Tooltip title={isOpenDrawer ? "Close sidebar" : "Additional info"}>
-                <div>
-                  <IconButton
-                    classes={{ disabled: classes.disabledBtn }}
-                    size="small"
-                    color="inherit"
-                    onClick={toggleDrawer(!isOpenDrawer)}
-                  >
-                    {isOpenDrawer ? (
-                      <DrawerCloseIcon />
-                    ) : (
-                      <DrawerOpenIcon />
-                    )}
-                  </IconButton>
-                </div>
-              </Tooltip>
-            </div>
-            {/*<Typography variant="caption" color="inherit" className={classes.rightPanel}>
-              ver. <span id="version">{process.env.REACT_APP_VERSION}</span>
-              {/*process.env.REACT_APP_ELECTRON && updateReady &&
-                <Button onClick={installUpdates}>
-                Update
-                </Button>
-              }
-            </Typography>*/}
-          </Toolbar>
-        </AppBar>
-
-        <main className={classNames(classes.content, {
-          [classes.contentShift]: isOpenDrawer,
-        })}>
-          <Route path="/" component={PageHome} />
-        </main>
-
-        <Drawer
-          variant="persistent"
-          anchor="right"
-          open={isOpenDrawer}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-        >
-          <DrawerRight />
-        </Drawer>
-
-      </div>
-    );
-  }
-};
+		</div>
+	)}
+	</Mutation>
+	)}
+	</Query>
+);
 
 export default withStyles(styles, { withTheme: true })(App);

@@ -8,7 +8,9 @@ const HISTORY_MAX_LENGTH = 100;
 
 const queryHistory = JSON.parse(storage.get('queryHistory', '[]'));
 const form = JSON.parse(storage.get('form', '{}'));
+const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
 export const defaults = {
+	isOpenDrawer,
   queryHistory,
   form,
 };
@@ -22,6 +24,15 @@ type FormParams = {
 };
 export const resolvers = {
   Mutation: {
+		setOpenDrawer: (_obj: void, { isOpen }: { isOpen: boolean }, { cache }: any): null => {
+      cache.writeData({
+        data: {
+          isOpenDrawer: isOpen,
+        },
+      });
+			storage.set('isOpenDrawer', isOpen ? 'true' : 'false');
+			return null;
+		},
     updateForm: (_obj: void, submitted: FormParams, { cache }: any): null => {
       const { form } = cache.readQuery({
         query: gql`

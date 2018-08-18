@@ -21,9 +21,10 @@ const typeDefs = `
   type Mutation {
     influxQuery(url: String!, u: String, p: String, db: String, q: String!): Boolean
     updateForm(url: String, u: String, p: String, db: String, q: String): Boolean
+		setOpenDrawer(isOpen: Boolean!): Boolean
   }
   type Query {
-    connection: Connection
+		isOpenDrawer: Boolean
     form: FormData
     queryHistory: [InfluxQuery]!
   }

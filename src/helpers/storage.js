@@ -25,7 +25,7 @@
 // }
 
 export default {
-  get: (name: string, defaultVal?: any) => {
+  get: (name: string, defaultVal?: string) => {
     // if (process.env.REACT_APP_ELECTRON) {
       // return store.get(name);
     // }
