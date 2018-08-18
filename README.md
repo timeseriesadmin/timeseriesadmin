@@ -1,4 +1,4 @@
-# InfluxQueryAdmin
+# Influx Query Admin
 
 ## Decisions
 

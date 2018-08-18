@@ -1,5 +1,5 @@
 {
-  "name": "infadmin-flow",
+  "name": "influx-query-admin",
   "description": "InfuxDB query editor",
   "author": "Jan Grzegorowski",
   "version": "0.1.0",

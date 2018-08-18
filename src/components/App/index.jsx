@@ -106,7 +106,7 @@ const App = ({ classes }) => (
 			})}>
 				<Toolbar disableGutters className={classes.toolbar}>
 					<Typography variant="title" color="inherit" className={classes.flex}>
-						Influx Admin
+						Influx Query Admin
 					</Typography>
 					<div className={classes.rightPanel}>
 						<Tooltip title={isOpenDrawer ? "Close sidebar" : "Additional info"}>
