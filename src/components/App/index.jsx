@@ -11,6 +11,7 @@ import { Route } from 'react-router-dom';
 
 import PageHome from '../PageHome';
 import DrawerRight from '../DrawerRight';
+import IconMain from '../IconMain';
 
 // TODO: remember open/close state in local storage
 
@@ -109,9 +110,12 @@ const App = ({ classes }) => (
 				[classes.appBarShifted]: isOpenDrawer,
 			})}>
 				<Toolbar disableGutters className={classes.toolbar}>
-					<Typography variant="title" color="inherit" className={classes.flex}>
-						Influx Query Admin
-					</Typography>
+					<div className={classes.flex} style={{ display: 'flex', flexDirection: 'row' }}>
+						<IconMain style={{ width: 48, height: 48, alignSelf: 'center', marginRight: 8 }}/>
+						<Typography variant="title" color="inherit" style={{ alignSelf: 'center' }}>
+							Influx Query Admin
+						</Typography>
+					</div>
 					<div className={classes.rightPanel}>
 						<Tooltip title={isOpenDrawer ? "Close sidebar" : "Additional info"}>
 							<div>
