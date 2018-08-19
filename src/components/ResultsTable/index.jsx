@@ -137,7 +137,7 @@ class ResultsTable extends React.Component<Props, State> {
     // no point in parsing before error check
     const { results, headers } = parseQueryResults(data.influxQuery.data);
 
-    if (!results || !results.length) {
+    if (!headers || !headers.length) {
       return (
         <Paper className={classes.root}>
           <div className={classes.contentNoTable}>
@@ -148,7 +148,7 @@ class ResultsTable extends React.Component<Props, State> {
               Maybe queried measurement doesn't exist ?
             </Typography>
             <Typography component="p">
-              Maybe you query only for TAGS (your query should contain at least one field) ?
+              Maybe you query only for TAGS (your query should contain at least one FIELD) ?
             </Typography>
           </div>
         </Paper>
@@ -166,7 +166,8 @@ class ResultsTable extends React.Component<Props, State> {
               headers={headers}
             />
             <TableBody>
-              {results.sort(getSorting(order, orderBy))
+						{results && results.length > 0 ?
+              results.sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => row ? (
                   <TableRow
@@ -179,7 +180,7 @@ class ResultsTable extends React.Component<Props, State> {
                     ))}
                   </TableRow>
                 ) : null)
-              }
+              : null}
             </TableBody>
           </Table>
         </div>
