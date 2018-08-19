@@ -45,6 +45,7 @@
     "benchmark": "^2.1.4",
     "electron": "^2.0.7",
     "electron-builder": "^20.27.1",
+    "electron-debug": "^2.0.0",
     "eslint": "^4.1.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-config-react-app": "^2.1.0",

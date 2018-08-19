@@ -1,6 +1,11 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 
+if (process.env.ELECTRON_START_URL) {
+	// so it will be available only for electron in dev mode
+	require('electron-debug')();
+}
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
