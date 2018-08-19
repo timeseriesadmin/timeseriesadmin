@@ -113,7 +113,10 @@ export const resolvers = {
         // return { data: 'error\n' + JSON.stringify(queryError)};
       }
 
-      return queryResult;
+      return {
+				request: { q },
+				response: queryResult,
+			};
     },
  },
 };

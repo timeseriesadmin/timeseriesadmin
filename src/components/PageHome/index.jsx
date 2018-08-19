@@ -11,7 +11,7 @@ const PageHome = () => (
     <Mutation mutation={QUERY_DB} fetchPolicy="no-cache">
       {(queryMutate, queryState) => (
         <Mutation mutation={UPDATE_FORM}>
-          {(formMutate, formState) => {
+          {(formMutate, _mutationState) => {
             const onSubmit = (values): void => {
               formMutate({ variables: values });
               queryMutate({ variables: values });

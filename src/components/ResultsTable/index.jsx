@@ -4,9 +4,12 @@ import { withStyles } from '@material-ui/core/styles';
 import {
 	CircularProgress, Typography, Table, TableBody, TableCell, TablePagination, TableRow, Paper
 } from '@material-ui/core';
+import format from 'date-fns/format';
 
 import QueryError from '../QueryError';
 import ResultsTableHead from '../ResultsTableHead';
+import TableToolbar from './TableToolbar';
+import storage from '../../helpers/storage';
 
 function getSorting(order, orderBy): (a: any, b: any) => number {
   if (order === 'desc') {
@@ -51,7 +54,6 @@ const parseQueryResults = (resultsString: string): parsedQuery => {
 
 type Props = {
   classes: any,
-  // data: any,
   queryState: any,
 };
 type State = {
@@ -60,19 +62,33 @@ type State = {
   selected: number[],
   page: number,
   rowsPerPage: number,
+	timeFormat: 's'|'ms'|'ns'|'timestamp',
 };
-class ResultsTable extends React.Component<Props, State> {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      order: 'asc',
-      orderBy: 0,
-      selected: [],
-      page: 0,
-      rowsPerPage: 10,
-    };
+const parseDate = (date: string, timeFormat: $PropertyType<State, 'timeFormat'>): string => {
+  switch (timeFormat) {
+    case 's':
+      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-DD HH:mm:ss');
+    case 'ms':
+      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-DD HH:mm:ss.SSS');
+    case 'ns':
+      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-DD HH:mm:ss.SSS') + date.slice(-6);
+    default:
+      return date;
   }
+};
+
+const initTimeFormat = storage.get('timeFormat', 'timestamp');
+
+class ResultsTable extends React.Component<Props, State> {
+	state = {
+		order: 'asc',
+		orderBy: 0,
+		selected: [],
+		page: 0,
+		rowsPerPage: 10,
+		timeFormat: initTimeFormat,
+	};
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -93,9 +109,14 @@ class ResultsTable extends React.Component<Props, State> {
     this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
   };
 
+  handleFormatChange = event => {
+    storage.set('timeFormat', event.target.value);
+    this.setState({ timeFormat: event.target.value });
+  };
+
   render() {
     const { classes, queryState: { called, loading, data, error } } = this.props;
-    const { order, orderBy, rowsPerPage, page } = this.state;
+    const { timeFormat, order, orderBy, rowsPerPage, page } = this.state;
 
     if (error) {
       return (
@@ -135,7 +156,7 @@ class ResultsTable extends React.Component<Props, State> {
     }
 
     // no point in parsing before error check
-    const { results, headers } = parseQueryResults(data.influxQuery.data);
+    const { results, headers } = parseQueryResults(data.influxQuery.response.data);
 
     if (!headers || !headers.length) {
       return (
@@ -155,8 +176,18 @@ class ResultsTable extends React.Component<Props, State> {
       );
     }
 
+		// look for time column
+		const tIndex = headers.findIndex(val => val === 'time');
+
+    const query = data.influxQuery.request.q;
+
     return (
       <Paper className={classes.root}>
+				<TableToolbar
+          title={query}
+          timeFormat={timeFormat}
+          handleFormatChange={this.handleFormatChange}
+        />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <ResultsTableHead
@@ -169,14 +200,16 @@ class ResultsTable extends React.Component<Props, State> {
 						{results && results.length > 0 ?
               results.sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => row ? (
+                .map((row, rIndex) => row ? (
                   <TableRow
                     hover
                     tabIndex={-1}
-                    key={index}
+                    key={rIndex}
                   >
-                    {row.map((cell, index) => (
-                      <TableCell key={index} padding="dense" numeric>{cell}</TableCell>
+                    {row.map((cell, cIndex) => (
+                      <TableCell key={cIndex} padding="dense" numeric>
+												{timeFormat && cIndex === tIndex ? parseDate(cell, timeFormat) : cell} 
+											</TableCell>
                     ))}
                   </TableRow>
                 ) : null)
