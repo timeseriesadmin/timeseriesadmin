@@ -7,8 +7,8 @@ import {
 import format from 'date-fns/format';
 
 import QueryError from '../QueryError';
-import ResultsTableHead from '../ResultsTableHead';
 import TableToolbar from './TableToolbar';
+import TableHead from './TableHead';
 import storage from '../../helpers/storage';
 
 function getSorting(order, orderBy): (a: any, b: any) => number {
@@ -191,7 +191,7 @@ class ResultsTable extends React.Component<Props, State> {
         />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
-            <ResultsTableHead
+            <TableHead
               order={order}
               orderBy={orderBy}
               onRequestSort={this.handleRequestSort}
