@@ -5,6 +5,7 @@ import { Query, Mutation } from 'react-apollo';
 import { AppBar, Toolbar, Typography, IconButton, Tooltip, Drawer } from '@material-ui/core';
 import { HelpOutline as DrawerOpenIcon, ChevronRight as DrawerCloseIcon } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
+import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
 import { Route } from 'react-router-dom';
 
@@ -28,6 +29,9 @@ const styles = theme => ({
   flex: {
     flex: 1,
   },
+	appBar: {
+		background: grey['900'],
+	},
   toolbar: {
     ...theme.mixins.toolbar,
     paddingLeft: theme.spacing.unit * 2,
