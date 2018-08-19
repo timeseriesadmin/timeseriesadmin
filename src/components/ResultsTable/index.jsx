@@ -12,7 +12,7 @@ function getSorting(order, orderBy): (a: any, b: any) => number {
   if (order === 'desc') {
     return (a, b) => a[orderBy] > b[orderBy] ? 1 : -1;
   }
-  return (a, b) => b[orderBy] > a[orderBy] ? -1 : 1;
+  return (a, b) => a[orderBy] > b[orderBy] ? -1 : 1;
 }
 
 const styles = theme => ({
