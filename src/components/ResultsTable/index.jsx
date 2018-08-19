@@ -78,7 +78,8 @@ const parseDate = (date: string, timeFormat: $PropertyType<State, 'timeFormat'>)
   }
 };
 
-const initTimeFormat = storage.get('timeFormat', 'timestamp');
+// $FlowFixMe
+const initTimeFormat: $PropertyType<State, 'timeFormat'> = storage.get('timeFormat', 'timestamp');
 
 class ResultsTable extends React.Component<Props, State> {
 	state = {

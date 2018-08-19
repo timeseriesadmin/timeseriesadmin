@@ -21,7 +21,7 @@ const styles = theme => ({
 type Props = {
   title: string,
   classes: any,
-	timeFormat: 's'|'ns'|'timestamp',
+	timeFormat: 's'|'ms'|'ns'|'timestamp',
 	handleFormatChange: Function,
 };
 const TableToolbar = ({ classes, title, timeFormat, handleFormatChange }: Props) => (
