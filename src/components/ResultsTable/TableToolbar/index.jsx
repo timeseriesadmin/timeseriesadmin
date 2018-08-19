@@ -21,10 +21,11 @@ const styles = theme => ({
 type Props = {
   title: string,
   classes: any,
+	hasTime: boolean,
 	timeFormat: 's'|'ms'|'ns'|'timestamp',
 	handleFormatChange: Function,
 };
-const TableToolbar = ({ classes, title, timeFormat, handleFormatChange }: Props) => (
+const TableToolbar = ({ classes, title, timeFormat, handleFormatChange, hasTime }: Props) => (
 <Toolbar className={classes.root}>
   <div className={classes.title}>
     <Typography variant="subheading" id="tableTitle">
@@ -32,6 +33,7 @@ const TableToolbar = ({ classes, title, timeFormat, handleFormatChange }: Props)
     </Typography>
   </div>
   <div className={classes.spacer} />
+	{hasTime &&
   <div className={classes.actions}>
 		<FormGroup row style={{ flexWrap: 'nowrap' }}>
 			<FormLabel style={{ margin: 8, marginRight: 16 }}>Time format</FormLabel>
@@ -51,6 +53,7 @@ const TableToolbar = ({ classes, title, timeFormat, handleFormatChange }: Props)
 			</Select>
 		</FormGroup>
   </div>
+	}
 </Toolbar>
 );
 

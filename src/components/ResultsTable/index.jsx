@@ -186,6 +186,7 @@ class ResultsTable extends React.Component<Props, State> {
       <Paper className={classes.root}>
 				<TableToolbar
           title={query}
+          hasTime={tIndex > -1}
           timeFormat={timeFormat}
           handleFormatChange={this.handleFormatChange}
         />
