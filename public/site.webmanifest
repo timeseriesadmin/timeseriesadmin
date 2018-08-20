@@ -1,6 +1,6 @@
 {
-    "short_name": "Influx Query Admin",
-    "name": "Influx Query Admin - database browsing interface for InfluxDB",
+    "short_name": "Influx Explorer",
+    "name": "Influx Explorer - database browsing interface for InfluxDB",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

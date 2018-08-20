@@ -60,7 +60,7 @@ const QueryHistory = ({ classes }: Props) => (
       return (
         <div className={classes.root}>
           <Typography variant="body1" className={classes.info}>
-            List of most recent queries executed, with max length of 100 items.
+            List of most recent queries executed, with max length of 30 items.
           </Typography>
           <List dense>
             {data.queryHistory.map((influxQuery, index) => (
