@@ -19,27 +19,30 @@ class ResultsTableHead extends React.Component<Props> {
     return (
       <TableHead>
         <TableRow>
-          {headers.map((cell, index) => (
-						<TableCell
-							padding="dense" 
-							key={index}
-							sortDirection={orderBy === index ? order : false}
-							numeric
-						>
-							<Tooltip
-								title="Sort"
-								enterDelay={300}
-							>
-								<TableSortLabel
-									active={orderBy === index}
-									direction={order}
-									onClick={this.createSortHandler(index.toString())}
-								>
-									{cell}
-								</TableSortLabel>
-							</Tooltip>
-						</TableCell>
-          ))}
+          {headers.map((cell, i) =>  {
+            const index = i.toString();
+            return (
+              <TableCell
+                padding="dense" 
+                key={index}
+                sortDirection={orderBy === index ? order : false}
+                numeric
+              >
+                <Tooltip
+                  title="Sort"
+                  enterDelay={300}
+                >
+                  <TableSortLabel
+                    active={orderBy === index}
+                    direction={order}
+                    onClick={this.createSortHandler(index)}
+                  >
+                    {cell}
+                  </TableSortLabel>
+                </Tooltip>
+              </TableCell>
+            );
+          })}
         </TableRow>
       </TableHead>
     );
