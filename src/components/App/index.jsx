@@ -26,7 +26,15 @@ const styles = theme => ({
     width: '100%',
     zIndex: 1,
     minHeight: '100vh',
+		boxSizing: 'border-box',
+    transition: theme.transitions.create('padding', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
+	rootWithDrawer: {
+		paddingRight: drawerWidth,
+	},
   flex: {
     flex: 1,
   },
@@ -58,21 +66,8 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       paddingTop: theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight,
     },
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginRight: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: 0,
   },
   drawerPaper: {
-    position: 'relative',
     width: drawerWidth,
   },
   appBarShifted: {
@@ -105,7 +100,9 @@ const App = ({ classes }) => (
 	{({ data: { isOpenDrawer } }: { data: any }) => (
 	<Mutation mutation={SET_OPEN_DRAWER}>
 	{(setOpenDrawer) => (
-		<div className={classes.root}>
+		<div className={classNames(classes.root, {
+				[classes.rootWithDrawer]: isOpenDrawer,
+			})}>
 			<AppBar className={classNames(classes.appBar, {
 				[classes.appBarShifted]: isOpenDrawer,
 			})}>
@@ -145,9 +142,7 @@ const App = ({ classes }) => (
 				</Toolbar>
 			</AppBar>
 
-			<main className={classNames(classes.content, {
-				[classes.contentShift]: isOpenDrawer,
-			})}>
+			<main className={classes.content}>
 				<Route path="/" component={PageHome} />
 			</main>
 
