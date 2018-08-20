@@ -68,11 +68,11 @@ type State = {
 const parseDate = (date: string, timeFormat: $PropertyType<State, 'timeFormat'>): string => {
   switch (timeFormat) {
     case 's':
-      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-DD HH:mm:ss');
+      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-dd HH:mm:ss');
     case 'ms':
-      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-DD HH:mm:ss.SSS');
+      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-dd HH:mm:ss.SSS');
     case 'ns':
-      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-DD HH:mm:ss.SSS') + date.slice(-6);
+      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-dd HH:mm:ss.SSS') + date.slice(-6);
     default:
       return date;
   }
