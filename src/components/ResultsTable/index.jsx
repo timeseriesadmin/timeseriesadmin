@@ -172,6 +172,9 @@ class ResultsTable extends React.Component<Props, State> {
             <Typography component="p">
               Maybe you query only for TAGS (your query should contain at least one FIELD) ?
             </Typography>
+            <Typography component="p">
+              Remember, measurement names are CASE SENSITIVE !
+            </Typography>
           </div>
         </Paper>
       );
