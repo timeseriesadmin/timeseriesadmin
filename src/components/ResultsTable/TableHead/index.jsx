@@ -6,7 +6,7 @@ type Props = {
   headers: string[],
   onRequestSort: Function,
   order: 'asc' | 'desc',
-  orderBy: number,
+  orderBy: number | null,
 };
 class ResultsTableHead extends React.Component<Props> {
   createSortHandler = (property: string) => (event: Event) => {

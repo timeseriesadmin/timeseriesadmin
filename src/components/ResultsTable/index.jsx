@@ -84,7 +84,7 @@ const initTimeFormat: $PropertyType<State, 'timeFormat'> = storage.get('timeForm
 class ResultsTable extends React.Component<Props, State> {
 	state = {
 		order: 'asc',
-		orderBy: 0,
+		orderBy: null,
 		selected: [],
 		page: 0,
 		rowsPerPage: 10,
@@ -157,7 +157,7 @@ class ResultsTable extends React.Component<Props, State> {
     }
 
     // no point in parsing before error check
-    const { results, headers } = parseQueryResults(data.influxQuery.response.data);
+    let { results, headers } = parseQueryResults(data.influxQuery.response.data);
 
     if (!headers || !headers.length) {
       return (
@@ -180,6 +180,11 @@ class ResultsTable extends React.Component<Props, State> {
 		// look for time column
 		const tIndex = headers.findIndex(val => val === 'time');
 
+		// skip sorting if not selected
+		if (results && results.length > 0 && orderBy) {
+			results = results.sort(getSorting(order, orderBy));
+		}
+
     const query = data.influxQuery.request.q;
 
     return (
@@ -200,7 +205,7 @@ class ResultsTable extends React.Component<Props, State> {
             />
             <TableBody>
 						{results && results.length > 0 ?
-              results.sort(getSorting(order, orderBy))
+							results
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, rIndex) => row ? (
                   <TableRow
