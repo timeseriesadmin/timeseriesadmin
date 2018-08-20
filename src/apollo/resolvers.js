@@ -4,7 +4,7 @@ import storage from '../helpers/storage';
 import gql from 'graphql-tag';
 import type { QueryParams } from '../providers/influx/types';
 
-const HISTORY_MAX_LENGTH = 100;
+const HISTORY_MAX_LENGTH = 30;
 
 const queryHistory = JSON.parse(storage.get('queryHistory', '[]'));
 const form = JSON.parse(storage.get('form', JSON.stringify({
