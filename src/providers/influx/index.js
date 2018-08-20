@@ -18,14 +18,14 @@ import qs from 'qs';
     }
     data = qs.stringify(requestParams);*/
 
-const post = async(params: WriteParams | QueryParams): Promise<InfluxResponse> => {
+const post = async(params: QueryParams): Promise<InfluxResponse> => {
   let response;
   if (params.db) {
     params.url += `?db=${params.db}`;
   }
   try {
     let headers = {
-      'Content-Type': 'application/x-www-form-urlencoded', // required to send query in POST body
+      // 'Content-Type': 'application/x-www-form-urlencoded', // required to send query in POST body
       'Accept': 'application/json',
     };
     if (params.responseType && params.responseType === 'csv') {
@@ -38,7 +38,7 @@ const post = async(params: WriteParams | QueryParams): Promise<InfluxResponse> =
     response = await axios({
       headers,
       url: params.url,
-      data: params.q,
+      data: qs.stringify({ q: params.q }),
       method: 'POST',
      // use Basic Auth headers if username is provided
       auth: params.u ? {
@@ -72,9 +72,12 @@ export const buildUrl = ({ host, ssl, port }: { host: string, ssl?: boolean, por
 };
 
 export const query = async(params: QueryParams): Promise<InfluxResponse> => {
-  params.url += '/query';
-  params.q = qs.stringify({ q: params.q });
-  return post(params);
+	const queryParams = {
+		...params,
+		url: `${params.url}/query`,
+	};
+
+	return post(queryParams);
 };
 
 export const write = async(params: WriteParams): Promise<InfluxResponse> => {

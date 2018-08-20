@@ -23,10 +23,10 @@ export type QueryParams = {
   responseType?: 'json' | 'csv' | 'msgpack', // json is the default response type
 };
 
-export type WriteParams = {
-  ...InfluxParams,
-  db: string, // is not optional for API write
-}
+// export type WriteParams = {
+  // ...InfluxParams,
+  // db: string, // is not optional for API write
+// }
 
 export type InfluxResponse = { data: { results: { series: { values: any[] }[] }[] } };
 

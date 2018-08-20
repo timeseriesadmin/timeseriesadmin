@@ -70,8 +70,6 @@ export const resolvers = {
       return null;
     },
     influxQuery: async (_: void, { url, u, p, db, q }: QueryParams, { cache }: any): Promise<any> => {
-      q = q.toLowerCase();
-
       // TODO: ensure LIMIT if not provided but ONLY for SELECTs
       // if (q.indexOf('select') === 0 && q.indexOf('limit') === -1) {
         // q += ' limit 100'; // TODO: increase LIMIT value
