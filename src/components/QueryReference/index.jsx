@@ -18,6 +18,11 @@ const references = [
     example: 'SELECT COUNT("water_level") FROM "h2o_feet" WHERE time >= \'2015-08-18T00:00:00Z\' AND time <= \'2015-08-18T00:30:00Z\' GROUP BY time(12m),"location"' },
   { query: 'SELECT_clause INTO <measurement_name> FROM_clause [WHERE_clause] [GROUP_BY_clause]',
     example: 'SELECT "water_level" INTO "h2o_feet_copy_1" FROM "h2o_feet" WHERE "location" = \'coyote_creek\'' },
+  { query: 'SHOW FIELD KEYS [ON <database_name>] [FROM <measurement_name>]',
+    example: 'SHOW FIELD KEYS ON "NOAA_water_database"' },
+  { query: 'SHOW TAG VALUES [ON <database_name>][FROM_clause] WITH KEY [ [<operator> "<tag_key>" | <regular_expression>] | [IN ("<tag_key1>","<tag_key2")]] [WHERE <tag_key> <operator> [\'<tag_value>\' | <regular_expression>]] [LIMIT_clause] [OFFSET_clause]',
+    example: 'SHOW TAG VALUES ON "NOAA_water_database" WITH KEY = "randtag"' },
+    // examples: ['SHOW TAG VALUES ON "NOAA_water_database" WITH KEY = "randtag"', 'SHOW TAG VALUES ON "NOAA_water_database" WITH KEY IN ("location","randtag") WHERE "randtag" =~ /./ LIMIT 3'] },
   { query: 'DROP MEASUREMENT <measurement_name>' },
   { query: 'DROP DATABASE <database_name>' },
 ];
