@@ -1,6 +1,8 @@
+import storage from '../helpers/storage';
+
 // In order to extract schema to separate .graphql file it will be required to alter
 // webpack config which is not possible without ejecting or using rewired version of CRA
-export default = `
+export const typeDefs = `
   type InfluxQuery {
     query: String
     error: String
@@ -23,3 +25,20 @@ export default = `
     queryHistory: [InfluxQuery!]
   }
 `;
+
+const queryHistory = JSON.parse(storage.get('queryHistory', '[]'));
+const form = JSON.parse(storage.get('form', JSON.stringify({
+	url: '',
+	u: '',
+	p: '',
+	db: '',
+	q: '',
+	__typename: 'FormData',
+})));
+const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
+
+export const defaults = {
+	isOpenDrawer,
+  queryHistory,
+  form,
+};

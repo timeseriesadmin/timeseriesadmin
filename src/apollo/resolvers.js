@@ -6,22 +6,6 @@ import type { QueryParams } from '../providers/influx/types';
 
 const HISTORY_MAX_LENGTH = 30;
 
-const queryHistory = JSON.parse(storage.get('queryHistory', '[]'));
-const form = JSON.parse(storage.get('form', JSON.stringify({
-	url: '',
-	u: '',
-	p: '',
-	db: '',
-	q: '',
-	__typename: 'FormData',
-})));
-const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
-export const defaults = {
-	isOpenDrawer,
-  queryHistory,
-  form,
-};
-
 type FormParams = {
   url?: string,
   u?: string,
