@@ -4,31 +4,7 @@ import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 
 import { defaults, resolvers } from './resolvers';
-
-// TODO: extract separate schema.graphql file see server implementation for more info
-const typeDefs = `
-  type InfluxQuery {
-    query: String!
-    error: String
-  }
-  type FormData {
-    url: String
-    u: String
-    p: String
-    db: String
-    q: String
-  }
-  type Mutation {
-    influxQuery(url: String!, u: String, p: String, db: String, q: String!): Boolean
-    updateForm(url: String, u: String, p: String, db: String, q: String): Boolean
-		setOpenDrawer(isOpen: Boolean!): Boolean
-  }
-  type Query {
-		isOpenDrawer: Boolean
-    form: FormData
-    queryHistory: [InfluxQuery]!
-  }
-`;
+import typeDefs from './schema';
 
 const cache = new InMemoryCache();
 
