@@ -53,33 +53,43 @@ export const resolvers = {
       // it is important to return anything e.g. null (in other case you will see a warning)
       return null;
     },
-    influxQuery: async (_: void, { url, u, p, db, q }: QueryParams, { cache }: any): Promise<any> => {
+    executeQuery: async (_: void, queryParams: QueryParams, { cache }: any): Promise<any> => {
       // TODO: ensure LIMIT if not provided but ONLY for SELECTs
       // if (q.indexOf('select') === 0 && q.indexOf('limit') === -1) {
         // q += ' limit 100'; // TODO: increase LIMIT value
       // }
 
-      let { queryHistory } = cache.readQuery({
+      let { queryHistory, form } = cache.readQuery({
         query: gql`
-          query queryHistory {
+          query getData {
             queryHistory {
               query
               error
             }
+						form {
+							url
+							u
+							p
+							db
+							q
+						}
           }
         `,
       });
+			let queryArgs = { ...form, ...queryParams, responseType: 'csv' };
 
       let queryError;
       let queryResult;
       try {
-        queryResult = await query({ url, u, p, db, q, responseType: 'csv' });
+        queryResult = await query(queryArgs);
       } catch(error) {
         queryError = error;
       }
 
+			// update query history
+			// TODO: check if current query is same as last one if so don't add it to the history
       queryHistory.unshift({
-        query: q,
+        query: queryArgs.q,
         error: queryError ? JSON.stringify(queryError) : null,
         __typename: 'InfluxQuery',
       });
@@ -103,7 +113,7 @@ export const resolvers = {
       }
 
       return {
-				request: { q },
+				request: { params: queryArgs },
 				response: queryResult,
 			};
     },

@@ -8,13 +8,13 @@ import ResultsTable from '../ResultsTable';
 const PageHome = () => (
   <div>
     <br/>
-    <Mutation mutation={QUERY_DB} fetchPolicy="no-cache">
-      {(queryMutate, queryState) => (
+    <Mutation mutation={FORM_QUERY} fetchPolicy="no-cache">
+      {(executeQuery, queryState) => (
         <Mutation mutation={UPDATE_FORM}>
           {(formMutate, _mutationState) => {
             const onSubmit = (values): void => {
               formMutate({ variables: values });
-              queryMutate({ variables: values });
+              executeQuery({ variables: {} });
             };
 
             return (
@@ -31,9 +31,9 @@ const PageHome = () => (
 );
 
 // TODO: use query instead, with no-cache policy
-const QUERY_DB = gql`
-  mutation influxQuery($url: String, $u: String, $p: String, $db: String, $q: String) {
-    influxQuery(url: $url, u: $u, p: $p, db: $db, q: $q) @client
+const FORM_QUERY = gql`
+  mutation executeQuery {
+    executeQuery @client
   }
 `;
 

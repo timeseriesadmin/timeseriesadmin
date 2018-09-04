@@ -157,7 +157,7 @@ class ResultsTable extends React.Component<Props, State> {
     }
 
     // no point in parsing before error check
-    let { results, headers } = parseQueryResults(data.influxQuery.response.data);
+    let { results, headers } = parseQueryResults(data.executeQuery.response.data);
 
     if (!headers || !headers.length) {
       return (
@@ -188,7 +188,7 @@ class ResultsTable extends React.Component<Props, State> {
 			results = results.sort(getSorting(order, orderBy));
 		}
 
-    const query = data.influxQuery.request.q;
+    const query = data.executeQuery.request.q;
 
     return (
       <Paper className={classes.root}>
