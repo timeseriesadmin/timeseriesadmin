@@ -14,6 +14,30 @@ export const typeDefs = `
     db: String
     q: String
   }
+  type Server {
+    id: String!
+    databases: [Database!]
+  }
+  type Database {
+    id: String!
+    name: String!
+    measurements: [Measurement!]
+  }
+  type Measurement {
+    id: String!
+    name: String!
+    fieldKeys: [FieldKey!]
+    fieldTags: [FieldTag!]
+  }
+  type FieldKey {
+    id: String!
+    name: String!
+    type: String!
+  }
+  type FieldTag {
+    id: String!
+    name: String!
+  }
   type Mutation {
     executeQuery(url: String!, u: String, p: String, db: String, q: String!): Boolean
     updateForm(url: String, u: String, p: String, db: String, q: String): Boolean
@@ -23,10 +47,12 @@ export const typeDefs = `
 		isOpenDrawer: Boolean
     form: FormData
     queryHistory: [InfluxQuery!]
+    server: Server
   }
 `;
 
-const queryHistory = JSON.parse(storage.get('queryHistory', '[]'));
+// TODO: prevent adding history with no query instead of filtering on init
+const queryHistory = JSON.parse(storage.get('queryHistory', '[]')).filter(hist => hist.query);
 const form = JSON.parse(storage.get('form', JSON.stringify({
 	url: '',
 	u: '',
@@ -36,9 +62,44 @@ const form = JSON.parse(storage.get('form', JSON.stringify({
 	__typename: 'FormData',
 })));
 const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
+const explorer = {
+  __typename: 'Server',
+  id: 'test@test.com:8086',
+  name: 'test@test.com:8086',
+  databases: [
+    {
+      __typename: 'Database',
+      id: 'testDB',
+      name: 'testDB',
+      measurements: [
+        {
+          __typename: 'Measurement',
+          id: 'testMeas',
+          name: 'testMeas',
+          fieldKeys: [
+            {
+              __typename: 'FieldKey',
+              id: 'testFK',
+              name: 'testFK',
+              type: 'float',
+            }
+          ],
+          fieldTags: [
+            {
+              __typename: 'FieldTag',
+              id: 'testFT',
+              name: 'testFT',
+            }
+          ],
+        },
+      ],
+    },
+  ],
+};//JSON.parse(storage.get('explorer', null));
 
 export const defaults = {
 	isOpenDrawer,
   queryHistory,
   form,
+  explorer,
 };

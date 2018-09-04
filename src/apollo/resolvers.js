@@ -6,6 +6,9 @@ import type { QueryParams } from '../providers/influx/types';
 
 const HISTORY_MAX_LENGTH = 30;
 
+type ExploreArgs = {
+	type: 'databases' | 'measurements' | 'field_keys' | 'field_tags' | 'series',
+};
 type FormParams = {
   url?: string,
   u?: string,
@@ -117,5 +120,50 @@ export const resolvers = {
 				response: queryResult,
 			};
     },
- },
+    // TODO: support multiserver with { id }: { id: string } args
+    server: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
+      const fragment = gql`
+      fragment getServer on Server {
+        id
+        name
+        databases {
+          id
+          name
+        }
+      }`;
+      const result = cache.readFragment({ fragment, id: `Server:${id}` });
+      return result;
+    },
+    database: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
+      const fragment = gql`
+      fragment getDatabase on Database {
+        id
+        name
+        measurements {
+          id
+          name
+        }
+      }`;
+      const result = cache.readFragment({ fragment, id: `Database:${id}` });
+      return result;
+    },
+    measurement: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
+      const fragment = gql`
+      fragment getMeasurement on Measurement {
+        id
+        name
+        fieldKeys {
+          id
+          name
+          type
+        }
+        fieldTags {
+          id
+          name
+        }
+      }`;
+      const result = cache.readFragment({ fragment, id: `Measurement:${id}` });
+      return result;
+    },
+  },
 };

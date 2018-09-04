@@ -3,8 +3,9 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { History as QueryHistoryIcon, Flip as QueryReferenceIcon } from '@material-ui/icons';
+import { History as QueryHistoryIcon, Flip as QueryReferenceIcon, Explore as InfluxExplorerIcon } from '@material-ui/icons';
 
+import InfluxExplorer from '../InfluxExplorer';
 import QueryHistory from '../QueryHistory';
 import QueryReference from '../QueryReference';
 
@@ -74,6 +75,10 @@ class DrawerRight extends React.Component<Props, State> {
             textColor="primary"
             onChange={this.handleChange}
           >
+            <Tab label="Explorer"
+              className={classes.tab}
+              icon={<InfluxExplorerIcon className={classes.tabIcon} />}
+            />
             <Tab label="History"
               className={classes.tab}
               icon={<QueryHistoryIcon className={classes.tabIcon} />}
@@ -86,8 +91,9 @@ class DrawerRight extends React.Component<Props, State> {
         </div>
 
         <div className={classes.content}>
-          {activeTab === 0 && <QueryHistory/>}
-          {activeTab === 1 && <QueryReference/>}
+          {activeTab === 0 && <InfluxExplorer/>}
+          {activeTab === 1 && <QueryHistory/>}
+          {activeTab === 2 && <QueryReference/>}
         </div>
       </div>
     );

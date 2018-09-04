@@ -63,18 +63,18 @@ const QueryHistory = ({ classes }: Props) => (
             List of most recent queries executed, with max length of 30 items.
           </Typography>
           <List dense>
-            {data.queryHistory.map((influxQuery, index) => (
+            {data.queryHistory.map((executeQuery, index) => (
               <ListItem button disableGutters
                 className={classes.listItem}
                 key={index}
-                onClick={handleQueryClick(influxQuery.query)}
+                onClick={handleQueryClick(executeQuery.query)}
               >
-                {influxQuery.error !== null &&
+                {executeQuery.error !== null &&
                 <ListItemIcon>
                   <ErrorIcon color="error" className={classes.btnIcon}/>
                 </ListItemIcon>
                 }
-                <ListItemText primary={influxQuery.query}
+                <ListItemText primary={executeQuery.query}
                   className={classes.listItemText}
                 />
               </ListItem>
