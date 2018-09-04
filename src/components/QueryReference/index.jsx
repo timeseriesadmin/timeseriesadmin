@@ -25,6 +25,7 @@ const references = [
     // examples: ['SHOW TAG VALUES ON "NOAA_water_database" WITH KEY = "randtag"', 'SHOW TAG VALUES ON "NOAA_water_database" WITH KEY IN ("location","randtag") WHERE "randtag" =~ /./ LIMIT 3'] },
   { query: 'DROP MEASUREMENT <measurement_name>' },
   { query: 'DROP DATABASE <database_name>' },
+  { query: 'SELECT FIRST(<field_name>) from /.*/' },
 ];
 
 const styles = theme => ({
