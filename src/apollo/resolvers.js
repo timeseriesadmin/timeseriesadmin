@@ -122,6 +122,44 @@ export const resolvers = {
     },
     // TODO: support multiserver with { id }: { id: string } args
     server: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
+      const { form } = cache.readQuery({
+        query: gql`
+          query form {
+            form {
+              url
+              u
+              p
+            }
+          }
+        `,
+      });
+
+			let queryArgs = { ...form, q: 'SHOW DATABASES', responseType: 'csv' };
+
+      const queryResult = await query(queryArgs);
+
+      let databases = queryResult.data.split('\n');
+      if (databases.length > 0) {
+        databases.shift(); // remove header
+      }
+
+      databases = databases.map(line => line.split(',')[2])
+        .filter(name => !!name);
+
+      /*cache.writeData({
+        data: {
+          server: {
+            __typename: 'Server',
+            id: `${form.u}@${form.url}`,
+            databases: databases.map(name => ({
+              __typename: 'Database',
+              id: name,
+              name,
+            })),
+          },
+        },
+      });
+
       const fragment = gql`
       fragment getServer on Server {
         id
@@ -131,11 +169,56 @@ export const resolvers = {
           name
         }
       }`;
-      const result = cache.readFragment({ fragment, id: `Server:${id}` });
-      return result;
+      const result = cache.readFragment({ fragment, id: `Server:${id}` });*/
+      // return result;
+      return {
+        __typename: 'Server',
+        id: `${form.u}@${form.url}`,
+        name: `${form.u}@${form.url}`,
+        databases: databases.map(name => ({
+          __typename: 'Database',
+          id: name,
+          name,
+        })),
+      };
     },
     database: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
-      const fragment = gql`
+      const { form } = cache.readQuery({
+        query: gql`
+          query form {
+            form {
+              url
+              u
+              p
+            }
+          }
+        `,
+      });
+
+			let queryArgs = { ...form, q: 'SHOW MEASUREMENTS', db: id, responseType: 'csv' };
+
+      const queryResult = await query(queryArgs);
+
+      let measurements = queryResult.data.split('\n');
+      if (measurements.length > 0) {
+        measurements.shift(); // remove header
+      }
+
+      measurements = measurements.map(line => line.split(',')[2])
+        .filter(name => !!name);
+
+      return {
+        __typename: 'Database',
+        id,
+        name: id,
+        measurements: measurements.map(name => ({
+          __typename: 'Measurement',
+          id: name,
+          name,
+        })),
+      };
+
+      /*const fragment = gql`
       fragment getDatabase on Database {
         id
         name
@@ -145,7 +228,7 @@ export const resolvers = {
         }
       }`;
       const result = cache.readFragment({ fragment, id: `Database:${id}` });
-      return result;
+      return result;*/
     },
     measurement: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
       const fragment = gql`

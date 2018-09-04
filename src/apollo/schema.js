@@ -62,7 +62,7 @@ const form = JSON.parse(storage.get('form', JSON.stringify({
 	__typename: 'FormData',
 })));
 const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
-const explorer = {
+const server = {
   __typename: 'Server',
   id: 'test@test.com:8086',
   name: 'test@test.com:8086',
@@ -101,5 +101,5 @@ export const defaults = {
 	isOpenDrawer,
   queryHistory,
   form,
-  explorer,
+  server,
 };

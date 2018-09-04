@@ -30,6 +30,15 @@ const styles = theme => ({
   }
 });
 
+const GET_FORM = gql`
+  query form {
+    form {
+      u
+      url
+    }
+  }
+`
+
 const SHOW_SERVER = gql`
   mutation showServer {
     server(id: $id) @client {
@@ -80,38 +89,42 @@ type Props = {
   classes: any,
 };
 const QueryHistory = ({ classes }: Props) => (
-  <List>
-    <ExplorerItem key="test@test.com:8086" id="test@test.com:8086" query={SHOW_SERVER}
-      label="Explore"
-      showData={data => (
-        <List>
-        {data.server.databases.map(database => (
-          <ExplorerItem key={database.id} id={database.id} query={SHOW_DATABASE}
-            label={database.name}
-            showData={data => (
-              <List>
-              {data.database.measurements.map(measurement => (
-                <ExplorerItem key={measurement.id} id={measurement.id} query={SHOW_MEASUREMENT}
-                  label={measurement.name}
-                  showData={data => 
-                    [(<List key="fieldKeys">
-                      {data.measurement.fieldKeys.map(fieldKey => (
-                        <div key={fieldKey.name}>{fieldKey.name}</div>
-                      ))}
-                    </List>),
-                    (<List key="fieldTags">
-                      {data.measurement.fieldTags.map(fieldTag => (
-                        <div key={fieldTag.name}>{fieldTag.name}</div>
-                      ))}
-                    </List>)]
-                  } />
-              ))}
-              </List>
-            )} />
-        ))}
-        </List>
-    )} />
-  </List>
+  <Query query={GET_FORM}>
+    {({ data: { form } }) => (
+    <List>
+      <ExplorerItem key={`${form.u}@${form.url}`} id={`${form.u}@${form.url}`} query={SHOW_SERVER}
+        label="Explore"
+        showData={data => (
+          <List>
+          {data.server.databases.map(database => (
+            <ExplorerItem key={database.id} id={database.id} query={SHOW_DATABASE}
+              label={database.name}
+              showData={data => (
+                <List>
+                {data.database.measurements.map(measurement => (
+                  <ExplorerItem key={measurement.id} id={measurement.id} query={SHOW_MEASUREMENT}
+                    label={measurement.name}
+                    showData={data => 
+                      [(<List key="fieldKeys">
+                        {data.measurement.fieldKeys.map(fieldKey => (
+                          <div key={fieldKey.name}>{fieldKey.name}</div>
+                        ))}
+                      </List>),
+                      (<List key="fieldTags">
+                        {data.measurement.fieldTags.map(fieldTag => (
+                          <div key={fieldTag.name}>{fieldTag.name}</div>
+                        ))}
+                      </List>)]
+                    } />
+                ))}
+                </List>
+              )} />
+          ))}
+          </List>
+      )} />
+    </List>
+    )}
+  </Query>
 );
 
 // const QueryHistory = ({ classes }: Props) => (
