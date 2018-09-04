@@ -13,7 +13,7 @@ const styles = theme => ({
 
 type Props = {
   classes: any,
-  database?: string,
+  db?: string,
   query: any, // gql string
   label: string,
   id: string,
@@ -28,11 +28,11 @@ class ExplorerItem extends React.Component<Props, State> {
   };
 
   render() {
-    const { classes, database, label, query, id, showData } = this.props;
+    const { classes, db, label, query, id, showData } = this.props;
 
     return (
       <ListItem key={id}>
-        <Mutation mutation={query} variables={{ id }}>
+        <Mutation mutation={query} variables={{ id, db }}>
           {(mutate, { called, loading, data, error }) => (
             <div>
               <Button onClick={() => mutate()}>

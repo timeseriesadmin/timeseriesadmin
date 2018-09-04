@@ -27,14 +27,14 @@ export const typeDefs = `
     id: String!
     name: String!
     fieldKeys: [FieldKey!]
-    fieldTags: [FieldTag!]
+    tagKeys: [TagKey!]
   }
   type FieldKey {
     id: String!
     name: String!
     type: String!
   }
-  type FieldTag {
+  type TagKey {
     id: String!
     name: String!
   }
@@ -62,7 +62,7 @@ const form = JSON.parse(storage.get('form', JSON.stringify({
 	__typename: 'FormData',
 })));
 const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
-const server = {
+/*const server = {
   __typename: 'Server',
   id: 'test@test.com:8086',
   name: 'test@test.com:8086',
@@ -84,9 +84,9 @@ const server = {
               type: 'float',
             }
           ],
-          fieldTags: [
+          tagKeys: [
             {
-              __typename: 'FieldTag',
+              __typename: 'TagKey',
               id: 'testFT',
               name: 'testFT',
             }
@@ -96,10 +96,11 @@ const server = {
     },
   ],
 };//JSON.parse(storage.get('explorer', null));
+*/
 
 export const defaults = {
 	isOpenDrawer,
   queryHistory,
   form,
-  server,
+  server: null,
 };

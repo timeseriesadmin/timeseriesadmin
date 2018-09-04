@@ -30,14 +30,9 @@ const styles = theme => ({
   }
 });
 
-const GET_FORM = gql`
-  query form {
-    form {
-      u
-      url
-    }
-  }
-`
+const GET_FORM = gql`{
+  form { u url }
+}`;
 
 const SHOW_SERVER = gql`
   mutation showServer {
@@ -66,8 +61,8 @@ const SHOW_DATABASE = gql`
 `;
 
 const SHOW_MEASUREMENT = gql`
-  mutation showMeasurement($id: String) {
-    measurement(id: $id) @client {
+  mutation showMeasurement($id: String, $db: String) {
+    measurement(id: $id, db: $db) @client {
       id
       name
       fieldKeys {
@@ -75,7 +70,7 @@ const SHOW_MEASUREMENT = gql`
         name
         type
       }
-      fieldTags {
+      tagKeys {
         id
         name
       }
@@ -102,19 +97,22 @@ const QueryHistory = ({ classes }: Props) => (
               showData={data => (
                 <List>
                 {data.database.measurements.map(measurement => (
-                  <ExplorerItem key={measurement.id} id={measurement.id} query={SHOW_MEASUREMENT}
+                  <ExplorerItem key={measurement.id} db={database.id} id={measurement.id} query={SHOW_MEASUREMENT}
                     label={measurement.name}
                     showData={data => 
                       [(<List key="fieldKeys">
                         {data.measurement.fieldKeys.map(fieldKey => (
-                          <div key={fieldKey.name}>{fieldKey.name}</div>
+                          <div key={fieldKey.name}>
+                            <span>{fieldKey.name}</span>
+                            <small>({fieldKey.type})</small>
+                          </div>
                         ))}
                       </List>),
-                      (<List key="fieldTags">
-                        {data.measurement.fieldTags.map(fieldTag => (
+                      data.measurement.tagKeys ? (<List key="tagKeys">
+                        {data.measurement.tagKeys.map(fieldTag => (
                           <div key={fieldTag.name}>{fieldTag.name}</div>
                         ))}
-                      </List>)]
+                      </List>) : null]
                     } />
                 ))}
                 </List>

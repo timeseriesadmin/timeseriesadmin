@@ -6,9 +6,6 @@ import type { QueryParams } from '../providers/influx/types';
 
 const HISTORY_MAX_LENGTH = 30;
 
-type ExploreArgs = {
-	type: 'databases' | 'measurements' | 'field_keys' | 'field_tags' | 'series',
-};
 type FormParams = {
   url?: string,
   u?: string,
@@ -123,15 +120,9 @@ export const resolvers = {
     // TODO: support multiserver with { id }: { id: string } args
     server: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
       const { form } = cache.readQuery({
-        query: gql`
-          query form {
-            form {
-              url
-              u
-              p
-            }
-          }
-        `,
+        query: gql`{
+          form { url u p }
+        }`,
       });
 
 			let queryArgs = { ...form, q: 'SHOW DATABASES', responseType: 'csv' };
@@ -184,15 +175,9 @@ export const resolvers = {
     },
     database: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
       const { form } = cache.readQuery({
-        query: gql`
-          query form {
-            form {
-              url
-              u
-              p
-            }
-          }
-        `,
+        query: gql`{
+          form { url u p }
+        }`,
       });
 
 			let queryArgs = { ...form, q: 'SHOW MEASUREMENTS', db: id, responseType: 'csv' };
@@ -230,8 +215,59 @@ export const resolvers = {
       const result = cache.readFragment({ fragment, id: `Database:${id}` });
       return result;*/
     },
-    measurement: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
-      const fragment = gql`
+    measurement: async (_: void, { id, db }: { id: string, db: string }, { cache }: any): Promise<any> => {
+      const { form } = cache.readQuery({
+        query: gql`{
+          form { url u p }
+        }`,
+      });
+
+      const qArgs = {
+        ...form,
+        q: `SHOW FIELD KEYS FROM "${id}"`,
+        responseType: 'csv',
+        db,
+      };
+
+      const keysResult = await query(qArgs);
+
+      let fieldKeys = keysResult.data.split('\n');
+      if (fieldKeys.length > 0) {
+        fieldKeys.shift(); // remove header
+      }
+
+      fieldKeys = fieldKeys.map(line => ({ name: line.split(',')[2], type: line.split(',')[3]}))
+        .filter(line => !!line.name);
+
+      const tagsResult = await query({
+        ...qArgs,
+        q: `SHOW TAG KEYS FROM "${id}"`,
+      });
+
+      let tagKeys = tagsResult.data.split('\n');
+      if (tagKeys.length > 0) {
+        tagKeys.shift(); // remove header
+      }
+
+      tagKeys = tagKeys.map(line => line.split(',')[2])
+        .filter(name => !!name);
+
+      return {
+        __typename: 'Measurement',
+        id,
+        name: id,
+        fieldKeys: fieldKeys.map(key => ({
+          ...key,
+          __typename: 'FieldKeys',
+          id: key.name,
+        })),
+        tagKeys: tagKeys.map(name => ({
+          __typename: 'TagKeys',
+          id: name,
+          name,
+        })),
+      };
+      /*const fragment = gql`
       fragment getMeasurement on Measurement {
         id
         name
@@ -240,13 +276,13 @@ export const resolvers = {
           name
           type
         }
-        fieldTags {
+        tagKeys {
           id
           name
         }
       }`;
       const result = cache.readFragment({ fragment, id: `Measurement:${id}` });
-      return result;
+      return result;*/
     },
   },
 };
