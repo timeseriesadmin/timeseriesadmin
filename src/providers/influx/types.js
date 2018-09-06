@@ -28,6 +28,6 @@ export type QueryParams = {
   // db: string, // is not optional for API write
 // }
 
-export type InfluxResponse = { data: { results: { series: { values: any[] }[] }[] } };
+export type InfluxResponse = { data: { results: { series: { values: any[] }[] }[] } | string };
 
 export type SingleQueryResult = string[][];

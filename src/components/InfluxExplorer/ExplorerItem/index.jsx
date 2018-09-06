@@ -13,6 +13,7 @@ const styles = theme => ({
 
 type Props = {
   classes: any,
+  meas?: string,
   db?: string,
   query: any, // gql string
   label: string,
@@ -28,24 +29,34 @@ class ExplorerItem extends React.Component<Props, State> {
   };
 
   render() {
-    const { classes, db, label, query, id, showData } = this.props;
+    const { classes, db, meas, label, query, id, showData } = this.props;
 
     return (
       <ListItem key={id}>
-        <Mutation mutation={query} variables={{ id, db }}>
-          {(mutate, { called, loading, data, error }) => (
-            <div>
-              <Button onClick={() => mutate()}>
-                {label}
-              </Button>
-              {!called ? null :
-                loading ? <div>Loading...</div> :
-                error ? <div>ERROR</div> :
-                !data ? <div>NO DATA</div> :
-                showData(data)
-              }
-            </div>
-          )}
+        <Mutation mutation={query} variables={{ id, meas, db }}>
+          {(mutate, { called, loading, data, error }) => {
+
+            // TODO: continue here
+            const handleClick = (expand: boolean = true) => () => {
+              mutate();
+              this.setState({ isExpanded: expand });
+            };
+            return (
+              <div>
+                <Button onClick={handleClick(!this.state.isExpanded)}>
+                  {label}
+                </Button>
+                {!called ? null :
+                  loading ? <div>Loading...</div> :
+                  error ? <div>ERROR</div> :
+                  !data ? <div>NO DATA</div> :
+                  <Collapse in={this.state.isExpanded} timeout="auto" unmountOnExit>
+                    {showData(data)}
+                  </Collapse>
+                }
+              </div>
+            );
+          }}
         </Mutation>
       </ListItem>
     );

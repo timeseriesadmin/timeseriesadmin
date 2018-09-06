@@ -23,6 +23,20 @@ export const typeDefs = `
     name: String!
     measurements: [Measurement!]
   }
+  type Series {
+    id: String!
+    name: String!
+    tags: String!
+    key: String!
+  }
+  type RetentionPolicy {
+    id: String!
+    name: String!
+    duration: String!
+    shardGroupDuration: String!
+    replicaN: Number!
+    default: Boolean!
+  }
   type Measurement {
     id: String!
     name: String!
@@ -35,6 +49,10 @@ export const typeDefs = `
     type: String!
   }
   type TagKey {
+    id: String!
+    name: String!
+  }
+  type TagValue {
     id: String!
     name: String!
   }

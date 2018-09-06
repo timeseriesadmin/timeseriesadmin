@@ -2,6 +2,8 @@
 import { query } from '../providers/influx';
 import storage from '../helpers/storage';
 import gql from 'graphql-tag';
+import Papa from 'papaparse';
+
 import type { QueryParams } from '../providers/influx/types';
 
 const HISTORY_MAX_LENGTH = 30;
@@ -127,6 +129,7 @@ export const resolvers = {
 
 			let queryArgs = { ...form, q: 'SHOW DATABASES', responseType: 'csv' };
 
+      // $FlowFixMe
       const queryResult = await query(queryArgs);
 
       let databases = queryResult.data.split('\n');
@@ -180,26 +183,65 @@ export const resolvers = {
         }`,
       });
 
+      // MEASUREMENTS
 			let queryArgs = { ...form, q: 'SHOW MEASUREMENTS', db: id, responseType: 'csv' };
 
+      // $FlowFixMe
       const queryResult = await query(queryArgs);
 
-      let measurements = queryResult.data.split('\n');
-      if (measurements.length > 0) {
-        measurements.shift(); // remove header
+      let measurements = Papa.parse(queryResult.data.trim(), {
+        header: true,
+      });
+      if (measurements.errors.length > 0) {
+        throw new Error(JSON.stringify(measurements.errors));
       }
 
-      measurements = measurements.map(line => line.split(',')[2])
-        .filter(name => !!name);
+      // RETENTION POLICIES
+      // $FlowFixMe
+      const policiesResult = await query({
+        ...queryArgs,
+        q: `SHOW RETENTION POLICIES ON "${id}"`,
+      });
+
+      let policies = Papa.parse(policiesResult.data.trim(), {
+        header: true
+      });
+      if (policies.errors.length > 0) {
+        throw new Error(JSON.stringify(policies.errors));
+      }
+
+      // SERIES
+      // $FlowFixMe
+      const seriesResult = await query({
+        ...queryArgs,
+        q: `SHOW SERIES ON "${id}"`,
+      });
+
+      const series = Papa.parse(seriesResult.data.trim(), {
+        header: true,
+      });
+      if (series.errors.length > 0) {
+        throw new Error(JSON.stringify(series.errors));
+      }
 
       return {
         __typename: 'Database',
         id,
         name: id,
-        measurements: measurements.map(name => ({
+        measurements: measurements.data.map(meas => ({
+          ...meas,
           __typename: 'Measurement',
-          id: name,
-          name,
+          id: meas.name,
+        })),
+        series: series.data.map(s => ({
+          ...s,
+          __typename: 'Series',
+          id: s.key,
+        })),
+        retentionPolicies: policies.data.map(policy => ({
+          ...policy,
+          __typename: 'RetentionPolicy',
+          id: policy.name,
         })),
       };
 
@@ -222,6 +264,7 @@ export const resolvers = {
         }`,
       });
 
+      // FIELD KEYS
       const qArgs = {
         ...form,
         q: `SHOW FIELD KEYS FROM "${id}"`,
@@ -229,42 +272,44 @@ export const resolvers = {
         db,
       };
 
+      // $FlowFixMe
       const keysResult = await query(qArgs);
 
-      let fieldKeys = keysResult.data.split('\n');
-      if (fieldKeys.length > 0) {
-        fieldKeys.shift(); // remove header
+      const fieldKeys = Papa.parse(keysResult.data.trim(), {
+        header: true,
+      });
+      if (fieldKeys.errors.length > 0) {
+        throw new Error(JSON.stringify(fieldKeys.errors));
       }
 
-      fieldKeys = fieldKeys.map(line => ({ name: line.split(',')[2], type: line.split(',')[3]}))
-        .filter(line => !!line.name);
-
+      // TAG KEYS
+      // $FlowFixMe
       const tagsResult = await query({
         ...qArgs,
         q: `SHOW TAG KEYS FROM "${id}"`,
       });
 
-      let tagKeys = tagsResult.data.split('\n');
-      if (tagKeys.length > 0) {
-        tagKeys.shift(); // remove header
+      const tagKeys = Papa.parse(tagsResult.data.trim(), {
+        header: true,
+      });
+      if (tagKeys.errors.length > 0) {
+        throw new Error(JSON.stringify(tagKeys.errors));
       }
-
-      tagKeys = tagKeys.map(line => line.split(',')[2])
-        .filter(name => !!name);
 
       return {
         __typename: 'Measurement',
         id,
         name: id,
-        fieldKeys: fieldKeys.map(key => ({
-          ...key,
+        fieldKeys: fieldKeys.data.map(fKey => ({
           __typename: 'FieldKeys',
-          id: key.name,
+          id: fKey.fieldKey,
+          name: fKey.fieldKey,
+          type: fKey.fieldType,
         })),
-        tagKeys: tagKeys.map(name => ({
+        tagKeys: tagKeys.data.map(tKey => ({
           __typename: 'TagKeys',
-          id: name,
-          name,
+          id: tKey.tagKey,
+          name: tKey.tagKey,
         })),
       };
       /*const fragment = gql`
@@ -283,6 +328,39 @@ export const resolvers = {
       }`;
       const result = cache.readFragment({ fragment, id: `Measurement:${id}` });
       return result;*/
+    },
+    tagKey: async (_: void, { id, meas, db }: { id: string, meas: string, db: string }, { cache }: any): Promise<any> => {
+      const { form } = cache.readQuery({
+        query: gql`{
+          form { url u p }
+        }`,
+      });
+
+      // FIELD KEYS
+      const tagsResult = await query({
+        ...form,
+        q: `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${id}"`,
+        responseType: 'csv',
+        db,
+      });
+      const tagValues = Papa.parse(tagsResult.data.trim(), {
+        header: true,
+      });
+      if (tagValues.errors.length > 0) {
+        throw new Error(JSON.stringify(tagValues.errors));
+      }
+
+      // TODO: solve bug with tag key which equals measurement name
+      return {
+        __typename: 'TagKey',
+        id,
+        name: id,
+        tagValues: tagValues.data.map(val => ({
+          __typename: 'TagValue',
+          id: val.value,
+          name: val.value,
+        })),
+      };
     },
   },
 };

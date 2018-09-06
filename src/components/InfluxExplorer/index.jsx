@@ -56,6 +56,20 @@ const SHOW_DATABASE = gql`
         id
         name
       }
+      retentionPolicies {
+        id
+        name
+        duration
+        shardGroupDuration
+        replicaN
+        default
+      }
+      series {
+        id
+        name
+        tags
+        key
+      }
     }
   }
 `;
@@ -78,6 +92,19 @@ const SHOW_MEASUREMENT = gql`
   }
 `;
 
+const SHOW_TAG = gql`
+  mutation showTag($id: String, $meas: String, $db: String) {
+    tagKey(id: $id, meas: $meas, db: $db) @client {
+      id
+      name
+      tagValues {
+        id
+        name
+      }
+    }
+  }
+`
+
 // TODO: with fragments it is impossible to get nested data?
 
 type Props = {
@@ -94,29 +121,75 @@ const QueryHistory = ({ classes }: Props) => (
           {data.server.databases.map(database => (
             <ExplorerItem key={database.id} id={database.id} query={SHOW_DATABASE}
               label={database.name}
-              showData={data => (
-                <List>
-                {data.database.measurements.map(measurement => (
-                  <ExplorerItem key={measurement.id} db={database.id} id={measurement.id} query={SHOW_MEASUREMENT}
-                    label={measurement.name}
-                    showData={data => 
-                      [(<List key="fieldKeys">
-                        {data.measurement.fieldKeys.map(fieldKey => (
-                          <div key={fieldKey.name}>
-                            <span>{fieldKey.name}</span>
-                            <small>({fieldKey.type})</small>
-                          </div>
-                        ))}
-                      </List>),
-                      data.measurement.tagKeys ? (<List key="tagKeys">
-                        {data.measurement.tagKeys.map(fieldTag => (
-                          <div key={fieldTag.name}>{fieldTag.name}</div>
-                        ))}
-                      </List>) : null]
-                    } />
-                ))}
-                </List>
-              )} />
+              showData={data => [(
+                <div key="series">
+                  <span>Series</span>
+                  <List>
+                  {data.database.series.map(se => (
+                    <ListItem key={se.id}>
+                      <span>{se.name}</span>
+                      <small>({se.tags}, {se.key})</small>
+                    </ListItem>
+                  ))}
+                  </List>
+                </div>
+              ),(
+                <div key="retentionPolicies">
+                  <span>Retention policies</span>
+                  <List>
+                  {data.database.retentionPolicies.map(policy => (
+                    <ListItem key={policy.name}>
+                      <span>{policy.name}</span>
+                      <small>({policy.duration}, {policy.shardGroupDuration}, {policy.replicaN}, {policy.default})</small>
+                    </ListItem>
+                  ))}
+                  </List>
+                </div>
+              ),(
+                <div key="measurements">
+                  <span>Measurements</span>
+                  <List>
+                  {data.database.measurements.map(measurement => (
+                    <ExplorerItem key={measurement.id} db={database.id} id={measurement.id} query={SHOW_MEASUREMENT}
+                      label={measurement.name}
+                      showData={data => [(
+                        <div key="fieldKeys">
+                          <span>Field Keys</span>
+                          <List>
+                            {data.measurement.fieldKeys.map((fieldKey, index) => (
+                              <div key={index}>
+                                <span>{fieldKey.name}</span>
+                                <small>({fieldKey.type})</small>
+                              </div>
+                            ))}
+                          </List>
+                        </div>
+                      ),data.measurement.tagKeys ? (
+                        <div key="tagKeys">
+                          <span>Tag Keys</span>
+                          <List>
+                          {data.measurement.tagKeys.map((tagKey, index) => (
+                            <ExplorerItem key={index} id={tagKey.id} meas={measurement.id} db={database.id}
+                              query={SHOW_TAG}
+                              label={tagKey.name}
+                              showData={data => (
+                                <List>
+                                {data.tagKey.tagValues.length > 0
+                                    && data.tagKey.tagValues.map((val, index) => (
+                                  <ListItem key={index}>
+                                    <span>{val.name}</span>
+                                  </ListItem>
+                                ))}
+                                </List>
+                              )} />
+                          ))}
+                          </List>
+                        </div>
+                      ) : null]} />
+                  ))}
+                  </List>
+                </div>
+              )]} />
           ))}
           </List>
       )} />

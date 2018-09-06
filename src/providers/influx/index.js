@@ -2,7 +2,7 @@
 // Influx 1.6.0 API (https://docs.influxdata.com/influxdb/v1.6/tools/api)
 // implemented with axios
 import axios from 'axios';
-import type { QueryParams, WriteParams, InfluxResponse, SingleQueryResult } from './types';
+import type { QueryParams, InfluxResponse, SingleQueryResult } from './types';
 import qs from 'qs';
 /*let requestParams = {
       q: query,
@@ -18,6 +18,10 @@ import qs from 'qs';
     }
     data = qs.stringify(requestParams);*/
 
+// interface Query {
+//   (params: { ...QueryParams, url: string, responseType: 'json' }): Promise<InfluxResponse>;
+//   (params: { ...QueryParams, url: string, responseType: 'csv' }): Promise<{ data: string }>;
+// };
 const post = async(params: QueryParams): Promise<InfluxResponse> => {
   let response;
   if (params.db) {
@@ -80,7 +84,7 @@ export const query = async(params: QueryParams): Promise<InfluxResponse> => {
 	return post(queryParams);
 };
 
-export const write = async(params: WriteParams): Promise<InfluxResponse> => {
+export const write = async(params: QueryParams): Promise<InfluxResponse> => {
   params.url += '/write';
   return post(params);
 };
