@@ -8,6 +8,35 @@ import type { QueryParams } from '../providers/influx/types';
 
 const HISTORY_MAX_LENGTH = 30;
 
+const queryBase = (cache: any, query: string) => {
+  const { form } = cache.readQuery({
+    query: gql`{
+      form { url u p }
+    }`,
+  });
+  
+  return {
+    ...form,
+    q: query,
+    responseType: 'csv',
+  };
+};
+
+const parseResults = (result: string, remap: {[string]: string}, type: string) => {
+  const results = Papa.parse(result.trim(), {
+    header: true,
+  });
+  if (results.errors.length > 0) {
+    throw new Error(JSON.stringify(results.errors));
+  }
+  console.log(results);
+  return results.data.map(entry => ({
+    __typename: type,
+    // TODO: this might be underperformant solution
+    ...Object.keys(remap).reduce((acc, key) => ({...acc, [key]: entry[remap[key]] }), {}),
+  }));
+};
+
 type FormParams = {
   url?: string,
   u?: string,
@@ -119,27 +148,42 @@ export const resolvers = {
 				response: queryResult,
 			};
     },
-    // TODO: support multiserver with { id }: { id: string } args
-    server: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
-      const { form } = cache.readQuery({
-        query: gql`{
-          form { url u p }
-        }`,
-      });
-
-			let queryArgs = { ...form, q: 'SHOW DATABASES', responseType: 'csv' };
-
+    // TODO: support multiserver with { url }: { url: string } args
+    databases: async (_: void, _args: void, { cache }: any): Promise<any> => {
       // $FlowFixMe
-      const queryResult = await query(queryArgs);
-
-      let databases = queryResult.data.split('\n');
-      if (databases.length > 0) {
-        databases.shift(); // remove header
-      }
-
-      databases = databases.map(line => line.split(',')[2])
-        .filter(name => !!name);
-
+      const result = await query(queryBase(cache, 'SHOW DATABASES'));
+      return parseResults(result.data, {id: 'name', name: 'name'}, 'Database');
+    },
+    series: async (_: void, { db, meas }: { db: string, meas?: string }, { cache }: any): Promise<any> => {
+      // $FlowFixMe
+      const result = await query(queryBase(cache, `SHOW SERIES ON "${db}"${meas ? ` FROM "${meas}"`: ''}`));
+      return parseResults(result.data, {id: 'key', key: 'key', tags: 'tags'}, 'Series');
+    },
+    policies: async (_: void, { db }: { db: string }, { cache }: any): Promise<any> => {
+      // $FlowFixMe
+      const result = await query(queryBase(cache, `SHOW RETENTION POLICIES ON "${db}"`));
+      return parseResults(result.data, {id: 'name', name: 'name', duration: 'duration', shardGroupDuration: 'shardGroupDuration', replicaN: 'replicaN', default: 'default'}, 'RetentionPolicy');
+    },
+    measurements: async (_: void, { db }: { db: string }, { cache }: any): Promise<any> => {
+      // $FlowFixMe
+      const result = await query(queryBase(cache, `SHOW MEASUREMENTS ON "${db}"`));
+      return parseResults(result.data, {id: 'name', name: 'name'}, 'Measurement');
+    },
+    fieldKeys: async (_: void, { db, meas }: { db: string, meas: string }, { cache }: any): Promise<any> => {
+      // $FlowFixMe
+      const result = await query(queryBase(cache, `SHOW FIELD KEYS ON "${db}" FROM "${meas}"`));
+      return parseResults(result.data, {id: 'fieldKey', name: 'fieldKey', type: 'fieldType'}, 'FieldKey');
+    },
+    tagKeys: async (_: void, { db, meas }: { db: string, meas: string }, { cache }: any): Promise<any> => {
+      // $FlowFixMe
+      const result = await query(queryBase(cache, `SHOW TAG KEYS ON "${db}" FROM "${meas}"`));
+      return parseResults(result.data, {id: 'tagKey', name: 'tagKey'}, 'TagKey');
+    },
+    tagValues: async (_: void, { db, meas, tagKey }: { db: string, meas: string, tagKey: string }, { cache }: any): Promise<any> => {
+      // $FlowFixMe
+      const result = await query(queryBase(cache, `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${tagKey}"`));
+      return parseResults(result.data, {id: 'value', value: 'value'}, 'TagValue');
+    },
       /*cache.writeData({
         data: {
           server: {
@@ -165,202 +209,22 @@ export const resolvers = {
       }`;
       const result = cache.readFragment({ fragment, id: `Server:${id}` });*/
       // return result;
-      return {
-        __typename: 'Server',
-        id: `${form.u}@${form.url}`,
-        name: `${form.u}@${form.url}`,
-        databases: databases.map(name => ({
-          __typename: 'Database',
-          id: name,
-          name,
-        })),
-      };
-    },
-    database: async (_: void, { id }: { id: string }, { cache }: any): Promise<any> => {
-      const { form } = cache.readQuery({
-        query: gql`{
-          form { url u p }
-        }`,
-      });
 
-      // MEASUREMENTS
-			let queryArgs = { ...form, q: 'SHOW MEASUREMENTS', db: id, responseType: 'csv' };
-
-      // $FlowFixMe
-      const queryResult = await query(queryArgs);
-
-      let measurements = Papa.parse(queryResult.data.trim(), {
-        header: true,
-      });
-      if (measurements.errors.length > 0) {
-        throw new Error(JSON.stringify(measurements.errors));
-      }
-
-      // RETENTION POLICIES
-      // $FlowFixMe
-      const policiesResult = await query({
-        ...queryArgs,
-        q: `SHOW RETENTION POLICIES ON "${id}"`,
-      });
-
-      let policies = Papa.parse(policiesResult.data.trim(), {
-        header: true
-      });
-      if (policies.errors.length > 0) {
-        throw new Error(JSON.stringify(policies.errors));
-      }
-
-      // SERIES
-      // $FlowFixMe
-      const seriesResult = await query({
-        ...queryArgs,
-        q: `SHOW SERIES ON "${id}"`,
-      });
-
-      const series = Papa.parse(seriesResult.data.trim(), {
-        header: true,
-      });
-      if (series.errors.length > 0) {
-        throw new Error(JSON.stringify(series.errors));
-      }
-
-      return {
-        __typename: 'Database',
-        id,
-        name: id,
-        measurements: measurements.data.map(meas => ({
-          ...meas,
-          __typename: 'Measurement',
-          id: meas.name,
-        })),
-        series: series.data.map(s => ({
-          ...s,
-          __typename: 'Series',
-          id: s.key,
-        })),
-        retentionPolicies: policies.data.map(policy => ({
-          ...policy,
-          __typename: 'RetentionPolicy',
-          id: policy.name,
-        })),
-      };
-
-      /*const fragment = gql`
-      fragment getDatabase on Database {
+    /*const fragment = gql`
+    fragment getMeasurement on Measurement {
+      id
+      name
+      fieldKeys {
         id
         name
-        measurements {
-          id
-          name
-        }
-      }`;
-      const result = cache.readFragment({ fragment, id: `Database:${id}` });
-      return result;*/
-    },
-    measurement: async (_: void, { id, db }: { id: string, db: string }, { cache }: any): Promise<any> => {
-      const { form } = cache.readQuery({
-        query: gql`{
-          form { url u p }
-        }`,
-      });
-
-      // FIELD KEYS
-      const qArgs = {
-        ...form,
-        q: `SHOW FIELD KEYS FROM "${id}"`,
-        responseType: 'csv',
-        db,
-      };
-
-      // $FlowFixMe
-      const keysResult = await query(qArgs);
-
-      const fieldKeys = Papa.parse(keysResult.data.trim(), {
-        header: true,
-      });
-      if (fieldKeys.errors.length > 0) {
-        throw new Error(JSON.stringify(fieldKeys.errors));
+        type
       }
-
-      // TAG KEYS
-      // $FlowFixMe
-      const tagsResult = await query({
-        ...qArgs,
-        q: `SHOW TAG KEYS FROM "${id}"`,
-      });
-
-      const tagKeys = Papa.parse(tagsResult.data.trim(), {
-        header: true,
-      });
-      if (tagKeys.errors.length > 0) {
-        throw new Error(JSON.stringify(tagKeys.errors));
-      }
-
-      return {
-        __typename: 'Measurement',
-        id,
-        name: id,
-        fieldKeys: fieldKeys.data.map(fKey => ({
-          __typename: 'FieldKeys',
-          id: fKey.fieldKey,
-          name: fKey.fieldKey,
-          type: fKey.fieldType,
-        })),
-        tagKeys: tagKeys.data.map(tKey => ({
-          __typename: 'TagKeys',
-          id: tKey.tagKey,
-          name: tKey.tagKey,
-        })),
-      };
-      /*const fragment = gql`
-      fragment getMeasurement on Measurement {
+      tagKeys {
         id
         name
-        fieldKeys {
-          id
-          name
-          type
-        }
-        tagKeys {
-          id
-          name
-        }
-      }`;
-      const result = cache.readFragment({ fragment, id: `Measurement:${id}` });
-      return result;*/
-    },
-    tagKey: async (_: void, { id, meas, db }: { id: string, meas: string, db: string }, { cache }: any): Promise<any> => {
-      const { form } = cache.readQuery({
-        query: gql`{
-          form { url u p }
-        }`,
-      });
-
-      // FIELD KEYS
-      const tagsResult = await query({
-        ...form,
-        q: `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${id}"`,
-        responseType: 'csv',
-        db,
-      });
-      const tagValues = Papa.parse(tagsResult.data.trim(), {
-        header: true,
-      });
-      if (tagValues.errors.length > 0) {
-        throw new Error(JSON.stringify(tagValues.errors));
       }
-
-      // TODO: solve bug with tag key which equals measurement name
-      return {
-        __typename: 'TagKey',
-        id,
-        name: id,
-        tagValues: tagValues.data.map(val => ({
-          __typename: 'TagValue',
-          id: val.value,
-          name: val.value,
-        })),
-      };
-    },
+    }`;
+    const result = cache.readFragment({ fragment, id: `Measurement:${id}` });
+    return result;*/
   },
 };

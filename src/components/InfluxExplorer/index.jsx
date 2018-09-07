@@ -30,278 +30,135 @@ const styles = theme => ({
   }
 });
 
-const GET_FORM = gql`{
-  form { u url }
-}`;
-
-const SHOW_SERVER = gql`
-  mutation showServer {
-    server(id: $id) @client {
+const SHOW_DATABASES = gql`
+  mutation showDatabases {
+    databases @client {
       id
       name
-      databases {
-        id
-        name
-      }
     }
   }
 `;
 
-const SHOW_DATABASE = gql`
-  mutation showDatabase($id: String) {
-    database(id: $id) @client {
+const SHOW_SERIES = gql`
+  mutation showSeries($db: String, $meas: String) {
+    series(db: $db, meas: $meas) @client {
       id
-      name
-      measurements {
-        id
-        name
-      }
-      retentionPolicies {
-        id
-        name
-        duration
-        shardGroupDuration
-        replicaN
-        default
-      }
-      series {
-        id
-        name
-        tags
-        key
-      }
+      tags
+      key
     }
   }
 `;
 
-const SHOW_MEASUREMENT = gql`
-  mutation showMeasurement($id: String, $db: String) {
-    measurement(id: $id, db: $db) @client {
+const SHOW_MEASUREMENTS = gql`
+  mutation showMeasurements($db: String) {
+    measurements(db: $db) @client {
       id
       name
-      fieldKeys {
+    }
+  }
+`;
+
+const SHOW_RET_POLICIES = gql`
+  mutation showRetentionPolicies($db: String) {
+    policies(db: $db) @client {
+      id
+      name
+      duration
+      shardGroupDuration
+      replicaN
+      default
+    }
+  }
+`;
+
+const SHOW_FIELD_KEYS = gql`
+  mutation showFieldKeys($db: String, $meas: String) {
+    fieldKeys(db: $db, meas: $meas) @client {
         id
         name
         type
-      }
-      tagKeys {
-        id
-        name
-      }
     }
   }
 `;
 
-const SHOW_TAG = gql`
-  mutation showTag($id: String, $meas: String, $db: String) {
-    tagKey(id: $id, meas: $meas, db: $db) @client {
+const SHOW_TAG_KEYS = gql`
+  mutation showTagKeys($db: String, $meas: String) {
+    tagKeys(db: $db, meas: $meas) @client {
       id
       name
-      tagValues {
-        id
-        name
-      }
     }
   }
-`
+`;
 
-// TODO: with fragments it is impossible to get nested data?
+const SHOW_TAG_VALUES = gql`
+  mutation showTagValues($db: String, $meas: String, $tagKey: String) {
+    tagValues(db: $db, meas: $meas, tagKey: $tagKey) @client {
+      id
+      value
+    }
+  }
+`;
 
 type Props = {
   classes: any,
 };
 const QueryHistory = ({ classes }: Props) => (
-  <Query query={GET_FORM}>
-    {({ data: { form } }) => (
-    <List>
-      <ExplorerItem key={`${form.u}@${form.url}`} id={`${form.u}@${form.url}`} query={SHOW_SERVER}
-        label="Explore"
-        showData={data => (
-          <List>
-          {data.server.databases.map(database => (
-            <ExplorerItem key={database.id} id={database.id} query={SHOW_DATABASE}
-              label={database.name}
-              showData={data => [(
-                <div key="series">
-                  <span>Series</span>
-                  <List>
-                  {data.database.series.map(se => (
-                    <ListItem key={se.id}>
-                      <span>{se.name}</span>
-                      <small>({se.tags}, {se.key})</small>
-                    </ListItem>
-                  ))}
-                  </List>
-                </div>
-              ),(
-                <div key="retentionPolicies">
-                  <span>Retention policies</span>
-                  <List>
-                  {data.database.retentionPolicies.map(policy => (
-                    <ListItem key={policy.name}>
-                      <span>{policy.name}</span>
-                      <small>({policy.duration}, {policy.shardGroupDuration}, {policy.replicaN}, {policy.default})</small>
-                    </ListItem>
-                  ))}
-                  </List>
-                </div>
-              ),(
-                <div key="measurements">
-                  <span>Measurements</span>
-                  <List>
-                  {data.database.measurements.map(measurement => (
-                    <ExplorerItem key={measurement.id} db={database.id} id={measurement.id} query={SHOW_MEASUREMENT}
-                      label={measurement.name}
-                      showData={data => [(
-                        <div key="fieldKeys">
-                          <span>Field Keys</span>
-                          <List>
-                            {data.measurement.fieldKeys.map((fieldKey, index) => (
-                              <div key={index}>
-                                <span>{fieldKey.name}</span>
-                                <small>({fieldKey.type})</small>
-                              </div>
-                            ))}
-                          </List>
-                        </div>
-                      ),data.measurement.tagKeys ? (
-                        <div key="tagKeys">
-                          <span>Tag Keys</span>
-                          <List>
-                          {data.measurement.tagKeys.map((tagKey, index) => (
-                            <ExplorerItem key={index} id={tagKey.id} meas={measurement.id} db={database.id}
-                              query={SHOW_TAG}
-                              label={tagKey.name}
-                              showData={data => (
-                                <List>
-                                {data.tagKey.tagValues.length > 0
-                                    && data.tagKey.tagValues.map((val, index) => (
-                                  <ListItem key={index}>
-                                    <span>{val.name}</span>
-                                  </ListItem>
-                                ))}
-                                </List>
-                              )} />
-                          ))}
-                          </List>
-                        </div>
-                      ) : null]} />
-                  ))}
-                  </List>
-                </div>
-              )]} />
-          ))}
-          </List>
-      )} />
-    </List>
-    )}
-  </Query>
+  <List>
+    <ExplorerItem query={SHOW_DATABASES} label="Databases"
+      showData={data => data.databases.map((database, index) => (
+      <ListItem key={index}>
+        <ListItemText primary={database.name} />
+        <List>
+          <ExplorerItem db={database.id} query={SHOW_MEASUREMENTS} label="Measurements"
+            showData={data => data.measurements.map((meas, index) => (
+              <ListItem key={index}>
+                <ListItemText primary={meas.name} />
+                <List>
+                  <ExplorerItem db={database.id} meas={meas.id} query={SHOW_FIELD_KEYS} label="Field Keys"
+                    showData={data => data.fieldKeys.map((fieldKey, index) => (
+                      <ListItem key={index}>
+                        <ListItemText primary={fieldKey.name} secondary={fieldKey.type} />
+                      </ListItem>
+                    ))} />
+                  <ExplorerItem db={database.id} meas={meas.id} query={SHOW_TAG_KEYS} label="Tag Keys"
+                    showData={data => data.tagKeys.map((tagKey, index) => (
+                      <ListItem key={index}>
+                        <ListItemText primary={tagKey.name} />
+                        <List>
+                          <ExplorerItem db={database.id} meas={meas.id} tagKey={tagKey.id} query={SHOW_TAG_VALUES} label="Tag Values"
+                            showData={data => data.tagValues.map((tagValue, index) => (
+                              <ListItem key={index}>
+                                <ListItemText primary={tagValue.value} />
+                              </ListItem>
+                            ))} />
+                        </List>
+                      </ListItem>
+                    ))} />
+                  <ExplorerItem db={database.id} meas={meas.id} query={SHOW_SERIES}
+                    label="Series" showData={data => data.series.map((se, index) => (
+                      <ListItem key={index}>
+                        <ListItemText primary={se.key} secondary={se.tags} />
+                      </ListItem>
+                    ))} />
+                </List>
+              </ListItem>
+            ))} />
+          <ExplorerItem db={database.id} query={SHOW_RET_POLICIES} label="Retention Policies"
+            showData={data => data.policies.map((policy, index) => (
+              <ListItem key={index}>
+                <ListItemText primary={policy.name} secondary={`duration: ${policy.duration}, shardGroupDuration: ${policy.shardGroupDuration}, replicaN: ${policy.replicaN}, default: ${policy.default}`} />
+              </ListItem>
+            ))} />
+          <ExplorerItem db={database.id} query={SHOW_SERIES} label="Series"
+            showData={data => data.series.map((se, index) => (
+              <ListItem key={index}>
+                <ListItemText primary={se.key} secondary={se.tags} />
+              </ListItem>
+            ))} />
+        </List>
+      </ListItem>
+    ))} />
+</List>
 );
-
-// const QueryHistory = ({ classes }: Props) => (
-//   <Query query={QUERY}>
-//   {(executeQuery, {data, loading, error, called}) => {
-//     const handleQueryClick = () => {
-//       executeQuery({ variables: { q: 'SHOW DATABASES' } });
-//     };
-//     if (loading) {
-//       return (
-//         <div>Loading...</div>
-//       );
-//     }
-//     // $FlowFixMe
-//     if (!called) return (
-//       <Button onClick={handleQueryClick}>Explore</Button>
-//     );
-
-//     if (!data) {
-//       return (
-//         <div>Data not ready</div>
-//       );
-//     }
-
-//     console.log(data);
-
-//     let results = data.executeQuery.response.data.split('\n')
-//       .filter(line => line !== '') // remove empty lines
-//       .map(line => line.split(',')); // create array of values for each line
-
-//     const headers = results.shift() || [];
-//     // return (
-//       // <div>{JSON.stringify(results)}</div>
-//     // );
-// [>
-// { type: 'databases', query: 'show databases', type: 'db_list', list: 'database' }
-// { type: 'database', isOpen: false, items: ['measurements', 'ret_policies', 'series'] }
-// { type: 'measurements', query: 'show measurements', type: 'ms_list', list: 'measurement' }
-// { type: 'measurement', isOpen: false, items: ['field_keys', 'tag_keys'] }
-// { type: 'field_keys', type: 'fk_list', list: 'field_key' }
-// { type: 'tag_keys', type: 'tk_list', list: 'tag_key' }
-// */
-//     console.log(results);
-
-//     const handleToggle = (index) => () => {
-//     };
-//     return (
-//       <div className={classes.root}>
-//         <Typography variant="body1" className={classes.info}>
-//           To start server exploration click button below.
-//         </Typography>
-//         <List dense>
-//           {results.map((result, index) => (
-//             <ListItem key={`db_${index}`} disableGutters className={classes.listItem}>
-//               <Button className={classes.itemContent} onClick={handleToggle(index)}>
-//                 <ListItemText inset primary={result[2]} />
-//               </Button>
-//               <Collapse in={false} timeout="auto" unmountOnExit className={classes.itemContent}>
-//                 <List dense>
-//                   <ListItem disableGutters>
-//                     <ListItemText inset primary="Measurements" />
-//                   </ListItem>
-//                 </List>
-//                 {[><ExplorerItem
-//                   key={`m_${index}`}
-//                   label="Measurements" 
-//                   query="SHOW MEASUREMENTS"
-//                   database={result[2]}
-//                   type="measurements"
-//                 />
-//                 <ExplorerItem
-//                   key={`rp_${index}`}
-//                   label="Retention policies" 
-//                   query={`SHOW RETENTION POLICIES ON "${result[2]}"`}
-//                   database={result[2]}
-//                   type="retention_policies"
-//                 />
-//                 <ExplorerItem
-//                   key={`s_${index}`}
-//                   label="Series" 
-//                   query={`SHOW SERIES ON "${result[2]}"`}
-//                   database={result[2]}
-//                   type="series"
-//                 />*/}
-//               </Collapse>
-//             </ListItem>
-//           ))}
-//         </List>
-//         {[><ListItem button disableGutters
-//           className={classes.listItem}
-//           key={index}
-//           onClick={handleQueryClick(executeQuery.query)}
-//         >
-//           {executeQuery.error !== null &&
-//           <ListItemIcon>
-//             <ErrorIcon color="error" className={classes.btnIcon}/>
-//           </ListItemIcon>
-//           }
-//           <ListItemText primary={executeQuery.query}
-//             className={classes.listItemText}
-//           />
-//         </ListItem>*/}
-//       </div>
-//     );
-//   }}
-//   </Mutation>
-// );
 
 export default withStyles(styles)(QueryHistory);
