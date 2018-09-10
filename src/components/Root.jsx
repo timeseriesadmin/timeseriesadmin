@@ -2,27 +2,11 @@
 import { BrowserRouter } from 'react-router-dom'
 import * as React from 'react';
 import { ApolloProvider } from 'react-apollo';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { grey, cyan } from '@material-ui/core/colors';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import theme from './theme';
 
 import App from './App';
 import client from '../apollo';
-
-const theme = createMuiTheme({
-	palette: {
-		// type: 'dark',
-		primary: {
-			light: grey['500'],
-			main: grey['800'],
-			dark: grey['900'],
-		},
-		secondary: {
-			light: cyan['A200'],
-			main: cyan['A400'],
-			dark: cyan['A700'],
-		},
-	},
-});
 
 const Root = () => (
   <ApolloProvider client={client}>
