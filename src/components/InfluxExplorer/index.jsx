@@ -1,32 +1,72 @@
 // @flow
 import React from 'react';
 import gql from 'graphql-tag';
-import { ListSubheader, Button, Collapse, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
-import { ErrorOutline as ErrorIcon } from '@material-ui/icons';
-import { Query, Mutation } from 'react-apollo';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { IconButton, ListSubheader, Button, Collapse, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import ErrorIcon from '@material-ui/icons/ErrorOutline';
+import ExpandIcon from '@material-ui/icons/ExpandMore';
+import CollapseIcon from '@material-ui/icons/ExpandLess';
 import { withStyles } from '@material-ui/core/styles';
 import ExplorerItem from './ExplorerItem';
+import ExplorerCollapse from './ExplorerCollapse';
+
+const theme = createMuiTheme({
+  overrides: {
+    MuiSvgIcon: {
+      root: {
+        marginRight: 3,
+        fontSize: 18,
+      },
+    },
+    MuiButton: {
+      label: {
+        paddingRight: 8,
+      },
+      sizeSmall: {
+        paddingTop: 0,
+        paddingBottom: 0,
+        minHeight: 26,
+      },
+    },
+    MuiCollapse: {
+      wrapper: {
+        paddingLeft: 20,
+      },
+    },
+    MuiList: {
+      padding: {
+        paddingTop: 0,
+        paddingBottom: 0,
+      },
+    },
+    MuiListItem: {
+      gutters: {
+        padding: 0,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        '@media (min-width: 600px)': {
+          padding: 0,
+        },
+      },
+    },
+    MuiListItemText: {
+      primary: {
+        display: 'inline-block',
+        fontSize: 14,
+        marginRight: 8,
+      },
+      secondary: {
+        display: 'inline-block',
+        fontSize: 12,
+      }
+    },
+  },
+});
 
 const styles = theme => ({
-  info: {
-    padding: theme.spacing.unit*2,
-    paddingBottom: 0,
-  },
-  btnIcon: {
-    color: theme.palette.error.main,
-    marginRight: 0,
-    fontSize: 18,
-    textAlign: 'left',
-  },
-  listItem: {
-		flexDirection: 'column',
-  },
-	itemContent: {
-		width: '100%',
-	},
-  listItemText: {
+  root: {
+    paddingTop: theme.spacing.unit,
     paddingLeft: theme.spacing.unit,
-    paddingRight: 0,
   }
 });
 
@@ -103,62 +143,94 @@ type Props = {
   classes: any,
 };
 const QueryHistory = ({ classes }: Props) => (
-  <List>
-    <ExplorerItem query={SHOW_DATABASES} label="Databases"
-      showData={data => data.databases.map((database, index) => (
+<MuiThemeProvider theme={theme}>
+  <div className={classes.root}>
+  <ExplorerItem query={SHOW_DATABASES} label="Databases">
+    {data => data.databases.map((database, index) => (
       <ListItem key={index}>
-        <ListItemText primary={database.name} />
-        <List>
-          <ExplorerItem db={database.id} query={SHOW_MEASUREMENTS} label="Measurements"
-            showData={data => data.measurements.map((meas, index) => (
+        <ExplorerCollapse renderToggler={(toggle, isExpanded) => (
+          <Button size="small" aria-label={isExpanded ? "Collapse" : "Expand"} onClick={toggle}>
+            {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
+            {database.name}
+          </Button>
+        )}>
+          <ExplorerItem db={database.id} query={SHOW_MEASUREMENTS} label="Measurements">
+            {data => data.measurements.map((meas, index) => (
               <ListItem key={index}>
-                <ListItemText primary={meas.name} />
-                <List>
-                  <ExplorerItem db={database.id} meas={meas.id} query={SHOW_FIELD_KEYS} label="Field Keys"
-                    showData={data => data.fieldKeys.map((fieldKey, index) => (
+                <ExplorerCollapse renderToggler={(toggle, isExpanded) => (
+                  <Button size="small" aria-label={isExpanded ? "Collapse" : "Expand"} onClick={toggle}>
+                    {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
+                    {meas.name}
+                  </Button>
+                )}>
+                  <ExplorerItem db={database.id} meas={meas.id} query={SHOW_FIELD_KEYS}
+                    label="Field Keys">
+                    {data => data.fieldKeys.map((fieldKey, index) => (
                       <ListItem key={index}>
-                        <ListItemText primary={fieldKey.name} secondary={fieldKey.type} />
+                        <ListItemText primary={fieldKey.name} secondary={`(${fieldKey.type})`} />
                       </ListItem>
-                    ))} />
-                  <ExplorerItem db={database.id} meas={meas.id} query={SHOW_TAG_KEYS} label="Tag Keys"
-                    showData={data => data.tagKeys.map((tagKey, index) => (
+                    ))}
+                  </ExplorerItem>
+                  <ExplorerItem db={database.id} meas={meas.id} query={SHOW_TAG_KEYS}
+                    label="Tag Keys">
+                    {data => data.tagKeys.map((tagKey, index) => (
                       <ListItem key={index}>
-                        <ListItemText primary={tagKey.name} />
-                        <List>
-                          <ExplorerItem db={database.id} meas={meas.id} tagKey={tagKey.id} query={SHOW_TAG_VALUES} label="Tag Values"
-                            showData={data => data.tagValues.map((tagValue, index) => (
+                        <ExplorerCollapse renderToggler={(toggle, isExpanded) => (
+                          <Button size="small" aria-label={isExpanded ? "Collapse" : "Expand"} onClick={toggle}>
+                            {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
+                            {tagKey.name}
+                          </Button>
+                        )}>
+                          <ExplorerItem db={database.id} meas={meas.id} tagKey={tagKey.id}
+                            query={SHOW_TAG_VALUES} label="Tag Values">
+                            {data => data.tagValues.map((tagValue, index) => (
                               <ListItem key={index}>
                                 <ListItemText primary={tagValue.value} />
                               </ListItem>
-                            ))} />
-                        </List>
+                            ))}
+                          </ExplorerItem>
+                        </ExplorerCollapse>
                       </ListItem>
-                    ))} />
+                    ))}
+                  </ExplorerItem>
                   <ExplorerItem db={database.id} meas={meas.id} query={SHOW_SERIES}
-                    label="Series" showData={data => data.series.map((se, index) => (
+                    label="Series">
+                    {data => data.series.map((se, index) => (
                       <ListItem key={index}>
-                        <ListItemText primary={se.key} secondary={se.tags} />
+                        <ListItemText primary={se.key} secondary={se.tags ? `(${se.tags})` : null} />
                       </ListItem>
-                    ))} />
-                </List>
+                    ))}
+                  </ExplorerItem>
+                </ExplorerCollapse>
               </ListItem>
-            ))} />
-          <ExplorerItem db={database.id} query={SHOW_RET_POLICIES} label="Retention Policies"
-            showData={data => data.policies.map((policy, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={policy.name} secondary={`duration: ${policy.duration}, shardGroupDuration: ${policy.shardGroupDuration}, replicaN: ${policy.replicaN}, default: ${policy.default}`} />
-              </ListItem>
-            ))} />
-          <ExplorerItem db={database.id} query={SHOW_SERIES} label="Series"
-            showData={data => data.series.map((se, index) => (
+            ))}
+          </ExplorerItem>
+          <ExplorerItem db={database.id} query={SHOW_RET_POLICIES} label="Retention Policies">
+            {data => data.policies.map((policy, index) => {
+              const description = Object.keys(policy)
+                .filter(k => k !== '__typename')
+                .map(k => `${k}: ${policy[k]}`)
+                .join(', ');
+              return (
+                <ListItem key={index}>
+                  <ListItemText primary={policy.name} secondary={description} />
+                </ListItem>
+              );
+            })}
+          </ExplorerItem>
+          <ExplorerItem db={database.id} query={SHOW_SERIES} label="Series">
+            {data => data.series.map((se, index) => (
               <ListItem key={index}>
                 <ListItemText primary={se.key} secondary={se.tags} />
               </ListItem>
-            ))} />
-        </List>
+            ))}
+          </ExplorerItem>
+        </ExplorerCollapse>
       </ListItem>
-    ))} />
-</List>
+    ))}
+  </ExplorerItem>
+  </div>
+</MuiThemeProvider>
 );
 
 export default withStyles(styles)(QueryHistory);
