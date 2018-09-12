@@ -1,9 +1,7 @@
 // @flow
 import React from 'react';
-import gql from 'graphql-tag';
-import { IconButton, Collapse, Button, ListSubheader, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
-import { ErrorOutline as ErrorIcon } from '@material-ui/icons';
-import { Query, Mutation } from 'react-apollo';
+import { IconButton, Collapse, Button, List } from '@material-ui/core';
+import { Mutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import CollapseIcon from '@material-ui/icons/ExpandLess';

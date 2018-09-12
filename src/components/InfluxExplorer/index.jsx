@@ -2,8 +2,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import { IconButton, ListSubheader, Button, Collapse, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
-import ErrorIcon from '@material-ui/icons/ErrorOutline';
+import { Button, ListItem, ListItemText } from '@material-ui/core';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import CollapseIcon from '@material-ui/icons/ExpandLess';
 import { withStyles } from '@material-ui/core/styles';
