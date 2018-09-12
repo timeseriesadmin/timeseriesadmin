@@ -29,7 +29,7 @@ const parseResults = (result: string, remap: {[string]: string}, type: string) =
   if (results.errors.length > 0) {
     throw new Error(JSON.stringify(results.errors));
   }
-  console.log(results);
+  // console.log(results);
   return results.data.map(entry => ({
     __typename: type,
     // TODO: this might be underperformant solution
