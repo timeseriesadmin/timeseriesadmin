@@ -70,7 +70,7 @@ const styles = theme => ({
 });
 
 const SHOW_DATABASES = gql`
-  mutation showDatabases {
+  mutation {
     databases @client {
       id
       name
@@ -79,7 +79,7 @@ const SHOW_DATABASES = gql`
 `;
 
 const SHOW_SERIES = gql`
-  mutation showSeries($db: String, $meas: String) {
+  mutation ($db: String, $meas: String) {
     series(db: $db, meas: $meas) @client {
       id
       tags
@@ -89,7 +89,7 @@ const SHOW_SERIES = gql`
 `;
 
 const SHOW_MEASUREMENTS = gql`
-  mutation showMeasurements($db: String) {
+  mutation ($db: String) {
     measurements(db: $db) @client {
       id
       name
@@ -98,7 +98,7 @@ const SHOW_MEASUREMENTS = gql`
 `;
 
 const SHOW_RET_POLICIES = gql`
-  mutation showRetentionPolicies($db: String) {
+  mutation ($db: String) {
     policies(db: $db) @client {
       id
       name
@@ -111,7 +111,7 @@ const SHOW_RET_POLICIES = gql`
 `;
 
 const SHOW_FIELD_KEYS = gql`
-  mutation showFieldKeys($db: String, $meas: String) {
+  mutation ($db: String, $meas: String) {
     fieldKeys(db: $db, meas: $meas) @client {
         id
         name
@@ -121,7 +121,7 @@ const SHOW_FIELD_KEYS = gql`
 `;
 
 const SHOW_TAG_KEYS = gql`
-  mutation showTagKeys($db: String, $meas: String) {
+  mutation ($db: String, $meas: String) {
     tagKeys(db: $db, meas: $meas) @client {
       id
       name
@@ -130,7 +130,7 @@ const SHOW_TAG_KEYS = gql`
 `;
 
 const SHOW_TAG_VALUES = gql`
-  mutation showTagValues($db: String, $meas: String, $tagKey: String) {
+  mutation ($db: String, $meas: String, $tagKey: String) {
     tagValues(db: $db, meas: $meas, tagKey: $tagKey) @client {
       id
       value
@@ -144,8 +144,8 @@ type Props = {
 const QueryHistory = ({ classes }: Props) => (
 <MuiThemeProvider theme={theme}>
   <div className={classes.root}>
-  <ExplorerItem query={SHOW_DATABASES} label="Databases">
-    {data => data.databases.map((database, index) => (
+  <ExplorerItem query={SHOW_DATABASES} label="Databases" resultsKey="databases">
+    {data => data.map((database, index) => (
       <ListItem key={index}>
         <ExplorerCollapse renderToggler={(toggle, isExpanded) => (
           <Button size="small" aria-label={isExpanded ? "Collapse" : "Expand"} onClick={toggle}>
@@ -153,8 +153,9 @@ const QueryHistory = ({ classes }: Props) => (
             {database.name}
           </Button>
         )}>
-          <ExplorerItem db={database.id} query={SHOW_MEASUREMENTS} label="Measurements">
-            {data => data.measurements.map((meas, index) => (
+        <ExplorerItem db={database.id} query={SHOW_MEASUREMENTS}
+          label="Measurements" resultsKey="measurements">
+            {data => data.map((meas, index) => (
               <ListItem key={index}>
                 <ExplorerCollapse renderToggler={(toggle, isExpanded) => (
                   <Button size="small" aria-label={isExpanded ? "Collapse" : "Expand"} onClick={toggle}>
@@ -163,16 +164,16 @@ const QueryHistory = ({ classes }: Props) => (
                   </Button>
                 )}>
                   <ExplorerItem db={database.id} meas={meas.id} query={SHOW_FIELD_KEYS}
-                    label="Field Keys">
-                    {data => data.fieldKeys.map((fieldKey, index) => (
+                    label="Field Keys" resultsKey="fieldKeys">
+                    {data => data.map((fieldKey, index) => (
                       <ListItem key={index}>
                         <ListItemText primary={fieldKey.name} secondary={`(${fieldKey.type})`} />
                       </ListItem>
                     ))}
                   </ExplorerItem>
                   <ExplorerItem db={database.id} meas={meas.id} query={SHOW_TAG_KEYS}
-                    label="Tag Keys">
-                    {data => data.tagKeys.map((tagKey, index) => (
+                    label="Tag Keys" resultsKey="tagKeys">
+                    {data => data.map((tagKey, index) => (
                       <ListItem key={index}>
                         <ExplorerCollapse renderToggler={(toggle, isExpanded) => (
                           <Button size="small" aria-label={isExpanded ? "Collapse" : "Expand"} onClick={toggle}>
@@ -181,8 +182,8 @@ const QueryHistory = ({ classes }: Props) => (
                           </Button>
                         )}>
                           <ExplorerItem db={database.id} meas={meas.id} tagKey={tagKey.id}
-                            query={SHOW_TAG_VALUES} label="Tag Values">
-                            {data => data.tagValues.map((tagValue, index) => (
+                            query={SHOW_TAG_VALUES} label="Tag Values" resultsKey="tagValues">
+                            {data => data.map((tagValue, index) => (
                               <ListItem key={index}>
                                 <ListItemText primary={tagValue.value} />
                               </ListItem>
@@ -193,8 +194,8 @@ const QueryHistory = ({ classes }: Props) => (
                     ))}
                   </ExplorerItem>
                   <ExplorerItem db={database.id} meas={meas.id} query={SHOW_SERIES}
-                    label="Series">
-                    {data => data.series.map((se, index) => (
+                    label="Series" resultsKey="series">
+                    {data => data.map((se, index) => (
                       <ListItem key={index}>
                         <ListItemText primary={se.key} secondary={se.tags ? `(${se.tags})` : null} />
                       </ListItem>
@@ -204,8 +205,9 @@ const QueryHistory = ({ classes }: Props) => (
               </ListItem>
             ))}
           </ExplorerItem>
-          <ExplorerItem db={database.id} query={SHOW_RET_POLICIES} label="Retention Policies">
-            {data => data.policies.map((policy, index) => {
+          <ExplorerItem db={database.id} query={SHOW_RET_POLICIES}
+            label="Retention Policies" resultsKey="policies">
+            {data => data.map((policy, index) => {
               const description = Object.keys(policy)
                 .filter(k => k !== '__typename')
                 .map(k => `${k}: ${policy[k]}`)
@@ -217,8 +219,8 @@ const QueryHistory = ({ classes }: Props) => (
               );
             })}
           </ExplorerItem>
-          <ExplorerItem db={database.id} query={SHOW_SERIES} label="Series">
-            {data => data.series.map((se, index) => (
+          <ExplorerItem db={database.id} query={SHOW_SERIES} label="Series" resultsKey="series">
+            {data => data.map((se, index) => (
               <ListItem key={index}>
                 <ListItemText primary={se.key} secondary={se.tags} />
               </ListItem>

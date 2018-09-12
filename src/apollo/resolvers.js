@@ -23,7 +23,11 @@ const queryBase = (cache: any, query: string) => {
 };
 
 const parseResults = (result: string, remap: {[string]: string}, type: string) => {
-  const results = Papa.parse(result.trim(), {
+  const response = result.trim();
+  if (!response) {
+    return null;
+  }
+  const results = Papa.parse(response, {
     header: true,
   });
   if (results.errors.length > 0) {
