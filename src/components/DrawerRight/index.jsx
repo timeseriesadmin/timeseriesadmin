@@ -3,11 +3,15 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { History as QueryHistoryIcon, Flip as QueryReferenceIcon, Explore as InfluxExplorerIcon } from '@material-ui/icons';
+import QueryHistoryIcon from '@material-ui/icons/History';
+import QueryReferenceIcon from '@material-ui/icons/Flip';
+import InfluxExplorerIcon from '@material-ui/icons/Explore';
+import InfluxConnectionsIcon from '@material-ui/icons/Link';
 
 import InfluxExplorer from '../InfluxExplorer';
 import QueryHistory from '../QueryHistory';
 import QueryReference from '../QueryReference';
+import PanelConnections from '../PanelConnections';
 
 const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
 const styles = theme => ({
@@ -31,7 +35,7 @@ const styles = theme => ({
   },
   tab: {
     minHeight: 64,
-    // minWidth: (480 - theme.spacing.unit*2) / 3,
+    minWidth: (480 - theme.spacing.unit*3) / 4, // 4 - number of tabs
   },
   tabIcon: {
     fontSize: theme.typography.pxToRem(20),
@@ -75,6 +79,10 @@ class DrawerRight extends React.Component<Props, State> {
             textColor="primary"
             onChange={this.handleChange}
           >
+            <Tab label="Connect"
+              className={classes.tab}
+              icon={<InfluxConnectionsIcon className={classes.tabIcon} />}
+            />
             <Tab label="Explorer"
               className={classes.tab}
               icon={<InfluxExplorerIcon className={classes.tabIcon} />}
@@ -91,9 +99,10 @@ class DrawerRight extends React.Component<Props, State> {
         </div>
 
         <div className={classes.content}>
-          {activeTab === 0 && <InfluxExplorer/>}
-          {activeTab === 1 && <QueryHistory/>}
-          {activeTab === 2 && <QueryReference/>}
+          {activeTab === 0 && <PanelConnections/>}
+          {activeTab === 1 && <InfluxExplorer/>}
+          {activeTab === 2 && <QueryHistory/>}
+          {activeTab === 3 && <QueryReference/>}
         </div>
       </div>
     );
