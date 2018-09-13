@@ -42,7 +42,7 @@ const parseResults = (result: string, remap: {[string]: string}, type: string) =
 };
 
 type FormParams = {
-  url?: string,
+  url: string,
   u?: string,
   p?: string,
   db?: string, // required for most SELECT and SHOW queries
@@ -187,6 +187,39 @@ export const resolvers = {
       // $FlowFixMe
       const result = await query(queryBase(cache, `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${tagKey}"`));
       return parseResults(result.data, {id: 'value', value: 'value'}, 'TagValue');
+    },
+    saveConnection: (_obj: void, { url, u, p, db }: FormParams, { cache }: any): null => {
+      let { connections } = cache.readQuery({
+        query: gql`{
+          connections @client { id url u p db }
+        }`,
+      });
+      if (!connections) { // initialize if empty
+        connections = [];
+      }
+
+      const connection = {
+        url, u, p, db,
+        id: `${url}${u ? u : '_'}${db ? db : '_'}`,
+        __typename: 'Connection',
+      };
+
+      const id = connections.findIndex(c => c.id === connection.id);
+      if (id < 0) {
+        connections.push(connection);
+      } else {
+        connections[id] = connection;
+      }
+
+      storage.set('connections', JSON.stringify(connections))
+      cache.writeData({
+        data: {
+          connections,
+        },
+      });
+
+      // it is important to return anything e.g. null (in other case you will see a warning)
+      return null;
     },
       /*cache.writeData({
         data: {

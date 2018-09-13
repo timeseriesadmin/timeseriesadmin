@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import { Button, Grid } from '@material-ui/core';
 import { Form, Field } from 'react-final-form'
@@ -84,6 +84,23 @@ const FormInflux = (props: Props) => {
                 </Grid>
 
                 <Grid item xs={12}>
+                  <Mutation mutation={SAVE_CONNECTION} variables={values}>
+                    {(mutate, { loading, error }) => (
+                    <Button
+                      disabled={loading}
+                      type="button"
+                      variant="outlined"
+                      color="primary"
+                      style={{ float: 'right' }}
+                      onClick={() => mutate()}
+                    >
+                      {loading ? 'Saving...' : 'Save connection data'}
+                    </Button>
+                    )}
+                  </Mutation>
+                </Grid>
+
+                <Grid item xs={12}>
                   <Field
                     disabled={submitting || loading}
                     name="q"
@@ -118,15 +135,13 @@ const FormInflux = (props: Props) => {
   );
 };
 
-const GET_INITIAL = gql`
-  {
-    form @client {
-      url
-      u
-      p
-      db
-      q
-    }
+const GET_INITIAL = gql`{
+  form @client { url u p db q }
+}`;
+
+const SAVE_CONNECTION = gql`
+  mutation ($url: String!, $u: String, $p: String, $db: String) {
+    saveConnection(url: $url, u: $u, p: $p, db: $db) @client
   }
 `;
 

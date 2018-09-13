@@ -56,20 +56,30 @@ export const typeDefs = `
     id: String!
     name: String!
   }
+  type Connection {
+    id: String!
+    url: String!
+    u: String
+    p: String
+    db: String
+  }
   type Mutation {
     executeQuery(url: String!, u: String, p: String, db: String, q: String!): Boolean
     updateForm(url: String, u: String, p: String, db: String, q: String): Boolean
 		setOpenDrawer(isOpen: Boolean!): Boolean
+    saveConnection(url: String, u: String, p: String, db: String): Boolean
   }
   type Query {
 		isOpenDrawer: Boolean
     form: FormData
     queryHistory: [InfluxQuery!]
     server: Server
+    connections: [Connection]!
   }
 `;
 
 // TODO: prevent adding history with no query instead of filtering on init
+const connections = JSON.parse(storage.get('connections', '[]'));
 const queryHistory = JSON.parse(storage.get('queryHistory', '[]')).filter(hist => hist.query);
 const form = JSON.parse(storage.get('form', JSON.stringify({
 	url: '',
@@ -119,6 +129,7 @@ const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
 export const defaults = {
 	isOpenDrawer,
   queryHistory,
+  connections,
   form,
   server: null,
 };
