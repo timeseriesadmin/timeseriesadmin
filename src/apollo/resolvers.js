@@ -61,17 +61,9 @@ export const resolvers = {
 		},
     updateForm: (_obj: void, submitted: FormParams, { cache }: any): null => {
       const { form } = cache.readQuery({
-        query: gql`
-          query form {
-            form {
-              url
-              u
-              p
-              db
-              q
-            }
-          }
-        `,
+        query: gql`{
+          form { url u p db q }
+        }`,
       });
 
       const newForm = {
@@ -219,6 +211,32 @@ export const resolvers = {
       });
 
       // it is important to return anything e.g. null (in other case you will see a warning)
+      return null;
+    },
+    deleteConnection: (_obj: void, { id }: { id: string }, { cache }: any): null => {
+      let { connections } = cache.readQuery({
+        query: gql`{
+          connections @client { id url u p db }
+        }`,
+      });
+      if (!connections) { // initialize if empty
+        connections = [];
+      }
+
+      const index = connections.findIndex(c => c.id === id);
+      if (index < 0) {
+        // TODO: maybe report an error?
+      } else {
+        connections.splice(index, 1);
+      }
+
+      storage.set('connections', JSON.stringify(connections))
+      cache.writeData({
+        data: {
+          connections,
+        },
+      });
+
       return null;
     },
       /*cache.writeData({

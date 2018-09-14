@@ -78,18 +78,31 @@ export const typeDefs = `
     connections: [Connection]!
   }
 `;
-
+// ensure connection fields existence
+const connections = JSON.parse(storage.get('connections', '[]')).map(conn => ({
+  url: '',
+  u: '',
+  p: '',
+  db: '',
+  ...conn,
+}));
 // TODO: prevent adding history with no query instead of filtering on init
-const connections = JSON.parse(storage.get('connections', '[]'));
-const queryHistory = JSON.parse(storage.get('queryHistory', '[]')).filter(hist => hist.query);
-const form = JSON.parse(storage.get('form', JSON.stringify({
+// HERE filter invalid connection data
+const queryHistory = JSON.parse(storage.get('queryHistory', '[]'))
+  .filter(hist => hist.query)
+  .map(hist => ({
+    query: '',
+    error: '',
+    ...hist,
+  }));
+const form = { ...JSON.parse(storage.get('form')),
 	url: '',
 	u: '',
 	p: '',
 	db: '',
 	q: '',
 	__typename: 'FormData',
-})));
+};
 const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
 /*const server = {
   __typename: 'Server',
