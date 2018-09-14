@@ -17,6 +17,7 @@
     "graphql-tag": "^2.9.2",
     "history": "^4.7.2",
     "lodash": "^4.17.10",
+    "material-ui-password-field": "^2.0.1",
     "papaparse": "^4.6.0",
     "qs": "^6.5.2",
     "react": "^16.4.1",

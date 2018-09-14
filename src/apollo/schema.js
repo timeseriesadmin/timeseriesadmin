@@ -68,6 +68,7 @@ export const typeDefs = `
     updateForm(url: String, u: String, p: String, db: String, q: String): Boolean
 		setOpenDrawer(isOpen: Boolean!): Boolean
     saveConnection(url: String, u: String, p: String, db: String): Boolean
+    deleteConnection(id: String!): Boolean
   }
   type Query {
 		isOpenDrawer: Boolean

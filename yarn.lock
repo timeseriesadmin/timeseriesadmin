@@ -51,6 +51,13 @@
     recompose "^0.28.0"
     warning "^4.0.1"
 
+"@material-ui/icons@^1.0.0":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-1.1.1.tgz#f104d6a1ac4d3ff34a2bed74b066986b2a7054a5"
+  dependencies:
+    "@babel/runtime" "7.0.0-beta.42"
+    recompose "^0.26.0 || ^0.27.0"
+
 "@material-ui/icons@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-1.1.0.tgz#4d025df7b0ba6ace8d6710079ed76013a4d26595"
@@ -5299,6 +5306,20 @@ map-visit@^1.0.0:
   resolved "https://registry.yarnpkg.com/map-visit/-/map-visit-1.0.0.tgz#ecdca8f13144e660f1b5bd41f12f3479d98dfb8f"
   dependencies:
     object-visit "^1.0.0"
+
+material-ui-password-field@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/material-ui-password-field/-/material-ui-password-field-2.0.1.tgz#7053a4c44f0150e64f33822db2389d9832f06bbc"
+  dependencies:
+    "@material-ui/icons" "^1.0.0"
+    material-ui-toggle-icon "^1.0.1"
+    prop-types "^15.5.10"
+
+material-ui-toggle-icon@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/material-ui-toggle-icon/-/material-ui-toggle-icon-1.0.1.tgz#c2947d6c3deaa93f1025086205f371b71023256f"
+  dependencies:
+    prop-types "^15.5.10"
 
 math-expression-evaluator@^1.2.14:
   version "1.2.17"

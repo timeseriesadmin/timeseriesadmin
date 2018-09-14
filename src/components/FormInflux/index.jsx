@@ -44,6 +44,9 @@ const FormInflux = (props: Props) => {
           initialValues={initialValues}
           render={({ handleSubmit, form, submitting, pristine, values }) => (
             <form onSubmit={handleSubmit} className={classes.form}>
+              {/* It is here to prevent Chrome from autofilling user and password form fields */}
+              <input type="password" style={{ display: 'none' }} />
+
               <Grid container spacing={16}>
 
                 <Grid item xs={6}>
