@@ -4,7 +4,8 @@ import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 
 import { resolvers } from './resolvers';
-import { defaults, typeDefs } from './schema';
+import typeDefs from './schema';
+import defaults from './defaults';
 
 const cache = new InMemoryCache();
 

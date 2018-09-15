@@ -1,8 +1,8 @@
-import storage from '../helpers/storage';
+// @flow
 
 // In order to extract schema to separate .graphql file it will be required to alter
 // webpack config which is not possible without ejecting or using rewired version of CRA
-export const typeDefs = `
+export default `
   type InfluxQuery {
     query: String
     error: String
@@ -78,72 +78,4 @@ export const typeDefs = `
     connections: [Connection]!
   }
 `;
-// ensure connection fields existence
-const connections = JSON.parse(storage.get('connections', '[]')).map(conn => ({
-  url: '',
-  u: '',
-  p: '',
-  db: '',
-  ...conn,
-}));
-// TODO: prevent adding history with no query instead of filtering on init
-// HERE filter invalid connection data
-const queryHistory = JSON.parse(storage.get('queryHistory', '[]'))
-  .filter(hist => hist.query)
-  .map(hist => ({
-    query: '',
-    error: '',
-    ...hist,
-  }));
-const form = { ...JSON.parse(storage.get('form')),
-	url: '',
-	u: '',
-	p: '',
-	db: '',
-	q: '',
-	__typename: 'FormData',
-};
-const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
-/*const server = {
-  __typename: 'Server',
-  id: 'test@test.com:8086',
-  name: 'test@test.com:8086',
-  databases: [
-    {
-      __typename: 'Database',
-      id: 'testDB',
-      name: 'testDB',
-      measurements: [
-        {
-          __typename: 'Measurement',
-          id: 'testMeas',
-          name: 'testMeas',
-          fieldKeys: [
-            {
-              __typename: 'FieldKey',
-              id: 'testFK',
-              name: 'testFK',
-              type: 'float',
-            }
-          ],
-          tagKeys: [
-            {
-              __typename: 'TagKey',
-              id: 'testFT',
-              name: 'testFT',
-            }
-          ],
-        },
-      ],
-    },
-  ],
-};//JSON.parse(storage.get('explorer', null));
-*/
 
-export const defaults = {
-	isOpenDrawer,
-  queryHistory,
-  connections,
-  form,
-  server: null,
-};
