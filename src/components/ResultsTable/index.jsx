@@ -5,6 +5,7 @@ import {
 	CircularProgress, Typography, Table, TableBody, TableCell, TablePagination, TableRow, Paper
 } from '@material-ui/core';
 import format from 'date-fns/format';
+import Papa from 'papaparse';
 
 import QueryError from '../QueryError';
 import TableToolbar from './TableToolbar';
@@ -31,26 +32,29 @@ const styles = theme => ({
   },
 });
 
-type parsedQuery = {
-  headers: string[],
-  results: Array<?string[]>,
-};
-const parseQueryResults = (resultsString: string): parsedQuery => {
-  let data = {
-    headers: [],
-    results: [],
-  };
+// type parsedQuery = {
+//   headers: string[],
+//   results: Array<?string[]>,
+// };
+// const parseQueryResults = (resultsString: string): parsedQuery => {
+//   let data = {
+//     headers: [],
+//     results: [],
+//   };
 
-  data.results = resultsString.split('\n')
-    .filter(line => line !== '') // remove empty lines
-    .map(line => line.split(',')); // create array of values for each line
+//   data.results = Papa.parse(resultsString, {
+//     header: true
+//   });
+//   // .split('\n')
+//     // .filter(line => line !== '') // remove empty lines
+//     // .map(line => line.split(',')); // create array of values for each line
 
-  if (data.results.length > 0) {
-    data.headers = data.results.shift() || [];
-  }
+//   // if (data.results.length > 0) {
+//     // data.headers = data.results.shift() || [];
+//   // }
 
-  return data;
-};
+//   return data;
+// };
 
 type Props = {
   classes: any,
@@ -157,9 +161,13 @@ class ResultsTable extends React.Component<Props, State> {
     }
 
     // no point in parsing before error check
-    let { results, headers } = parseQueryResults(data.executeQuery.response.data);
+    // let { results, headers } = parseQueryResults(data.executeQuery.response.data);
+    let results = Papa.parse(data.executeQuery.response.data, {
+      header: true,
+      skipEmptyLines: 'greedy', // skip empty and whitespace lines
+    });
 
-    if (!headers || !headers.length) {
+    if (!results.data || !results.data.length) {
       return (
         <Paper className={classes.root}>
           <div className={classes.contentNoTable}>
@@ -181,12 +189,15 @@ class ResultsTable extends React.Component<Props, State> {
     }
 
 		// look for time column
-		const tIndex = headers.findIndex(val => val === 'time');
+		const tIndex = Object.keys(results.data[0]).findIndex(val => val === 'time');
 
 		// skip sorting if not selected
-		if (results && results.length > 0 && orderBy) {
-			results = results.sort(getSorting(order, orderBy));
-		}
+    let dataset;
+		if (orderBy) {
+			dataset = results.data.sort(getSorting(order, orderBy));
+    } else {
+      dataset = results.data;
+    }
 
     const query = data.executeQuery.request.q;
 
@@ -204,32 +215,25 @@ class ResultsTable extends React.Component<Props, State> {
               order={order}
               orderBy={orderBy}
               onRequestSort={this.handleRequestSort}
-              headers={headers}
+              headers={Object.keys(dataset[0])}
             />
             <TableBody>
-						{results && results.length > 0 ?
-							results
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, rIndex) => row ? (
-                  <TableRow
-                    hover
-                    tabIndex={-1}
-                    key={rIndex}
-                  >
-                    {row.map((cell, cIndex) => (
-                      <TableCell key={cIndex} padding="dense" numeric>
-												{timeFormat && cIndex === tIndex ? parseDate(cell, timeFormat) : cell} 
+              {dataset.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, rIndex) => (
+                  <TableRow hover tabIndex={-1} key={rIndex}>
+                    {Object.keys(row).map(key => (
+                      <TableCell key={key} padding="dense" numeric>
+												{timeFormat && key === 'time' ? parseDate(row[key], timeFormat) : row[key]} 
 											</TableCell>
                     ))}
                   </TableRow>
-                ) : null)
-              : null}
+                ))}
             </TableBody>
           </Table>
         </div>
         <TablePagination
           component="div"
-          count={results.length}
+          count={dataset.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{
