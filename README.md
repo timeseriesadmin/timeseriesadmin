@@ -1,13 +1,8 @@
 # Influx Explorer
 
-## Decisions
-
-- connect multiple components approach advised by https://redux.js.org/faq/react-redux#react-multiple-components
-
 ## TODO
 
 - CORE: add pagination for large datasets in Explorer panel using `fetchMore` Graphql feature https://www.apollographql.com/docs/react/features/pagination.html
-- UX: copy/paste/selectAll shortcuts https://pracucci.com/atom-electron-enable-copy-and-paste.html
 - CORE: writing data
 - CORE: error handling
 - UX: cmd+enter submit
