@@ -3,6 +3,7 @@ import { query } from '../providers/influx';
 import storage from '../helpers/storage';
 import gql from 'graphql-tag';
 import Papa from 'papaparse';
+import { ApolloError } from 'apollo-client';
 
 import type { QueryParams } from '../providers/influx/types';
 
@@ -132,11 +133,19 @@ export const resolvers = {
       });
 
       if (queryError) {
-        // TODO: improve error handling when 
-        // https://github.com/apollographql/apollo-link-state/issues/282
-        // gets resolved
-        throw new Error(JSON.stringify(queryError));
-        // return { data: 'error\n' + JSON.stringify(queryError)};
+        let errorMessage = `${queryError.response.status}:${queryError.response.statusText} `;
+        try {
+          errorMessage += Papa.parse(queryError.response.data, {
+            trimHeaders: true,
+            skipEmptyLines: true,
+          }).data[1][0];
+        } catch (error) {}
+
+        throw new ApolloError({
+          errorMessage,
+          networkError: queryError.response,
+          extraInfo: queryError,
+        });
       }
 
       return {

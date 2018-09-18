@@ -4,7 +4,6 @@
 
 - CORE: add pagination for large datasets in Explorer panel using `fetchMore` Graphql feature https://www.apollographql.com/docs/react/features/pagination.html
 - CORE: writing data
-- CORE: error handling
 - UX: cmd+enter submit
 - UX: opt-in password saving
 - UX: password show/hide

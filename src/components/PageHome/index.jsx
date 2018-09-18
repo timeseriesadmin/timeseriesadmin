@@ -14,7 +14,8 @@ const PageHome = () => (
           {(formMutate, _mutationState) => {
             const onSubmit = (values): void => {
               formMutate({ variables: values });
-              executeQuery({ variables: {} });
+              // prevent displaying errors in console (they are handled in resolvers)
+              executeQuery({ variables: {} }).catch(err => {});
             };
 
             return (

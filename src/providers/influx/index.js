@@ -55,11 +55,9 @@ const post = async(params: QueryParams): Promise<InfluxResponse> => {
       // ensure some .response in case of
       // possibly preflight/CORS error (see: https://github.com/axios/axios/issues/838)
       error.response = {
-        status: '',
+        status: 400,
         statusText: error.message,
-        data: {
-          error: `${error.message}. This might be a CORS error, network problem or invalid HTTPS redirect, invalid URL. Please check your connection configuration once more.`,
-        },
+        details: `This might be a CORS error, network problem or invalid HTTPS redirect, invalid URL. Please check your connection configuration once more.`,
       };
       throw error;
     }

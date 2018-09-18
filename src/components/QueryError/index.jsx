@@ -7,41 +7,21 @@ import get from 'lodash/get';
 import type { ApolloError } from 'apollo-client';
 
 // Converts ApolloError to string
-// TODO: cover all possible cases
-const parseErrorMessage = (apolloError: ApolloError): string => {
-  let error;
-  try {
-    error = JSON.parse(apolloError.message.replace('Network error: ',''))
-  } catch (error) {
-    return apolloError.message;
+const stringifyError = (apolloError: ApolloError): string => {
+  const error = get(apolloError, 'networkError.networkError');
+  if (!error) {
+    return JSON.stringify(apolloError);
   }
-  const errorStatus = get(error, 'response.status', null);
-  const errorMessage = get(error, 'response.data', null);
-
-  if (errorStatus === 400 && errorMessage) {
-    // this is probably a bug in query string
-    // TODO: it should possible to show some suggestions connected with fixing it
-    return `${errorStatus}: ${errorMessage}`;
-  }
-
-  const errorDetails = get(error, 'response.data.error', null);
-  if (errorDetails) {
-    return `${errorStatus ? errorStatus + ': ' : ''}${errorDetails}`;
-  }
-
-  return `${errorStatus ? errorStatus + ': ' : ''}${errorMessage}`;
-};
+  return `${error.status}:${error.statusText} ${error.details || error.data || ''}`;
+}
 
 type Props = {
   error: ApolloError,
 };
 const QueryError = ({ error }: Props) => (
   <div>
-    <Typography variant="headline" component="h3" style={{ marginBottom: 8 }}>
-      Error message
-    </Typography>
-    <Typography component="p">
-      {parseErrorMessage(error)}
+    <Typography variant="headline" component="h3" style={{ marginBottom: 8, color: "red" }}>
+      {stringifyError(error)}
     </Typography>
     <Typography variant="subheading" component="h4" style={{ margin: '18px 0 6px' }}>
       Error details

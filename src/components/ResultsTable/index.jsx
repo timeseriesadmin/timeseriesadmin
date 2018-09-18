@@ -161,26 +161,29 @@ class ResultsTable extends React.Component<Props, State> {
     }
 
     // no point in parsing before error check
-    // let { results, headers } = parseQueryResults(data.executeQuery.response.data);
     let results = Papa.parse(data.executeQuery.response.data, {
       header: true,
       skipEmptyLines: 'greedy', // skip empty and whitespace lines
     });
 
     if (!results.data || !results.data.length) {
+      const statusCode = data.executeQuery.response.status;
       return (
         <Paper className={classes.root}>
           <div className={classes.contentNoTable}>
-            <Typography variant="headline" component="h3" style={{ marginBottom: 8 }}>
-              Empty server response
+            <Typography variant="headline" component="h3" style={{ marginBottom: 8, color: statusCode >= 200 && statusCode < 300 ? "green" : "red" }}>
+              {data.executeQuery.response.status}:{data.executeQuery.response.statusText} No data
             </Typography>
-            <Typography component="p">
+            <Typography component="p" variant="body1">
+              Please verify your query if this is not the expected response.
+            </Typography>
+            <Typography component="p" variant="caption">
               Maybe queried measurement doesn't exist ?
             </Typography>
-            <Typography component="p">
+            <Typography component="p" variant="caption">
               Maybe you query only for TAGS (your query should contain at least one FIELD) ?
             </Typography>
-            <Typography component="p">
+            <Typography component="p" variant="caption">
               Remember, measurement names are CASE SENSITIVE !
             </Typography>
           </div>
