@@ -202,7 +202,7 @@ class ResultsTable extends React.Component<Props, State> {
       dataset = results.data;
     }
 
-    const query = data.executeQuery.request.q;
+    const query = data.executeQuery.request.params.q;
 
     return (
       <Paper className={classes.root}>

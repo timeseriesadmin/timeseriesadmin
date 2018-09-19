@@ -8,14 +8,16 @@ const styles = theme => ({
     paddingRight: theme.spacing.unit,
   },
   spacer: {
-    flex: '1 1 100%',
+    // flex: '1 1 100%',
   },
   actions: {
-    flex: '0 0 auto',
+    minWidth: 320,
+    // flex: '0 0 auto',
     color: theme.palette.text.secondary,
   },
   title: {
-    flex: '0 0 auto',
+    paddingTop: 18,
+    // flex: '0 0 auto',
   },
 });
 type Props = {
@@ -35,14 +37,14 @@ const TableToolbar = ({ classes, title, timeFormat, handleFormatChange, hasTime 
   <div className={classes.spacer} />
 	{hasTime &&
   <div className={classes.actions}>
-		<FormGroup row style={{ flexWrap: 'nowrap' }}>
+		<FormGroup row style={{ flexWrap: 'nowrap', display: 'flex' }}>
 			<FormLabel style={{ margin: 8, marginRight: 16 }}>Time format</FormLabel>
 			<Select
 				value={timeFormat}
 				onChange={handleFormatChange}
 				displayEmpty
 				name="timeFormat"
-				className={classes.selectEmpty}
+        style={{ flexGrow: 1 }}
 			>
 				<MenuItem value="timestamp">
 					<em>Timestamp</em>
