@@ -114,23 +114,32 @@ export const resolvers = {
         queryError = error;
       }
 
-			// update query history
-			// TODO: check if current query is same as last one if so don't add it to the history
-      queryHistory.unshift({
-        query: queryArgs.q,
-        error: queryError ? JSON.stringify(queryError) : null,
-        __typename: 'InfluxQuery',
-      });
+      const historyIndex = queryHistory.findIndex(hist => hist.query === queryArgs.q);
 
-      // limit max length of query history
-      queryHistory = queryHistory.slice(0, HISTORY_MAX_LENGTH);
+      if (historyIndex !== 0) {
+        if (historyIndex > 0) {
+          // remove any other history entries with same query
+          queryHistory = queryHistory.filter(hist => hist.query !== queryArgs.q);
+        }
 
-      storage.set('queryHistory', JSON.stringify(queryHistory))
-      cache.writeData({
-        data: {
-          queryHistory: queryHistory,
-        },
-      });
+        // add query as first history element
+        queryHistory.unshift({
+          query: queryArgs.q,
+          error: queryError ? JSON.stringify(queryError) : null,
+          __typename: 'InfluxQuery',
+        });
+
+        // limit max length of query history
+        queryHistory = queryHistory.slice(0, HISTORY_MAX_LENGTH);
+
+        storage.set('queryHistory', JSON.stringify(queryHistory))
+        cache.writeData({
+          data: {
+            queryHistory: queryHistory,
+          },
+        });
+      }
+      // else { in case query has index 0 do nothing (it is already at the top) }
 
       if (queryError) {
         let errorMessage = `${queryError.response.status}:${queryError.response.statusText} `;
