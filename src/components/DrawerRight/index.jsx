@@ -8,7 +8,7 @@ import QueryReferenceIcon from '@material-ui/icons/Flip';
 import InfluxExplorerIcon from '@material-ui/icons/Explore';
 import InfluxConnectionsIcon from '@material-ui/icons/Link';
 
-import InfluxExplorer from '../InfluxExplorer';
+import PanelExplorer from '../PanelExplorer';
 import QueryHistory from '../QueryHistory';
 import QueryReference from '../QueryReference';
 import PanelConnections from '../PanelConnections';
@@ -100,7 +100,7 @@ class DrawerRight extends React.Component<Props, State> {
 
         <div className={classes.content}>
           {activeTab === 0 && <PanelConnections/>}
-          {activeTab === 1 && <InfluxExplorer/>}
+          {activeTab === 1 && <PanelExplorer/>}
           {activeTab === 2 && <QueryHistory/>}
           {activeTab === 3 && <QueryReference/>}
         </div>
