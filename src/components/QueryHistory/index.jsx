@@ -6,6 +6,8 @@ import { ErrorOutline as ErrorIcon } from '@material-ui/icons';
 import { Query, Mutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 
+import { HISTORY_MAX_LENGTH } from '../../apollo/resolvers';
+
 const styles = theme => ({
   info: {
     padding: theme.spacing.unit*2,
@@ -60,7 +62,7 @@ const QueryHistory = ({ classes }: Props) => (
       return (
         <div className={classes.root}>
           <Typography variant="body1" className={classes.info}>
-            List of most recent queries executed, with max length of 30 items.
+            List of most recent queries executed, with max length of {HISTORY_MAX_LENGTH} items.
           </Typography>
           <List dense>
             {data.queryHistory.map((executeQuery, index) => (

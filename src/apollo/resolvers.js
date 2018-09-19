@@ -7,7 +7,7 @@ import { ApolloError } from 'apollo-client';
 
 import type { QueryParams } from '../providers/influx/types';
 
-const HISTORY_MAX_LENGTH = 30;
+export const HISTORY_MAX_LENGTH = 30;
 
 const queryBase = (cache: any, query: string) => {
   const { form } = cache.readQuery({
