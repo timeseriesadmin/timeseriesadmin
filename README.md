@@ -1,22 +1,20 @@
-# Influx Explorer
+Influx Explorer
+===
+
+Administration panel and data explorer interface for InfluxDB databases.
 
 ## TODO
 
+- CORE: add user management
 - CORE: add pagination for large datasets in Explorer panel using `fetchMore` Graphql feature https://www.apollographql.com/docs/react/features/pagination.html
 - CORE: writing data
 - UX: cmd+enter submit
 - UX: opt-in password saving
-- UX: password show/hide
 - CORE: Support Electron autoUpdater: https://github.com/electron-userland/electron-builder/issues/3053#issuecomment-401001573
 - CORE: add `APP_ELECTRON=true` to preelectron:stag and prod, it doesn't work now because of misconfigured updates
 - CORE: secure localStorage e.g. with password encryption of stored data (?) see: https://stackoverflow.com/questions/3220660/local-storage-vs-cookies
 - UX: in network error indicate possible cause of lack of port number if it is not provided by user
 - UX: reset active pagination page to 0 after executing query
-- UX: when duplicated query is added to history it should remove all previous history entries of this query
-
-## Known bugs
-
-- problem with e.g. `DROP MEASUREMENT "530A2::1"` query (probably some encoding issue)
 
 ## Electron
 
