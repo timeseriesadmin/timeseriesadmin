@@ -12,10 +12,14 @@ const styles = theme => ({
     textTransform: 'none',
     textAlign: 'left',
     width: 'calc(100% - 36px)',
+    borderRadius: 0,
   },
   btnDelete: {
     minWidth: 36,
     width: 36,
+  },
+  list: {
+    padding: 0,
   },
   listItem: {
     padding: 0,
@@ -43,7 +47,7 @@ const DELETE_CONNECTION = gql`
 type Props = {
   classes: any,
 };
-const PanelConnections = ({ classes }: Props) => (
+const Connections = ({ classes }: Props) => (
   <Query query={GET_CONNECTIONS}>
   {({ loading, error, data }) => (
     <Mutation mutation={DELETE_CONNECTION}>
@@ -57,7 +61,7 @@ const PanelConnections = ({ classes }: Props) => (
           loading ?  <div>Loading...</div> 
           : !data || !data.connections || data.connections.length === 0 ?  <div>No data</div>
           : error ? <div>Error!</div>
-          : <List>
+          : <List className={classes.list}>
             {data.connections.map((conn, index) => (
               <ListItem key={index} className={classes.listItem}>
                 <Button className={classes.btnConnect}
@@ -94,4 +98,4 @@ const PanelConnections = ({ classes }: Props) => (
   </Query>
 );
 
-export default withStyles(styles)(PanelConnections);
+export default withStyles(styles)(Connections);

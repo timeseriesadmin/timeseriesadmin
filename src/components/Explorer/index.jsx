@@ -24,6 +24,7 @@ const theme = createMuiTheme({
         paddingTop: 0,
         paddingBottom: 0,
         minHeight: 26,
+        borderRadius: 0,
       },
     },
     MuiCollapse: {

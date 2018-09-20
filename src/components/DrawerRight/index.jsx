@@ -9,9 +9,9 @@ import InfluxExplorerIcon from '@material-ui/icons/Explore';
 import InfluxConnectionsIcon from '@material-ui/icons/Link';
 
 import PanelExplorer from '../PanelExplorer';
-import QueryHistory from '../QueryHistory';
-import QueryReference from '../QueryReference';
-import PanelConnections from '../PanelConnections';
+import PanelHistory from '../PanelHistory';
+import PanelReference from '../PanelReference';
+import PanelConnect from '../PanelConnect';
 
 const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
 const styles = theme => ({
@@ -99,10 +99,10 @@ class DrawerRight extends React.Component<Props, State> {
         </div>
 
         <div className={classes.content}>
-          {activeTab === 0 && <PanelConnections/>}
+          {activeTab === 0 && <PanelConnect/>}
           {activeTab === 1 && <PanelExplorer/>}
-          {activeTab === 2 && <QueryHistory/>}
-          {activeTab === 3 && <QueryReference/>}
+          {activeTab === 2 && <PanelHistory/>}
+          {activeTab === 3 && <PanelReference/>}
         </div>
       </div>
     );

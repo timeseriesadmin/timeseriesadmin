@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import gql from 'graphql-tag';
-import { List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import { List, ListItem, ListItemText } from '@material-ui/core';
 import { Mutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -29,10 +29,6 @@ const references = [
 ];
 
 const styles = theme => ({
-  info: {
-    padding: theme.spacing.unit*2,
-    paddingBottom: 0,
-  },
   btnIcon: {
     color: theme.palette.error.main,
     marginRight: 0,
@@ -67,25 +63,20 @@ const QueryReference = ({ classes }: Props) => (
       setFormQuery({ variables: { query } });
     };
     return (
-      <div className={classes.root}>
-        <Typography variant="body1" className={classes.info}>
-          Some examples taken from <a href="https://docs.influxdata.com/influxdb/v1.6/query_language/data_exploration/">official InfluxDB docs</a>.
-        </Typography>
-        <List dense>
-          {references.map((example, index) => (
-            <ListItem button disableGutters
-              className={classes.listItem}
-              key={index}
-              onClick={handleQueryClick(example.query)}
-            >
-              <ListItemText primary={example.query}
-                secondary={example.example || null}
-                className={classes.listItemText}
-              />
-            </ListItem>
-          ))}
-        </List>
-      </div>
+      <List dense>
+        {references.map((example, index) => (
+          <ListItem button disableGutters
+            className={classes.listItem}
+            key={index}
+            onClick={handleQueryClick(example.query)}
+          >
+            <ListItemText primary={example.query}
+              secondary={example.example || null}
+              className={classes.listItemText}
+            />
+          </ListItem>
+        ))}
+      </List>
     );
   }}
   </Mutation>
