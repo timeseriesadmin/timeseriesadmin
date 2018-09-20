@@ -4,8 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Connections from '../Connections';
 
-import { HISTORY_MAX_LENGTH } from '../../apollo/resolvers';
-
 const styles = theme => ({
   root: {
     paddingTop: theme.spacing.unit,
