@@ -49,6 +49,9 @@ const styles = theme => ({
     //   paddingLeft: theme.spacing.unit * 2,
     // },
   },
+  versionInfo: {
+    fontSize: 10,
+  },
   rightPanel: {
     paddingRight: theme.spacing.unit * 2,
   },
@@ -111,6 +114,14 @@ const App = ({ classes }) => (
 						<IconMain style={{ width: 48, height: 48, alignSelf: 'center', marginRight: 8 }}/>
 						<Typography variant="title" color="inherit" style={{ alignSelf: 'center' }}>
 							Influx Explorer
+              <Typography variant="caption" color="inherit" className={classes.versionInfo}>
+                ver. <span id="version">{process.env.REACT_APP_VERSION}</span>
+                {/*process.env.REACT_APP_ELECTRON && updateReady &&
+                  <Button onClick={installUpdates}>
+                  Update
+                  </Button>
+                }*/}
+              </Typography>
 						</Typography>
 					</div>
 					<div className={classes.rightPanel}>
@@ -131,14 +142,6 @@ const App = ({ classes }) => (
 							</div>
 						</Tooltip>
 					</div>
-					{/*<Typography variant="caption" color="inherit" className={classes.rightPanel}>
-						ver. <span id="version">{process.env.REACT_APP_VERSION}</span>
-						{/*process.env.REACT_APP_ELECTRON && updateReady &&
-							<Button onClick={installUpdates}>
-							Update
-							</Button>
-						}
-					</Typography>*/}
 				</Toolbar>
 			</AppBar>
 
