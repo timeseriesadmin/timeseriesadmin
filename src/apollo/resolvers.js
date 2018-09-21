@@ -289,48 +289,5 @@ export const resolvers = {
       // it is important to return anything e.g. null (in other case you will see a warning)
       return null;
     },
-
-      /*cache.writeData({
-        data: {
-          server: {
-            __typename: 'Server',
-            id: `${form.u}@${form.url}`,
-            databases: databases.map(name => ({
-              __typename: 'Database',
-              id: name,
-              name,
-            })),
-          },
-        },
-      });
-
-      const fragment = gql`
-      fragment getServer on Server {
-        id
-        name
-        databases {
-          id
-          name
-        }
-      }`;
-      const result = cache.readFragment({ fragment, id: `Server:${id}` });*/
-      // return result;
-
-    /*const fragment = gql`
-    fragment getMeasurement on Measurement {
-      id
-      name
-      fieldKeys {
-        id
-        name
-        type
-      }
-      tagKeys {
-        id
-        name
-      }
-    }`;
-    const result = cache.readFragment({ fragment, id: `Measurement:${id}` });
-    return result;*/
   },
 };
