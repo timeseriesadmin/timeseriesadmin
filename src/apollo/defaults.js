@@ -28,6 +28,7 @@ const form = {
   ...JSON.parse(storage.get('form')),
 };
 const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
+const initTimeFormat = storage.get('timeFormat', 'timestamp');
 
 export default {
 	isOpenDrawer,
@@ -35,4 +36,12 @@ export default {
   connections,
   form,
   server: null,
+  resultsTable: {
+    order: 'asc',
+    orderBy: null,
+    page: 0,
+    rowsPerPage: 10,
+    timeFormat: initTimeFormat,
+    __typename: 'ResultsTable',
+  },
 };

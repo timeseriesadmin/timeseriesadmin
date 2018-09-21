@@ -4,8 +4,17 @@ import storage from '../helpers/storage';
 import gql from 'graphql-tag';
 import Papa from 'papaparse';
 import { ApolloError } from 'apollo-client';
+import mergeWith from 'lodash/mergeWith';
 
 import type { QueryParams } from '../providers/influx/types';
+
+export type ResultsSettings = {
+  order: 'asc'|'desc',
+  orderBy: number | null,
+  page: number,
+  rowsPerPage: number,
+	timeFormat: 's'|'ms'|'ns'|'timestamp',
+};
 
 export const HISTORY_MAX_LENGTH = 30;
 
@@ -88,21 +97,10 @@ export const resolvers = {
       // }
 
       let { queryHistory, form } = cache.readQuery({
-        query: gql`
-          query getData {
-            queryHistory {
-              query
-              error
-            }
-						form {
-							url
-							u
-							p
-							db
-							q
-						}
-          }
-        `,
+        query: gql`{
+          queryHistory { query error }
+          form { url u p db q }
+        }`,
       });
 			let queryArgs = { ...form, ...queryParams, responseType: 'csv' };
 
@@ -156,6 +154,18 @@ export const resolvers = {
           extraInfo: queryError,
         });
       }
+
+      // reset current page number to 0 (first page), orderBy and order
+      const { resultsTable } = cache.readQuery({
+        query: gql`{
+          resultsTable { rowsPerPage timeFormat }
+        }`,
+      });
+      cache.writeData({
+        data: {
+          resultsTable: { ...resultsTable, page: 0, orderBy: null, order: 'desc' },
+        },
+      });
 
       return {
 				request: { params: queryArgs },
@@ -257,6 +267,29 @@ export const resolvers = {
 
       return null;
     },
+    setResultsTable: (_obj: void, changed: ResultsSettings, { cache }: any): null => {
+      const { resultsTable } = cache.readQuery({
+        query: gql`{
+          resultsTable { order orderBy page rowsPerPage timeFormat }
+        }`,
+      });
+
+      const newResultsSettings = mergeWith(
+        { __typename: 'ResultsTable' }, resultsTable, changed,
+        // ignore overwriting with undefined while merging
+        (a, b): any => b === undefined ? a : undefined
+      );
+      storage.set('timeFormat', newResultsSettings.timeFormat)
+
+      cache.writeData({
+        data: {
+          resultsTable: newResultsSettings,
+        },
+      });
+      // it is important to return anything e.g. null (in other case you will see a warning)
+      return null;
+    },
+
       /*cache.writeData({
         data: {
           server: {

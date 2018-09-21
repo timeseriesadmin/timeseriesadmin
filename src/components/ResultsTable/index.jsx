@@ -6,11 +6,14 @@ import {
 } from '@material-ui/core';
 import format from 'date-fns/format';
 import Papa from 'papaparse';
+import gql from 'graphql-tag';
+import { Query, Mutation } from 'react-apollo';
 
 import QueryError from '../QueryError';
 import TableToolbar from './TableToolbar';
 import TableHead from './TableHead';
-import storage from '../../helpers/storage';
+
+import type { ResultsSettings } from '../../apollo/resolvers';
 
 function getSorting(order, orderBy): (a: any, b: any) => number {
   if (order === 'desc') {
@@ -32,44 +35,12 @@ const styles = theme => ({
   },
 });
 
-// type parsedQuery = {
-//   headers: string[],
-//   results: Array<?string[]>,
-// };
-// const parseQueryResults = (resultsString: string): parsedQuery => {
-//   let data = {
-//     headers: [],
-//     results: [],
-//   };
-
-//   data.results = Papa.parse(resultsString, {
-//     header: true
-//   });
-//   // .split('\n')
-//     // .filter(line => line !== '') // remove empty lines
-//     // .map(line => line.split(',')); // create array of values for each line
-
-//   // if (data.results.length > 0) {
-//     // data.headers = data.results.shift() || [];
-//   // }
-
-//   return data;
-// };
-
 type Props = {
   classes: any,
   queryState: any,
 };
-type State = {
-  order: 'asc'|'desc',
-  orderBy: number,
-  selected: number[],
-  page: number,
-  rowsPerPage: number,
-	timeFormat: 's'|'ms'|'ns'|'timestamp',
-};
 
-const parseDate = (date: string, timeFormat: $PropertyType<State, 'timeFormat'>): string => {
+const parseDate = (date: string, timeFormat: $PropertyType<ResultsSettings, 'timeFormat'>): string => {
   switch (timeFormat) {
     case 's':
       return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-dd HH:mm:ss');
@@ -82,46 +53,44 @@ const parseDate = (date: string, timeFormat: $PropertyType<State, 'timeFormat'>)
   }
 };
 
-// $FlowFixMe
-const initTimeFormat: $PropertyType<State, 'timeFormat'> = storage.get('timeFormat', 'timestamp');
+const ResultsTable = (props: Props) => (
+  <Mutation mutation={SET_RESULTS_TABLE}>
+    {setResultsTable => (
+  <Query query={GET_RESULTS_TABLE}>
+    { // $FlowFixMe
+      ({ data: { resultsTable } }: { data: { resultsTable: ResultsSettings } }) => {
+      // const { order, orderBy, page, rowsPerPage, timeFormat } = data;
 
-class ResultsTable extends React.Component<Props, State> {
-	state = {
-		order: 'asc',
-		orderBy: null,
-		selected: [],
-		page: 0,
-		rowsPerPage: 10,
-		timeFormat: initTimeFormat,
-	};
-
-  handleRequestSort = (event, property) => {
+  const handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = 'desc';
 
-    if (this.state.orderBy === property && this.state.order === 'desc') {
+    if (resultsTable.orderBy === property && resultsTable.order === 'desc') {
       order = 'asc';
     }
 
-    this.setState({ order, orderBy });
+    setResultsTable({ variables: { order, orderBy } });
+    // this.setState({ order, orderBy });
   };
 
-  handleChangePage = (event, page) => {
-    this.setState({ page });
+  const handleChangePage = (event, page) => {
+    setResultsTable({ variables: { page } });
+    // this.setState({ page });
   };
 
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
+  const handleChangeRowsPerPage = event => {
+    setResultsTable({ variables: { rowsPerPage: parseInt(event.target.value, 10) } });
+    // this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
   };
 
-  handleFormatChange = event => {
-    storage.set('timeFormat', event.target.value);
-    this.setState({ timeFormat: event.target.value });
+  const handleFormatChange = event => {
+    // TODO: decide if timeFormat should be saved in storage
+    // storage.set('timeFormat', event.target.value);
+    setResultsTable({ variables: { timeFormat: event.target.value } });
+    // this.setState({ timeFormat: event.target.value });
   };
 
-  render() {
-    const { classes, queryState: { called, loading, data, error } } = this.props;
-    const { timeFormat, order, orderBy, rowsPerPage, page } = this.state;
+    const { classes, queryState: { called, loading, data: query, error } } = props;
 
     if (error) {
       return (
@@ -161,18 +130,18 @@ class ResultsTable extends React.Component<Props, State> {
     }
 
     // no point in parsing before error check
-    let results = Papa.parse(data.executeQuery.response.data, {
+    let results = Papa.parse(query.executeQuery.response.data, {
       header: true,
       skipEmptyLines: 'greedy', // skip empty and whitespace lines
     });
 
     if (!results.data || !results.data.length) {
-      const statusCode = data.executeQuery.response.status;
+      const statusCode = query.executeQuery.response.status;
       return (
         <Paper className={classes.root}>
           <div className={classes.contentNoTable}>
             <Typography variant="headline" component="h3" style={{ marginBottom: 8, color: statusCode >= 200 && statusCode < 300 ? "green" : "red" }}>
-              {data.executeQuery.response.status}:{data.executeQuery.response.statusText} No data
+              {query.executeQuery.response.status}:{query.executeQuery.response.statusText} No data
             </Typography>
             <Typography component="p" variant="body1">
               Please verify your query if this is not the expected response.
@@ -196,37 +165,35 @@ class ResultsTable extends React.Component<Props, State> {
 
 		// skip sorting if not selected
     let dataset;
-		if (orderBy) {
-			dataset = results.data.sort(getSorting(order, orderBy));
+		if (resultsTable.orderBy) {
+			dataset = results.data.sort(getSorting(resultsTable.order, resultsTable.orderBy));
     } else {
       dataset = results.data;
     }
 
-    const query = data.executeQuery.request.params.q;
-
     return (
       <Paper className={classes.root}>
 				<TableToolbar
-          title={query}
+          title={query.executeQuery.request.params.q}
           hasTime={tIndex > -1}
-          timeFormat={timeFormat}
-          handleFormatChange={this.handleFormatChange}
+          timeFormat={resultsTable.timeFormat}
+          handleFormatChange={handleFormatChange}
         />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <TableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={this.handleRequestSort}
+              order={resultsTable.order}
+              orderBy={resultsTable.orderBy}
+              onRequestSort={handleRequestSort}
               headers={Object.keys(dataset[0])}
             />
             <TableBody>
-              {dataset.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              {dataset.slice(resultsTable.page * resultsTable.rowsPerPage, resultsTable.page * resultsTable.rowsPerPage + resultsTable.rowsPerPage)
                 .map((row, rIndex) => (
                   <TableRow hover tabIndex={-1} key={rIndex}>
                     {Object.keys(row).map(key => (
                       <TableCell key={key} padding="dense" numeric>
-												{timeFormat && key === 'time' ? parseDate(row[key], timeFormat) : row[key]} 
+												{resultsTable.timeFormat && key === 'time' ? parseDate(row[key], resultsTable.timeFormat) : row[key]} 
 											</TableCell>
                     ))}
                   </TableRow>
@@ -237,20 +204,33 @@ class ResultsTable extends React.Component<Props, State> {
         <TablePagination
           component="div"
           count={dataset.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
+          rowsPerPage={resultsTable.rowsPerPage}
+          page={resultsTable.page}
           backIconButtonProps={{
             'aria-label': 'Previous Page',
           }}
           nextIconButtonProps={{
             'aria-label': 'Next Page',
           }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
     );
+    }}
+  </Query>
+    )}
+  </Mutation>
+);
+
+const SET_RESULTS_TABLE = gql`
+  mutation setResultsTable($order: String, $orderBy: String, $page: Int, $rowsPerPage: Int, $timeFormat: String) {
+    setResultsTable(order: $order, orderBy: $orderBy, page: $page, rowsPerPage: $rowsPerPage, timeFormat: $timeFormat) @client
   }
-}
+`;
+
+const GET_RESULTS_TABLE = gql`{
+  resultsTable @client { order orderBy page rowsPerPage timeFormat }
+}`;
 
 export default withStyles(styles)(ResultsTable);

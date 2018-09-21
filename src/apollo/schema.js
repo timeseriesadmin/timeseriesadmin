@@ -34,7 +34,7 @@ export default `
     name: String!
     duration: String!
     shardGroupDuration: String!
-    replicaN: Number!
+    replicaN: Int!
     default: Boolean!
   }
   type Measurement {
@@ -63,6 +63,13 @@ export default `
     p: String
     db: String
   }
+  type ResultsTable {
+    order: String!
+    orderBy: String
+    page: Int!
+    rowsPerPage: Int!
+    timeFormat: String!
+  }
   type Mutation {
     executeQuery(url: String!, u: String, p: String, db: String, q: String!): Boolean
     updateForm(url: String, u: String, p: String, db: String, q: String): Boolean
@@ -76,6 +83,7 @@ export default `
     queryHistory: [InfluxQuery!]
     server: Server
     connections: [Connection]!
+    getResultsTable: ResultsTable
   }
 `;
 

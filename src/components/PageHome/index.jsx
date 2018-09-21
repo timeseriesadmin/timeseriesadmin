@@ -8,10 +8,10 @@ import ResultsTable from '../ResultsTable';
 const PageHome = () => (
   <div>
     <br/>
-    <Mutation mutation={FORM_QUERY} fetchPolicy="no-cache">
+    <Mutation mutation={FORM_QUERY}>
       {(executeQuery, queryState) => (
         <Mutation mutation={UPDATE_FORM}>
-          {(formMutate, _mutationState) => {
+          {formMutate => {
             const onSubmit = (values): void => {
               formMutate({ variables: values });
               // prevent displaying errors in console (they are handled in resolvers)
