@@ -17,6 +17,7 @@ const styles = theme => ({
   },
   title: {
     paddingTop: 18,
+    flexGrow: 1,
     // flex: '0 0 auto',
   },
 });
