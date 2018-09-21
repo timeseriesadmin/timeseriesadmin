@@ -3,7 +3,8 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import { AppBar, Toolbar, Typography, IconButton, Tooltip, Drawer } from '@material-ui/core';
-import { HelpOutline as DrawerOpenIcon, ChevronRight as DrawerCloseIcon } from '@material-ui/icons';
+import DrawerOpenIcon from '@material-ui/icons/Menu';
+import DrawerCloseIcon from '@material-ui/icons/ChevronRight';
 import { withStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
@@ -12,8 +13,6 @@ import { Route } from 'react-router-dom';
 import PageHome from '../PageHome';
 import DrawerRight from '../DrawerRight';
 import IconMain from '../IconMain';
-
-// TODO: remember open/close state in local storage
 
 const drawerWidth = 480;
 const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
@@ -125,7 +124,7 @@ const App = ({ classes }) => (
 						</Typography>
 					</div>
 					<div className={classes.rightPanel}>
-						<Tooltip title={isOpenDrawer ? "Close sidebar" : "Additional info"}>
+						<Tooltip title={isOpenDrawer ? "Close sidebar" : "Open sidebar"}>
 							<div>
 								<IconButton
 									classes={{ disabled: classes.disabledBtn }}
