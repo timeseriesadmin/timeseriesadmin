@@ -1,12 +1,12 @@
 // @flow
-import { query as influxQuery } from '../providers/influx';
+import { query as influxQuery } from 'influx-api';
 import storage from '../helpers/storage';
 import gql from 'graphql-tag';
 import Papa from 'papaparse';
 import { ApolloError } from 'apollo-client';
 import mergeWith from 'lodash/mergeWith';
 
-import type { QueryParams } from '../providers/influx/types';
+import type { QueryParams } from 'influx-api';
 
 export type ResultsSettings = {
   order: 'asc'|'desc',
