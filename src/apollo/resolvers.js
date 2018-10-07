@@ -6,7 +6,7 @@ import Papa from 'papaparse';
 import { ApolloError } from 'apollo-client';
 import mergeWith from 'lodash/mergeWith';
 
-import type { QueryParams } from 'influx-api';
+import type { InfluxResponse, QueryParams, JSONResponse } from 'influx-api';
 
 export type ResultsSettings = {
   order: 'asc'|'desc',
@@ -18,7 +18,7 @@ export type ResultsSettings = {
 
 export const HISTORY_MAX_LENGTH = 30;
 
-const queryBase = (cache: any, query: string) => {
+const queryBase = (cache: any, query: string): QueryParams<'csv'> => {
   const { form } = cache.readQuery({
     query: gql`{
       form { url u p }
@@ -90,7 +90,7 @@ export const resolvers = {
       // it is important to return anything e.g. null (in other case you will see a warning)
       return null;
     },
-    executeQuery: async (_: void, queryParams: QueryParams, { cache }: any): Promise<any> => {
+    executeQuery: async (_: void, queryParams: QueryParams<'csv'>, { cache }: any): Promise<any> => {
       // TODO: ensure LIMIT if not provided but ONLY for SELECTs
       // if (q.indexOf('select') === 0 && q.indexOf('limit') === -1) {
         // q += ' limit 100'; // TODO: increase LIMIT value
@@ -174,37 +174,30 @@ export const resolvers = {
     },
     // TODO: support multiserver with { url }: { url: string } args
     databases: async (_: void, _args: void, { cache }: any): Promise<any> => {
-      // $FlowFixMe
       const result = await influxQuery(queryBase(cache, 'SHOW DATABASES'));
       return parseResults(result.data, {id: 'name', name: 'name'}, 'Database');
     },
     series: async (_: void, { db, meas }: { db: string, meas?: string }, { cache }: any): Promise<any> => {
-      // $FlowFixMe
       const result = await influxQuery(queryBase(cache, `SHOW SERIES ON "${db}"${meas ? ` FROM "${meas}"`: ''}`));
       return parseResults(result.data, {id: 'key', key: 'key', tags: 'tags'}, 'Series');
     },
     policies: async (_: void, { db }: { db: string }, { cache }: any): Promise<any> => {
-      // $FlowFixMe
       const result = await influxQuery(queryBase(cache, `SHOW RETENTION POLICIES ON "${db}"`));
       return parseResults(result.data, {id: 'name', name: 'name', duration: 'duration', shardGroupDuration: 'shardGroupDuration', replicaN: 'replicaN', default: 'default'}, 'RetentionPolicy');
     },
     measurements: async (_: void, { db }: { db: string }, { cache }: any): Promise<any> => {
-      // $FlowFixMe
       const result = await influxQuery(queryBase(cache, `SHOW MEASUREMENTS ON "${db}"`));
       return parseResults(result.data, {id: 'name', name: 'name'}, 'Measurement');
     },
     fieldKeys: async (_: void, { db, meas }: { db: string, meas: string }, { cache }: any): Promise<any> => {
-      // $FlowFixMe
       const result = await influxQuery(queryBase(cache, `SHOW FIELD KEYS ON "${db}" FROM "${meas}"`));
       return parseResults(result.data, {id: 'fieldKey', name: 'fieldKey', type: 'fieldType'}, 'FieldKey');
     },
     tagKeys: async (_: void, { db, meas }: { db: string, meas: string }, { cache }: any): Promise<any> => {
-      // $FlowFixMe
       const result = await influxQuery(queryBase(cache, `SHOW TAG KEYS ON "${db}" FROM "${meas}"`));
       return parseResults(result.data, {id: 'tagKey', name: 'tagKey'}, 'TagKey');
     },
     tagValues: async (_: void, { db, meas, tagKey }: { db: string, meas: string, tagKey: string }, { cache }: any): Promise<any> => {
-      // $FlowFixMe
       const result = await influxQuery(queryBase(cache, `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${tagKey}"`));
       return parseResults(result.data, {id: 'value', value: 'value'}, 'TagValue');
     },

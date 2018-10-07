@@ -16,7 +16,7 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "history": "^4.7.2",
-    "influx-api": "^0.1.3",
+    "influx-api": "^0.1.4",
     "lodash": "^4.17.10",
     "material-ui-password-field": "^2.0.1",
     "papaparse": "^4.6.0",
@@ -35,13 +35,15 @@
     "start": "./update-env.sh && react-scripts start",
     "build": "./update-env.sh && react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "lint": "yarn eslint src",
     "eject": "react-scripts eject",
     "start:electron": "./update-env.sh && APP_ELECTRON=true react-scripts start",
     "build:electron": "./update-env.sh && APP_ELECTRON=true react-scripts build",
     "electron:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
     "electron": "electron .",
     "electron:stag": "electron-builder -m -c.compression=store -c.extraMetadata.main=build/electron.js",
-    "electron:prod": "electron-builder -m -c.extraMetadata.main=build/electron.js"
+    "electron:prod": "electron-builder -m -c.extraMetadata.main=build/electron.js",
+    "electron:win": "electron-builder -m -c.extraMetadata.main=build/electron.js"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -63,7 +65,7 @@
   "main": "public/electron.js",
   "homepage": ".",
   "build": {
-    "appId": "pl.jmarceli.infadmin",
+    "appId": "com.grzegorowski.influx-explorer",
     "productName": "Influx Explorer",
     "files": [
       "build/**/*",
