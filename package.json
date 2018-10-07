@@ -2,8 +2,9 @@
   "name": "influx-explorer",
   "description": "InfuxDB query editor and administrator UI",
   "author": "Jan Grzegorowski",
-  "version": "0.3.0",
-  "private": true,
+  "version": "0.3.1",
+  "private": false,
+  "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^3.1.0",
     "@material-ui/icons": "^1.1.0",
@@ -14,7 +15,7 @@
     "axios": "^0.18.0",
     "date-fns": "^2.0.0-alpha.16",
     "final-form": "^4.9.1",
-    "graphql": "^0.13.2",
+    "graphql": "^14.0.2",
     "graphql-tag": "^2.9.2",
     "history": "^4.7.2",
     "influx-api": "^0.1.4",
@@ -30,9 +31,10 @@
     "react-popper": "^1.0.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^1.1.4"
+    "react-scripts": "^2.0.4"
   },
   "scripts": {
+    "clean": "rm -r dist/",
     "start": "./update-env.sh && react-scripts start",
     "build": "./update-env.sh && react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -42,9 +44,11 @@
     "build:electron": "./update-env.sh && APP_ELECTRON=true react-scripts build",
     "electron:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
     "electron": "electron .",
-    "electron:stag": "electron-builder -m -c.compression=store -c.extraMetadata.main=build/electron.js",
-    "electron:prod": "electron-builder -m -c.extraMetadata.main=build/electron.js",
-    "electron:win": "electron-builder -m -c.extraMetadata.main=build/electron.js"
+    "electron:stag": "yarn clean && electron-builder -m -c.compression=store -c.extraMetadata.main=build/electron.js",
+    "electron:prod": "yarn clean && yarn electron:mac",
+    "electron:mac": "yarn clean && electron-builder -m -c.extraMetadata.main=build/electron.js",
+    "electron:win": "yarn clean && electron-builder -w -c.extraMetadata.main=build/electron.js",
+    "electron:lin": "yarn clean && electron-builder -l -c.extraMetadata.main=build/electron.js"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
@@ -76,8 +80,23 @@
       "buildResources": "assets"
     },
     "mac": {
+      "target": "dmg",
       "category": "utilities",
       "type": "development"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "./assets/icon.png"
+    },
+    "linux": {
+      "target": "deb",
+      "category": "Development"
     }
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
