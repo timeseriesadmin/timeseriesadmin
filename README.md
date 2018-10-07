@@ -14,6 +14,9 @@ Administration panel and data explorer interface for InfluxDB databases.
 - CORE: add `APP_ELECTRON=true` to preelectron:stag and prod, it doesn't work now because of misconfigured updates
 - CORE: secure localStorage e.g. with password encryption of stored data (?) see: https://stackoverflow.com/questions/3220660/local-storage-vs-cookies
 - UX: in network error indicate possible cause of lack of port number if it is not provided by user
+- UX: remember Explorer panel state
+- UX: ease History access
+- UX: allow for copy/paste from Explorer panel e.g. measurement name
 
 ## Electron
 
