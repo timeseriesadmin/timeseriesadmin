@@ -34,7 +34,7 @@
     "react-scripts": "^2.0.4"
   },
   "scripts": {
-    "clean": "rm -r dist/",
+    "clean": "yarn rimraf dist",
     "start": "./update-env.sh && react-scripts start",
     "build": "./update-env.sh && react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -45,7 +45,7 @@
     "electron:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
     "electron": "electron .",
     "electron:stag": "yarn clean && electron-builder -m -c.compression=store -c.extraMetadata.main=build/electron.js",
-    "electron:prod": "yarn clean && yarn electron:mac",
+    "electron:prod": "yarn electron:mac",
     "electron:mac": "yarn clean && electron-builder -m -c.extraMetadata.main=build/electron.js",
     "electron:win": "yarn clean && electron-builder -w -c.extraMetadata.main=build/electron.js",
     "electron:lin": "yarn clean && electron-builder -l -c.extraMetadata.main=build/electron.js"
@@ -65,7 +65,8 @@
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.1.0",
     "flow-bin": "^0.82.0",
-    "flow-typed": "^2.5.1"
+    "flow-typed": "^2.5.1",
+    "rimraf": "^2.6.2"
   },
   "main": "public/electron.js",
   "homepage": ".",
