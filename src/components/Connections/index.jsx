@@ -6,6 +6,8 @@ import { List, ListItem, Button, Typography } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { withStyles } from '@material-ui/core/styles';
 
+import type { QueryRenderProps } from 'react-apollo';
+
 const styles = theme => ({
   btnConnect: {
     display: 'inline-block',
@@ -49,7 +51,7 @@ type Props = {
 };
 const Connections = ({ classes }: Props) => (
   <Query query={GET_CONNECTIONS}>
-  {({ loading, error, data }) => (
+  {({ loading, error, data }: QueryRenderProps<{ connections: any[] }>) => (
     <Mutation mutation={DELETE_CONNECTION}>
     {deleteConnection => {
       const handleDelete = (id) => () => {

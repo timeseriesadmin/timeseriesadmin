@@ -132,6 +132,7 @@ const ResultsTable = (props: Props) => (
     // no point in parsing before error check
     let results = Papa.parse(query.executeQuery.response.data, {
       header: true,
+      // $FlowFixMe
       skipEmptyLines: 'greedy', // skip empty and whitespace lines
     });
 
