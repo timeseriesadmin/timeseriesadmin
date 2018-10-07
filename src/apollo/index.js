@@ -9,7 +9,9 @@ import defaults from './defaults';
 
 const cache = new InMemoryCache();
 
-const linkState = withClientState({ resolvers, defaults, cache, typeDefs });
+const linkState = withClientState({
+  resolvers, defaults, cache, typeDefs,
+});
 
 const client = new ApolloClient({
   cache,

@@ -1,14 +1,16 @@
 // @flow
 import React from 'react';
-import { InputLabel, FormControl, FormHelperText, TextField } from '@material-ui/core';
-import PasswordField from 'material-ui-password-field'
+import {
+  InputLabel, FormControl, FormHelperText, TextField,
+} from '@material-ui/core';
+import PasswordField from 'material-ui-password-field';
 
 export const renderField = ({
   input,
   label,
   meta: { touched, error },
   ...custom
-}: any): any => custom.type === "password" ? (
+}: any): any => (custom.type === 'password' ? (
   <FormControl error={touched && !!error} fullWidth>
     <InputLabel htmlFor={custom.name}>Password</InputLabel>
     <PasswordField
@@ -17,11 +19,11 @@ export const renderField = ({
       {...custom}
     />
     {touched && !!error ? (
-    <FormHelperText>{error}</FormHelperText>
+      <FormHelperText>{error}</FormHelperText>
     ) : ''}
   </FormControl>
 
-  ) : (
+) : (
   <FormControl error={touched && !!error} fullWidth>
     <TextField
       error={touched && !!error}
@@ -31,7 +33,9 @@ export const renderField = ({
       {...custom}
     />
     {touched && !!error ? (
-    <FormHelperText>{error}</FormHelperText>
+      <FormHelperText>{error}</FormHelperText>
     ) : ''}
   </FormControl>
-);
+));
+
+export default { renderField };

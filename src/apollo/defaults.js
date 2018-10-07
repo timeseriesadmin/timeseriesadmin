@@ -19,19 +19,19 @@ const queryHistory = JSON.parse(storage.get('queryHistory', '[]'))
     ...hist,
   }));
 const form = {
-	url: '',
-	u: '',
-	p: '',
-	db: '',
-	q: '',
-	__typename: 'FormData',
+  url: '',
+  u: '',
+  p: '',
+  db: '',
+  q: '',
+  __typename: 'FormData',
   ...JSON.parse(storage.get('form')),
 };
 const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
 const initTimeFormat = storage.get('timeFormat', 'timestamp');
 
 export default {
-	isOpenDrawer,
+  isOpenDrawer,
   queryHistory,
   connections,
   form,

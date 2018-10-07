@@ -1,19 +1,19 @@
 // @flow
 import { query as influxQuery } from 'influx-api';
-import storage from '../helpers/storage';
 import gql from 'graphql-tag';
 import Papa from 'papaparse';
 import { ApolloError } from 'apollo-client';
 import mergeWith from 'lodash/mergeWith';
 
-import type { InfluxResponse, QueryParams, JSONResponse } from 'influx-api';
+import type { QueryParams } from 'influx-api';
+import storage from '../helpers/storage';
 
 export type ResultsSettings = {
   order: 'asc'|'desc',
   orderBy: number | null,
   page: number,
   rowsPerPage: number,
-	timeFormat: 's'|'ms'|'ns'|'timestamp',
+  timeFormat: 's'|'ms'|'ns'|'timestamp',
 };
 
 export const HISTORY_MAX_LENGTH = 30;
@@ -24,7 +24,7 @@ const queryBase = (cache: any, query: string): QueryParams<'csv'> => {
       form { url u p }
     }`,
   });
-  
+
   return {
     ...form,
     q: query,
@@ -47,7 +47,7 @@ const parseResults = (result: string, remap: {[string]: string}, type: string) =
   return results.data.map(entry => ({
     __typename: type,
     // TODO: this might be underperformant solution
-    ...Object.keys(remap).reduce((acc, key) => ({...acc, [key]: entry[remap[key]] }), {}),
+    ...Object.keys(remap).reduce((acc, key) => ({ ...acc, [key]: entry[remap[key]] }), {}),
   }));
 };
 
@@ -60,15 +60,15 @@ type FormParams = {
 };
 export const resolvers = {
   Mutation: {
-		setOpenDrawer: (_obj: void, { isOpen }: { isOpen: boolean }, { cache }: any): null => {
+    setOpenDrawer: (_obj: void, { isOpen }: { isOpen: boolean }, { cache }: any): null => {
       cache.writeData({
         data: {
           isOpenDrawer: isOpen,
         },
       });
-			storage.set('isOpenDrawer', isOpen ? 'true' : 'false');
-			return null;
-		},
+      storage.set('isOpenDrawer', isOpen ? 'true' : 'false');
+      return null;
+    },
     updateForm: (_obj: void, submitted: FormParams, { cache }: any): null => {
       const { form } = cache.readQuery({
         query: gql`{
@@ -81,7 +81,7 @@ export const resolvers = {
         ...submitted,
         __typename: 'FormData',
       };
-      storage.set('form', JSON.stringify(newForm))
+      storage.set('form', JSON.stringify(newForm));
       cache.writeData({
         data: {
           form: newForm,
@@ -93,22 +93,23 @@ export const resolvers = {
     executeQuery: async (_: void, queryParams: QueryParams<'csv'>, { cache }: any): Promise<any> => {
       // TODO: ensure LIMIT if not provided but ONLY for SELECTs
       // if (q.indexOf('select') === 0 && q.indexOf('limit') === -1) {
-        // q += ' limit 100'; // TODO: increase LIMIT value
+      // q += ' limit 100'; // TODO: increase LIMIT value
       // }
 
-      let { queryHistory, form } = cache.readQuery({
+      const readQuery = cache.readQuery({
         query: gql`{
           queryHistory { query error }
           form { url u p db q }
         }`,
       });
-			let queryArgs = { ...form, ...queryParams, responseType: 'csv' };
+      let { queryHistory } = readQuery.queryHistory;
+      const queryArgs = { ...readQuery.form, ...queryParams, responseType: 'csv' };
 
       let queryError;
       let queryResult;
       try {
         queryResult = await influxQuery(queryArgs);
-      } catch(error) {
+      } catch (error) {
         queryError = error;
       }
 
@@ -130,10 +131,10 @@ export const resolvers = {
         // limit max length of query history
         queryHistory = queryHistory.slice(0, HISTORY_MAX_LENGTH);
 
-        storage.set('queryHistory', JSON.stringify(queryHistory))
+        storage.set('queryHistory', JSON.stringify(queryHistory));
         cache.writeData({
           data: {
-            queryHistory: queryHistory,
+            queryHistory,
           },
         });
       }
@@ -146,7 +147,10 @@ export const resolvers = {
             trimHeaders: true,
             skipEmptyLines: true,
           }).data[1][0];
-        } catch (error) {}
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
 
         throw new ApolloError({
           errorMessage,
@@ -163,45 +167,63 @@ export const resolvers = {
       });
       cache.writeData({
         data: {
-          resultsTable: { ...resultsTable, page: 0, orderBy: null, order: 'desc' },
+          resultsTable: {
+            ...resultsTable, page: 0, orderBy: null, order: 'desc',
+          },
         },
       });
 
       return {
-				request: { params: queryArgs },
-				response: queryResult,
-			};
+        request: { params: queryArgs },
+        response: queryResult,
+      };
     },
     // TODO: support multiserver with { url }: { url: string } args
     databases: async (_: void, _args: void, { cache }: any): Promise<any> => {
       const result = await influxQuery(queryBase(cache, 'SHOW DATABASES'));
-      return parseResults(result.data, {id: 'name', name: 'name'}, 'Database');
+      return parseResults(result.data, { id: 'name', name: 'name' }, 'Database');
     },
-    series: async (_: void, { db, meas }: { db: string, meas?: string }, { cache }: any): Promise<any> => {
-      const result = await influxQuery(queryBase(cache, `SHOW SERIES ON "${db}"${meas ? ` FROM "${meas}"`: ''}`));
-      return parseResults(result.data, {id: 'key', key: 'key', tags: 'tags'}, 'Series');
+    series: async (
+      _: void, { db, meas }: { db: string, meas?: string }, { cache }: any,
+    ): Promise<any> => {
+      const result = await influxQuery(queryBase(cache, `SHOW SERIES ON "${db}"${meas ? ` FROM "${meas}"` : ''}`));
+      return parseResults(result.data, { id: 'key', key: 'key', tags: 'tags' }, 'Series');
     },
-    policies: async (_: void, { db }: { db: string }, { cache }: any): Promise<any> => {
+    policies: async (
+      _: void, { db }: { db: string }, { cache }: any,
+    ): Promise<any> => {
       const result = await influxQuery(queryBase(cache, `SHOW RETENTION POLICIES ON "${db}"`));
-      return parseResults(result.data, {id: 'name', name: 'name', duration: 'duration', shardGroupDuration: 'shardGroupDuration', replicaN: 'replicaN', default: 'default'}, 'RetentionPolicy');
+      return parseResults(result.data, {
+        id: 'name', name: 'name', duration: 'duration', shardGroupDuration: 'shardGroupDuration', replicaN: 'replicaN', default: 'default',
+      }, 'RetentionPolicy');
     },
-    measurements: async (_: void, { db }: { db: string }, { cache }: any): Promise<any> => {
+    measurements: async (
+      _: void, { db }: { db: string }, { cache }: any,
+    ): Promise<any> => {
       const result = await influxQuery(queryBase(cache, `SHOW MEASUREMENTS ON "${db}"`));
-      return parseResults(result.data, {id: 'name', name: 'name'}, 'Measurement');
+      return parseResults(result.data, { id: 'name', name: 'name' }, 'Measurement');
     },
-    fieldKeys: async (_: void, { db, meas }: { db: string, meas: string }, { cache }: any): Promise<any> => {
+    fieldKeys: async (
+      _: void, { db, meas }: { db: string, meas: string }, { cache }: any,
+    ): Promise<any> => {
       const result = await influxQuery(queryBase(cache, `SHOW FIELD KEYS ON "${db}" FROM "${meas}"`));
-      return parseResults(result.data, {id: 'fieldKey', name: 'fieldKey', type: 'fieldType'}, 'FieldKey');
+      return parseResults(result.data, { id: 'fieldKey', name: 'fieldKey', type: 'fieldType' }, 'FieldKey');
     },
-    tagKeys: async (_: void, { db, meas }: { db: string, meas: string }, { cache }: any): Promise<any> => {
+    tagKeys: async (
+      _: void, { db, meas }: { db: string, meas: string }, { cache }: any,
+    ): Promise<any> => {
       const result = await influxQuery(queryBase(cache, `SHOW TAG KEYS ON "${db}" FROM "${meas}"`));
-      return parseResults(result.data, {id: 'tagKey', name: 'tagKey'}, 'TagKey');
+      return parseResults(result.data, { id: 'tagKey', name: 'tagKey' }, 'TagKey');
     },
-    tagValues: async (_: void, { db, meas, tagKey }: { db: string, meas: string, tagKey: string }, { cache }: any): Promise<any> => {
+    tagValues: async (
+      _: void, { db, meas, tagKey }: { db: string, meas: string, tagKey: string }, { cache }: any,
+    ): Promise<any> => {
       const result = await influxQuery(queryBase(cache, `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${tagKey}"`));
-      return parseResults(result.data, {id: 'value', value: 'value'}, 'TagValue');
+      return parseResults(result.data, { id: 'value', value: 'value' }, 'TagValue');
     },
-    saveConnection: (_obj: void, { url, u, p, db }: FormParams, { cache }: any): null => {
+    saveConnection: (_obj: void, {
+      url, u, p, db,
+    }: FormParams, { cache }: any): null => {
       let { connections } = cache.readQuery({
         query: gql`{
           connections @client { id url u p db }
@@ -212,8 +234,11 @@ export const resolvers = {
       }
 
       const connection = {
-        url, u, p, db,
-        id: `${url}${u ? u : '_'}${db ? db : '_'}`,
+        url,
+        u,
+        p,
+        db,
+        id: `${url}${u || '_'}${db || '_'}`,
         __typename: 'Connection',
       };
 
@@ -224,7 +249,7 @@ export const resolvers = {
         connections[id] = connection;
       }
 
-      storage.set('connections', JSON.stringify(connections))
+      storage.set('connections', JSON.stringify(connections));
       cache.writeData({
         data: {
           connections,
@@ -251,7 +276,7 @@ export const resolvers = {
         connections.splice(index, 1);
       }
 
-      storage.set('connections', JSON.stringify(connections))
+      storage.set('connections', JSON.stringify(connections));
       cache.writeData({
         data: {
           connections,
@@ -270,9 +295,9 @@ export const resolvers = {
       const newResultsSettings = mergeWith(
         { __typename: 'ResultsTable' }, resultsTable, changed,
         // ignore overwriting with undefined while merging
-        (a, b): any => b === undefined ? a : undefined
+        (a, b): any => (b === undefined ? a : undefined),
       );
-      storage.set('timeFormat', newResultsSettings.timeFormat)
+      storage.set('timeFormat', newResultsSettings.timeFormat);
 
       cache.writeData({
         data: {
