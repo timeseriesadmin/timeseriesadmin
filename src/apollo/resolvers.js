@@ -102,7 +102,7 @@ export const resolvers = {
           form { url u p db q }
         }`,
       });
-      let { queryHistory } = readQuery.queryHistory;
+      let { queryHistory } = readQuery;
       const queryArgs = { ...readQuery.form, ...queryParams, responseType: 'csv' };
 
       let queryError;
