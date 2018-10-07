@@ -1774,7 +1774,7 @@ declare module "@material-ui/core/styles/createMixins" {
 }
 
 declare module "@material-ui/core/styles/createMuiTheme" {
-  declare module.exports: (options: Object) => any;
+  declare module.exports: (options?: Object) => any;
 }
 
 declare module "@material-ui/core/styles/createPalette" {
