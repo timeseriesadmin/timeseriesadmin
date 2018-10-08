@@ -27,6 +27,11 @@ const theme = createMuiTheme({
         borderRadius: 0,
       },
     },
+    MuiIconButton: {
+      root: {
+        padding: 0,
+      },
+    },
     MuiCollapse: {
       wrapper: {
         paddingLeft: 20,
