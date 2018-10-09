@@ -2,7 +2,7 @@
   "name": "influx-explorer",
   "description": "InfuxDB query editor and administrator UI",
   "author": "Jan Grzegorowski <grzegorowski@gmail.com> (https://grzegorowski.com)",
-  "version": "0.3.2",
+  "version": "0.3.1",
   "private": false,
   "license": "MIT",
   "dependencies": {
@@ -37,18 +37,18 @@
     "clean": "yarn rimraf dist",
     "start": "./update-env.sh && react-scripts start",
     "build": "./update-env.sh && react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test src --env=jsdom",
     "lint": "yarn eslint src",
-    "eject": "react-scripts eject",
     "start:electron": "./update-env.sh && APP_ELECTRON=true react-scripts start",
     "build:electron": "./update-env.sh && APP_ELECTRON=true react-scripts build",
     "electron:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
     "electron": "electron .",
     "electron:stag": "electron-builder -m -c.compression=store -c.extraMetadata.main=build/electron.js",
-    "electron:prod": "yarn electron:mac",
-    "electron:mac": "electron-builder -m -c.extraMetadata.main=build/electron.js",
-    "electron:win": "electron-builder -w -c.extraMetadata.main=build/electron.js",
-    "electron:linux": "electron-builder -l -c.extraMetadata.main=build/electron.js"
+    "electron:prod": "yarn dist:mac",
+    "dist:docker": "yarn build && sh -ac 'source ./.env; docker build . -t jmarceli/influx-explorer:$REACT_APP_VERSION'",
+    "dist:mac": "yarn build:electron && electron-builder -m -c.extraMetadata.main=build/electron.js",
+    "dist:win": "yarn build:electron && electron-builder -w -c.extraMetadata.main=build/electron.js",
+    "dist:linux": "yarn build:electron && electron-builder -l -c.extraMetadata.main=build/electron.js"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
