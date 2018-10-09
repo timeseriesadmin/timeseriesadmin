@@ -115,11 +115,6 @@ const App = ({ classes }) => (
 							Influx Explorer
               <Typography variant="caption" color="inherit" className={classes.versionInfo}>
                 ver. <span id="version">{process.env.REACT_APP_VERSION}</span>
-                {/*process.env.REACT_APP_ELECTRON && updateReady &&
-                  <Button onClick={installUpdates}>
-                  Update
-                  </Button>
-                }*/}
               </Typography>
 						</Typography>
 					</div>
