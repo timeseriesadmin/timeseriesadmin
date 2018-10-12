@@ -2,7 +2,7 @@
   "name": "influx-explorer",
   "description": "InfuxDB query editor and administrator UI",
   "author": "Jan Grzegorowski <grzegorowski@gmail.com> (https://grzegorowski.com)",
-  "version": "0.3.1",
+  "version": "0.1.0",
   "private": false,
   "license": "MIT",
   "dependencies": {
