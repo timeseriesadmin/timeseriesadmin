@@ -1,6 +1,6 @@
 {
-  "short_name": "Influx Explorer",
-  "name": "Influx Explorer - database browsing interface for InfluxDB",
+  "short_name": "Time Series Admin",
+  "name": "Administration and querying interface for InfluxDB databases",
   "icons": [
     {
       "src": "favicon.ico",

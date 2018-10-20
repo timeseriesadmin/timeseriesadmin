@@ -1,6 +1,6 @@
 {
-  "name": "influx-explorer",
-  "description": "InfuxDB query editor and administrator UI",
+  "name": "timeseriesadmin",
+  "description": "Administration and querying interface for InfluxDB databases",
   "author": "Jan Grzegorowski <grzegorowski@gmail.com> (https://grzegorowski.com)",
   "version": "0.1.0",
   "private": false,
@@ -43,7 +43,8 @@
     "electron": "electron .",
     "electron:stag": "electron-builder -m -c.compression=store -c.extraMetadata.main=build/electron.js",
     "electron:prod": "yarn dist:mac",
-    "dist:docker": "yarn build && sh -ac 'source ./.env; docker build . -t jmarceli/influx-explorer:$REACT_APP_VERSION'",
+    "dist:docker": "yarn build && sh -ac 'source ./.env; docker build . -t timeseriesadmin/timeseriesadmin:$REACT_APP_VERSION'",
+    "release:docker": "sh -ac 'source ./.env; docker tag timeseriesadmin/timeseriesadmin:$REACT_APP_VERSION timeseriesadmin/timeseriesadmin:latest && docker push timeseriesadmin/timeseriesadmin:latest && docker push timeseriesadmin/timeseriesadmin:$REACT_APP_VERSION'",
     "dist:mac": "yarn build && electron-builder -m -c.extraMetadata.main=build/electron.js",
     "dist:win": "yarn build && electron-builder -w -c.extraMetadata.main=build/electron.js",
     "dist:linux": "yarn build && electron-builder -l -c.extraMetadata.main=build/electron.js",
@@ -70,8 +71,8 @@
   "main": "public/electron.js",
   "homepage": ".",
   "build": {
-    "appId": "com.grzegorowski.influx-explorer",
-    "productName": "Influx Explorer",
+    "appId": "com.grzegorowski.timeseriesadmin",
+    "productName": "Time Series Admin",
     "files": [
       "build/**/*",
       "node_modules/**/*"

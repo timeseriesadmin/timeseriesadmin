@@ -112,7 +112,7 @@ const App = ({ classes }) => (
 					<div className={classes.flex} style={{ display: 'flex', flexDirection: 'row' }}>
 						<IconMain style={{ width: 48, height: 48, alignSelf: 'center', marginRight: 8 }}/>
 						<Typography variant="title" color="inherit" style={{ alignSelf: 'center' }}>
-							Influx Explorer
+							Time Series Admin
               <Typography variant="caption" color="inherit" className={classes.versionInfo}>
                 ver. <span id="version">{process.env.REACT_APP_VERSION}</span>
               </Typography>

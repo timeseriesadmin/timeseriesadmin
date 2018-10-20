@@ -1,6 +1,6 @@
 {
-    "short_name": "Influx Explorer",
-    "name": "Influx Explorer - database browsing interface for InfluxDB",
+    "short_name": "TS Admin",
+    "name": "Time Series Admin",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
