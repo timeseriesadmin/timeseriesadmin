@@ -1,5 +1,5 @@
-// flow-typed signature: 801a586493cc07862ec140632797a48a
-// flow-typed version: ff74aeccac/papaparse_v4.x.x/flow_>=v0.39.x
+// flow-typed signature: fb7acb4bfbb68f011ee61773c32fd4f2
+// flow-typed version: e627a53ee8/papaparse_v4.x.x/flow_>=v0.39.x
 
 declare interface PapaParse$Static {
 
@@ -34,7 +34,8 @@ declare interface PapaParse$ParseConfig {
     worker?: boolean,
     comments?: boolean,
     download?: boolean,
-    skipEmptyLines?: boolean,
+    // + is required see https://github.com/facebook/flow/issues/3876
+    +skipEmptyLines?: boolean | 'greedy',
     fastMode?: boolean,
     withCredentials?: boolean,
     step?: Function,

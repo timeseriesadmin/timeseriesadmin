@@ -1,5 +1,5 @@
-// flow-typed signature: ae6dd2fff7718a6434052f6830bf129b
-// flow-typed version: 2cbae06e0e/apollo-client_v2.x.x/flow_>=v0.57.x
+// flow-typed signature: 6834361f8e8bf3189282ec9320206060
+// flow-typed version: e3b214ebb0/apollo-client_v2.x.x/flow_>=v0.57.x
 
 declare module "apollo-client" {
   /**
@@ -418,7 +418,7 @@ declare module "apollo-client" {
     +mutate?: MutationBaseOptions<>;
   }
 
-  declare type ApolloClientOptions<TCacheShape> = {
+  declare export type ApolloClientOptions<TCacheShape> = {
     link: ApolloLink,
     cache: ApolloCache<TCacheShape>,
     ssrMode?: boolean,
