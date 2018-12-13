@@ -37,13 +37,13 @@ const FormInflux = (props: Props) => {
 
   return (
     <Query query={GET_INITIAL}>
-      {({ loading, error, data }) => {
+      {({ loading, data }) => {
         const initialValues = get(data, 'form', {});
         return (
           <Form
             onSubmit={onSubmit}
             initialValues={initialValues}
-            render={({ handleSubmit, form, submitting, pristine, values }) => (
+            render={({ handleSubmit, form, submitting, values }) => (
               <form onSubmit={handleSubmit} className={classes.form}>
                 {/* It is here to prevent Chrome from autofilling user and password form fields */}
                 <input type="password" style={{ display: 'none' }} />
@@ -92,7 +92,7 @@ const FormInflux = (props: Props) => {
 
                   <Grid item xs={12}>
                     <Mutation mutation={SAVE_CONNECTION} variables={values}>
-                      {(mutate, { loading, error }) => (
+                      {(mutate, { loading }) => (
                         <Button
                           disabled={loading}
                           type="button"
@@ -135,7 +135,7 @@ const FormInflux = (props: Props) => {
                       {submitting
                         ? 'Executing query...'
                         : loading
-                          ? 'Loading saved'
+                          ? 'Loading data...'
                           : 'Run query'}
                     </Button>
                   </Grid>
@@ -149,7 +149,7 @@ const FormInflux = (props: Props) => {
   );
 };
 
-const GET_INITIAL = gql`
+export const GET_INITIAL = gql`
   {
     form @client {
       url
@@ -161,7 +161,7 @@ const GET_INITIAL = gql`
   }
 `;
 
-const SAVE_CONNECTION = gql`
+export const SAVE_CONNECTION = gql`
   mutation($url: String!, $u: String, $p: String, $db: String) {
     saveConnection(url: $url, u: $u, p: $p, db: $db) @client
   }
