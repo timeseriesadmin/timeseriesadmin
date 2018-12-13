@@ -1,0 +1,25 @@
+import React from 'react';
+import { render, fireEvent } from 'react-testing-library';
+import TableHead from './index';
+
+describe('<TableHead />', () => {
+  test('rendering and clicking', () => {
+    const sortFn = jest.fn();
+    const { getByText } = render(
+      <table>
+        <TableHead
+          headers={['first', 'second', 'last']}
+          order="asc"
+          orderBy={1}
+          handleSort={sortFn}
+        />
+      </table>,
+    );
+    expect(getByText('first').className.indexOf('active') > -1).toBeFalsy();
+    expect(getByText('second').className.indexOf('active') > -1).toBeTruthy();
+    expect(getByText('last').className.indexOf('active') > -1).toBeFalsy();
+    fireEvent.click(getByText('first'));
+    expect(sortFn).toBeCalledTimes(1);
+    expect(sortFn).toBeCalledWith('0');
+  });
+});
