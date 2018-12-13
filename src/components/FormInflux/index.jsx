@@ -32,122 +32,115 @@ type Props = {
   classes: any,
   onSubmit: Function,
 };
-const FormInflux = (props: Props) => {
-  const { classes, onSubmit } = props;
+const FormInflux = ({ classes, onSubmit }: Props) => (
+  <Query query={GET_INITIAL}>
+    {({ loading, data }) => (
+      <Form
+        onSubmit={onSubmit}
+        initialValues={get(data, 'form', {})}
+        render={({ handleSubmit, form, submitting, values }) => (
+          <form onSubmit={handleSubmit} className={classes.form}>
+            {/* It is here to prevent Chrome from autofilling user and password form fields */}
+            <input type="password" style={{ display: 'none' }} />
 
-  return (
-    <Query query={GET_INITIAL}>
-      {({ loading, data }) => {
-        const initialValues = get(data, 'form', {});
-        return (
-          <Form
-            onSubmit={onSubmit}
-            initialValues={initialValues}
-            render={({ handleSubmit, form, submitting, values }) => (
-              <form onSubmit={handleSubmit} className={classes.form}>
-                {/* It is here to prevent Chrome from autofilling user and password form fields */}
-                <input type="password" style={{ display: 'none' }} />
+            <Grid container spacing={16}>
+              <Grid item xs={6}>
+                <Field
+                  id="influx-url"
+                  disabled={submitting || loading}
+                  name="url"
+                  component={renderField}
+                  label="Database URL"
+                  placeholder="https://myinfluxdb.test:8086"
+                  validate={composeValidators(isRequired)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Field
+                  id="influx-u"
+                  disabled={submitting || loading}
+                  name="u"
+                  component={renderField}
+                  label="User"
+                />
+              </Grid>
 
-                <Grid container spacing={16}>
-                  <Grid item xs={6}>
-                    <Field
-                      id="influx-url"
-                      disabled={submitting || loading}
-                      name="url"
-                      component={renderField}
-                      label="Database URL"
-                      placeholder="https://myinfluxdb.test:8086"
-                      validate={composeValidators(isRequired)}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Field
-                      id="influx-u"
-                      disabled={submitting || loading}
-                      name="u"
-                      component={renderField}
-                      label="User"
-                    />
-                  </Grid>
+              <Grid item xs={6}>
+                <Field
+                  id="influx-p"
+                  disabled={submitting || loading}
+                  name="p"
+                  component={renderField}
+                  label="Password"
+                  type="password"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Field
+                  id="influx-db"
+                  disabled={submitting || loading}
+                  name="db"
+                  component={renderField}
+                  label="Database"
+                />
+              </Grid>
 
-                  <Grid item xs={6}>
-                    <Field
-                      id="influx-p"
-                      disabled={submitting || loading}
-                      name="p"
-                      component={renderField}
-                      label="Password"
-                      type="password"
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Field
-                      id="influx-db"
-                      disabled={submitting || loading}
-                      name="db"
-                      component={renderField}
-                      label="Database"
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Mutation mutation={SAVE_CONNECTION} variables={values}>
-                      {(mutate, { loading }) => (
-                        <Button
-                          disabled={loading}
-                          type="button"
-                          variant="outlined"
-                          color="primary"
-                          style={{ float: 'right' }}
-                          onClick={() => mutate()}
-                        >
-                          {loading ? 'Saving...' : 'Save connection data'}
-                        </Button>
-                      )}
-                    </Mutation>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Field
-                      id="influx-q"
-                      disabled={submitting || loading}
-                      name="q"
-                      component={renderField}
-                      label="Query"
-                      validate={composeValidators(isRequired)}
-                      multiline
-                      rows={5}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} className={classes.footer}>
+              <Grid item xs={12}>
+                <Mutation mutation={SAVE_CONNECTION} variables={values}>
+                  {(mutate, { loading }) => (
                     <Button
-                      disabled={submitting || loading}
-                      type="submit"
-                      variant="contained"
-                      color="secondary"
-                      className={classes.submit}
-                      classes={{
-                        root: classes.submit,
-                        disabled: classes.disabled,
-                      }}
+                      disabled={loading}
+                      type="button"
+                      variant="outlined"
+                      color="primary"
+                      style={{ float: 'right' }}
+                      onClick={() => mutate()}
                     >
-                      {submitting
-                        ? 'Executing query...'
-                        : loading
-                          ? 'Loading data...'
-                          : 'Run query'}
+                      {loading ? 'Saving...' : 'Save connection data'}
                     </Button>
-                  </Grid>
-                </Grid>
-              </form>
-            )}
-          />
-        );
-      }}
-    </Query>
-  );
-};
+                  )}
+                </Mutation>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Field
+                  id="influx-q"
+                  disabled={submitting || loading}
+                  name="q"
+                  component={renderField}
+                  label="Query"
+                  validate={composeValidators(isRequired)}
+                  multiline
+                  rows={5}
+                />
+              </Grid>
+
+              <Grid item xs={12} className={classes.footer}>
+                <Button
+                  disabled={submitting || loading}
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  className={classes.submit}
+                  classes={{
+                    root: classes.submit,
+                    disabled: classes.disabled,
+                  }}
+                >
+                  {submitting
+                    ? 'Executing query...'
+                    : loading
+                      ? 'Loading data...'
+                      : 'Run query'}
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      />
+    )}
+  </Query>
+);
 
 export const GET_INITIAL = gql`
   {
