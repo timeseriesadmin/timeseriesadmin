@@ -36,6 +36,7 @@
     "clean": "yarn rimraf dist",
     "start": "./update-env.sh && react-scripts start",
     "build": "./update-env.sh && react-scripts build",
+    "db:start": "docker-compose -f dev-db/docker-compose.yml up",
     "test": "CI=true react-scripts test",
     "test:watch": "react-scripts test src",
     "lint": "yarn eslint src",

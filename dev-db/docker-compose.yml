@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  influx:
+    image: influxdb:1.6
+    ports:
+      - '8086:8086'
+    volumes:
+      - ./influx:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=test
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=password

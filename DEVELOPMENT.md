@@ -1,5 +1,4 @@
-Development
-===
+# Development
 
 A bunch of information for developers connected with "Time Series Admin" project.
 
@@ -18,11 +17,18 @@ Flow is used for type hinting.
 
 0. Install Yarn
 1. Execute `yarn`
-2. Run `yarn start` to start development server on port **3000**
+1. Run `yarn start` to start development server on port **3000**
 
 ## Build locally
 
 Use `yarn build` to compile release files.
+Use `yarn db:start` to run local InfluxDB through Docker engine.
+Created DB will have following credentials:
+
+- URL: http://localhost:8086
+- DB NAME: test
+- USER: admin
+- PASS: password
 
 Use `yarn electron:dev` to develop Electron with live updates.
 Use `yarn build` and `yarn electron` to test Electron releases before bundling.
@@ -34,5 +40,3 @@ Use `yarn dist:[platform]` to create platform specific bundle (`platform` may ha
 ## Notes
 
 Electron distribution configuration is based on https://medium.freecodecamp.org/building-an-electron-application-with-create-react-app-97945861647c and https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3.
-
-
