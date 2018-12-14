@@ -1,22 +1,15 @@
 // @flow
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  CircularProgress,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TablePagination,
-  TableRow,
-  Paper,
-} from '@material-ui/core';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 import format from 'date-fns/format';
-import Papa from 'papaparse';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 
-import QueryError from '../QueryError';
 import TableToolbar from './TableToolbar';
 import TableHead from './TableHead';
 import orderBy from 'lodash/orderBy';
@@ -38,7 +31,8 @@ const styles = theme => ({
 
 type Props = {
   classes: any,
-  queryState: any,
+  title: string,
+  parsedData: { [string]: string }[],
 };
 
 export const parseDate = (
@@ -72,13 +66,6 @@ export const sortData = (
   return orderBy(data, orderKey, order);
 };
 
-export const parseQueryResults = (data: string) =>
-  Papa.parse(data, {
-    header: true,
-    // $FlowFixMe
-    skipEmptyLines: 'greedy', // skip empty and whitespace lines
-  });
-
 const handleSort = (update: any => any, settings: ResultsSettings) => (
   orderKey: string,
 ) => {
@@ -107,10 +94,28 @@ const renderBody = (
     </TableRow>
   ));
 
-const ResultsTable = ({ classes, queryState }: Props) => (
-  <Paper className={classes.root}>
-    <Mutation mutation={SET_RESULTS_TABLE}>
-      {setResultsTable => (
+const ResultsTable = ({ classes, title, parsedData }: Props) => (
+  <Mutation mutation={SET_RESULTS_TABLE}>
+    {setResultsTable => {
+      const handleChangePage = (event, page) => {
+        setResultsTable({ variables: { page } });
+      };
+
+      const handleChangeRowsPerPage = event => {
+        setResultsTable({
+          variables: {
+            rowsPerPage: parseInt(event.target.value, 10),
+          },
+        });
+      };
+
+      const handleFormatChange = event => {
+        setResultsTable({
+          variables: { timeFormat: event.target.value },
+        });
+      };
+
+      return (
         <Query query={GET_RESULTS_TABLE}>
           {({
             data: { resultsTable },
@@ -120,98 +125,13 @@ const ResultsTable = ({ classes, queryState }: Props) => (
             data: { resultsTable: ResultsSettings },
             loading: boolean,
           }) => {
-            const handleChangePage = (event, page) => {
-              setResultsTable({ variables: { page } });
-            };
-
-            const handleChangeRowsPerPage = event => {
-              setResultsTable({
-                variables: { rowsPerPage: parseInt(event.target.value, 10) },
-              });
-            };
-
-            const handleFormatChange = event => {
-              setResultsTable({
-                variables: { timeFormat: event.target.value },
-              });
-            };
-
-            const { called, loading, data: query, error } = queryState;
-
-            if (error) {
-              return (
-                <div className={classes.contentNoTable}>
-                  <QueryError error={error} />
-                </div>
-              );
-            }
-
-            if (!called) {
-              return (
-                <div className={classes.contentNoTable}>
-                  <Typography
-                    variant="display1"
-                    component="p"
-                    style={{ textAlign: 'center' }}
-                  >
-                    Go ahead and "RUN QUERY"!
-                  </Typography>
-                </div>
-              );
-            }
-
-            if (loading || cacheLoading) {
-              return (
-                <div className={classes.contentNoTable}>
-                  <div style={{ textAlign: 'center' }}>
-                    <CircularProgress color="secondary" />
-                    <Typography variant="headline">
-                      Executing query please wait...
-                    </Typography>
-                  </div>
-                </div>
-              );
-            }
-
-            // no point in parsing before error check
-            const results = parseQueryResults(query.executeQuery.response.data);
-
-            if (!results.data || !results.data.length) {
-              const statusCode = query.executeQuery.response.status;
-              return (
-                <div className={classes.contentNoTable}>
-                  <Typography
-                    variant="headline"
-                    component="h3"
-                    style={{
-                      marginBottom: 8,
-                      color:
-                        statusCode >= 200 && statusCode < 300 ? 'green' : 'red',
-                    }}
-                  >
-                    {query.executeQuery.response.status}:
-                    {query.executeQuery.response.statusText} No data
-                  </Typography>
-                  <Typography component="p" variant="body1">
-                    Please verify your query if this is not the expected
-                    response.
-                  </Typography>
-                  <Typography component="p" variant="caption">
-                    Maybe queried measurement doesn't exist ?
-                  </Typography>
-                  <Typography component="p" variant="caption">
-                    Maybe you query only for TAGS (your query should contain at
-                    least one FIELD) ?
-                  </Typography>
-                  <Typography component="p" variant="caption">
-                    Remember, measurement names are CASE SENSITIVE !
-                  </Typography>
-                </div>
-              );
+            if (cacheLoading) {
+              // this is possible only in tests, because real cache has no loading state
+              return null;
             }
 
             const sortedData = sortData(
-              results.data,
+              parsedData,
               resultsTable.order,
               resultsTable.orderKey,
             );
@@ -221,8 +141,8 @@ const ResultsTable = ({ classes, queryState }: Props) => (
             return (
               <React.Fragment>
                 <TableToolbar
-                  title={query.executeQuery.request.params.q}
-                  hasTime={!!results.data[0]['time']}
+                  title={title}
+                  hasTime={!!parsedData[0]['time']}
                   timeFormat={resultsTable.timeFormat}
                   handleFormatChange={handleFormatChange}
                 />
@@ -264,9 +184,9 @@ const ResultsTable = ({ classes, queryState }: Props) => (
             );
           }}
         </Query>
-      )}
-    </Mutation>
-  </Paper>
+      );
+    }}
+  </Mutation>
 );
 
 export const SET_RESULTS_TABLE = gql`

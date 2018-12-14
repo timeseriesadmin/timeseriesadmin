@@ -3,11 +3,11 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import FormInflux from '../FormInflux';
-import ResultsTable from '../ResultsTable';
+import QueryResults from '../QueryResults';
 
 const PageHome = () => (
   <div>
-    <br/>
+    <br />
     <Mutation mutation={FORM_QUERY}>
       {(executeQuery, queryState) => (
         <Mutation mutation={UPDATE_FORM}>
@@ -21,7 +21,7 @@ const PageHome = () => (
             return (
               <div>
                 <FormInflux onSubmit={onSubmit} />
-                <ResultsTable queryState={queryState} />
+                <QueryResults queryState={queryState} />
               </div>
             );
           }}
@@ -39,8 +39,14 @@ const FORM_QUERY = gql`
 `;
 
 const UPDATE_FORM = gql`
-  mutation updateForm($url: String, $u: String, $p: String, $db: String, $q: String) {
-    updateForm(url: $url, u: $u, p: $p, db: $db, q: $q) @client 
+  mutation updateForm(
+    $url: String
+    $u: String
+    $p: String
+    $db: String
+    $q: String
+  ) {
+    updateForm(url: $url, u: $u, p: $p, db: $db, q: $q) @client
   }
 `;
 

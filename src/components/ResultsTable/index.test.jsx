@@ -46,35 +46,23 @@ const mocks = [
 
 describe('<ResultsTable />', () => {
   test('rendering', async () => {
-    const request = { params: { q: 'SELECT * FROM test' } };
-    const response = {
-      status: 200,
-      data: 'col_1,col_2,col_3,col_4\n11,12,13,14\n21,22,23,24\n1,2,3,4\n',
-      statusText: 'Status info',
-    };
     const { getByText } = render(
       <ResultsTable
         mocks={mocks}
-        queryState={{
-          called: true,
-          loading: false,
-          data: {
-            executeQuery: {
-              response,
-              request,
-            },
-          },
-          error: undefined,
-        }}
+        title="Test title"
+        parsedData={[
+          { col_1: '1', col_2: '2', col_3: '3', col_4: '4' },
+          { col_1: '111', col_2: '112', col_3: '113', col_4: '114' },
+          { col_1: '11', col_2: '12', col_3: '13', col_4: '14' },
+        ]}
       />,
     );
-    expect(getByText('Executing query please wait...')).toBeDefined();
 
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    expect(getByText(request.params.q)).toBeDefined();
+    expect(getByText('Test title')).toBeDefined();
     expect(getByText('col_4')).toBeDefined();
-    expect(getByText('14')).toBeDefined();
+    expect(getByText('114')).toBeDefined();
     expect(getByText('1-2 of 3')).toBeDefined();
 
     // TODO: ensure that sort is working
@@ -159,17 +147,5 @@ describe('sortData()', () => {
     ];
     const sorted = sortData(input, 'desc', '');
     expect(sorted).toEqual(input);
-  });
-});
-
-describe('parseQueryResults()', () => {
-  test('sample string parsing', () => {
-    const result = parseQueryResults(
-      'col_1,col_2,col_3,col_4\n1,2,3,4\n11,12,13,14',
-    );
-    expect(result.data).toEqual([
-      { col_1: '1', col_2: '2', col_3: '3', col_4: '4' },
-      { col_1: '11', col_2: '12', col_3: '13', col_4: '14' },
-    ]);
   });
 });
