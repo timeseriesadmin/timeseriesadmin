@@ -12,24 +12,24 @@ type Props = {
   headers: string[],
   handleSort: string => void,
   order: 'asc' | 'desc',
-  orderBy: number | null,
+  orderKey: string,
 };
 
-const ResultsTableHead = ({ handleSort, headers, order, orderBy }: Props) => (
+const ResultsTableHead = ({ handleSort, headers, order, orderKey }: Props) => (
   <TableHead>
     <TableRow>
       {headers.map((cell, index) => (
         <TableCell
           padding="dense"
           key={index}
-          sortDirection={orderBy === index ? order : false}
+          sortDirection={orderKey === cell ? order : false}
           numeric
         >
           <Tooltip title="Sort" enterDelay={300}>
             <TableSortLabel
-              active={orderBy === index}
+              active={orderKey === cell}
               direction={order}
-              onClick={() => handleSort(index.toString())}
+              onClick={() => handleSort(cell)}
             >
               {cell}
             </TableSortLabel>

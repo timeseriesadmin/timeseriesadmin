@@ -19,6 +19,7 @@ import { Query, Mutation } from 'react-apollo';
 import QueryError from '../QueryError';
 import TableToolbar from './TableToolbar';
 import TableHead from './TableHead';
+import orderBy from 'lodash/orderBy';
 
 import type { ResultsSettings } from '../../apollo/resolvers';
 
@@ -61,24 +62,50 @@ export const parseDate = (
 
 // Sorts data array of arrays with string values
 export const sortData = (
-  data: Array<string[]>,
-  order: 'asc' | 'desc',
-  orderBy: number | null,
+  data: { [string]: string }[],
+  order: $PropertyType<ResultsSettings, 'order'>,
+  orderKey: string,
 ) => {
-  if (!orderBy || !order) {
+  if (orderKey === '' || !order) {
     return data;
   }
-
-  if (order === 'asc') {
-    // $FlowFixMe
-    data.sort((a, b) => a[orderBy] - b[orderBy]);
-  } else {
-    // $FlowFixMe
-    data.sort((a, b) => b[orderBy] - a[orderBy]);
-  }
-
-  return data;
+  return orderBy(data, orderKey, order);
 };
+
+export const parseQueryResults = (data: string) =>
+  Papa.parse(data, {
+    header: true,
+    // $FlowFixMe
+    skipEmptyLines: 'greedy', // skip empty and whitespace lines
+  });
+
+const handleSort = (update: any => any, settings: ResultsSettings) => (
+  orderKey: string,
+) => {
+  const order =
+    settings.orderKey === orderKey && settings.order === 'desc'
+      ? 'asc'
+      : 'desc';
+
+  update({ variables: { order, orderKey } });
+};
+
+const renderBody = (
+  data: { [string]: string }[],
+  keys: string[],
+  timeFormat: $PropertyType<ResultsSettings, 'timeFormat'>,
+) =>
+  data.map((row, index) => (
+    <TableRow hover tabIndex={-1} key={index}>
+      {keys.map(key => (
+        <TableCell key={key} padding="dense" numeric>
+          {timeFormat && key === 'time'
+            ? parseDate(row[key], timeFormat)
+            : row[key]}
+        </TableCell>
+      ))}
+    </TableRow>
+  ));
 
 const ResultsTable = ({ classes, queryState }: Props) => (
   <Paper className={classes.root}>
@@ -93,20 +120,6 @@ const ResultsTable = ({ classes, queryState }: Props) => (
             data: { resultsTable: ResultsSettings },
             loading: boolean,
           }) => {
-            const handleSort = property => {
-              const orderBy = property;
-              let order = 'desc';
-
-              if (
-                resultsTable.orderBy === property &&
-                resultsTable.order === 'desc'
-              ) {
-                order = 'asc';
-              }
-
-              setResultsTable({ variables: { order, orderBy } });
-            };
-
             const handleChangePage = (event, page) => {
               setResultsTable({ variables: { page } });
             };
@@ -161,11 +174,7 @@ const ResultsTable = ({ classes, queryState }: Props) => (
             }
 
             // no point in parsing before error check
-            let results = Papa.parse(query.executeQuery.response.data, {
-              header: true,
-              // $FlowFixMe
-              skipEmptyLines: 'greedy', // skip empty and whitespace lines
-            });
+            const results = parseQueryResults(query.executeQuery.response.data);
 
             if (!results.data || !results.data.length) {
               const statusCode = query.executeQuery.response.status;
@@ -201,22 +210,19 @@ const ResultsTable = ({ classes, queryState }: Props) => (
               );
             }
 
-            // look for time column
-            const tIndex = Object.keys(results.data[0]).findIndex(
-              val => val === 'time',
-            );
-
             const sortedData = sortData(
               results.data,
               resultsTable.order,
-              resultsTable.orderBy,
+              resultsTable.orderKey,
             );
+
+            const keys = Object.keys(sortedData[0]);
 
             return (
               <React.Fragment>
                 <TableToolbar
                   title={query.executeQuery.request.params.q}
-                  hasTime={tIndex > -1}
+                  hasTime={!!results.data[0]['time']}
                   timeFormat={resultsTable.timeFormat}
                   handleFormatChange={handleFormatChange}
                 />
@@ -224,27 +230,19 @@ const ResultsTable = ({ classes, queryState }: Props) => (
                   <Table className={classes.table} aria-labelledby="tableTitle">
                     <TableHead
                       order={resultsTable.order}
-                      orderBy={resultsTable.orderBy}
-                      handleSort={handleSort}
-                      headers={Object.keys(sortedData[0])}
+                      orderKey={resultsTable.orderKey}
+                      handleSort={handleSort(setResultsTable, resultsTable)}
+                      headers={keys}
                     />
                     <TableBody>
-                      {sortedData
-                        .slice(
+                      {renderBody(
+                        sortedData.slice(
                           resultsTable.rowsPerPage * resultsTable.page,
                           resultsTable.rowsPerPage * (resultsTable.page + 1),
-                        )
-                        .map((row, rIndex) => (
-                          <TableRow hover tabIndex={-1} key={rIndex}>
-                            {Object.keys(row).map(key => (
-                              <TableCell key={key} padding="dense" numeric>
-                                {resultsTable.timeFormat && key === 'time'
-                                  ? parseDate(row[key], resultsTable.timeFormat)
-                                  : row[key]}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        ))}
+                        ),
+                        keys,
+                        resultsTable.timeFormat,
+                      )}
                     </TableBody>
                   </Table>
                 </div>
@@ -274,14 +272,14 @@ const ResultsTable = ({ classes, queryState }: Props) => (
 export const SET_RESULTS_TABLE = gql`
   mutation setResultsTable(
     $order: String
-    $orderBy: String
+    $orderKey: String
     $page: Int
     $rowsPerPage: Int
     $timeFormat: String
   ) {
     setResultsTable(
       order: $order
-      orderBy: $orderBy
+      orderKey: $orderKey
       page: $page
       rowsPerPage: $rowsPerPage
       timeFormat: $timeFormat
@@ -293,7 +291,7 @@ export const GET_RESULTS_TABLE = gql`
   {
     resultsTable @client {
       order
-      orderBy
+      orderKey
       page
       rowsPerPage
       timeFormat

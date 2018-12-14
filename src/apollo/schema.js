@@ -65,7 +65,7 @@ export default `
   }
   type ResultsTable {
     order: String!
-    orderBy: String
+    orderKey: String
     page: Int!
     rowsPerPage: Int!
     timeFormat: String!

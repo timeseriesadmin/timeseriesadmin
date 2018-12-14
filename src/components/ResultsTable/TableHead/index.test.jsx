@@ -10,7 +10,7 @@ describe('<TableHead />', () => {
         <TableHead
           headers={['first', 'second', 'last']}
           order="asc"
-          orderBy={1}
+          orderKey="second"
           handleSort={sortFn}
         />
       </table>,
@@ -20,6 +20,6 @@ describe('<TableHead />', () => {
     expect(getByText('last').className.indexOf('active') > -1).toBeFalsy();
     fireEvent.click(getByText('first'));
     expect(sortFn).toBeCalledTimes(1);
-    expect(sortFn).toBeCalledWith('0');
+    expect(sortFn).toBeCalledWith('first');
   });
 });

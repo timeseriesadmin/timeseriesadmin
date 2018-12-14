@@ -1,7 +1,6 @@
 <img src="https://timeseriesadmin.github.io/favicon.svg" alt="Time Series Admin" width="64" height="64" />
 
-Time Series Admin
-===
+# Time Series Admin
 
 [![dependencies Status](https://david-dm.org/timeseriesadmin/timeseriesadmin/status.svg)](https://david-dm.org/timeseriesadmin/timeseriesadmin) [![devDependencies Status](https://david-dm.org/timeseriesadmin/timeseriesadmin/dev-status.svg)](https://david-dm.org/timeseriesadmin/timeseriesadmin?type=dev) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -37,6 +36,10 @@ List of things that are going to be implemented may be found inside [TODO.md](./
 ## Development
 
 Check [DEVELOPMENT.md](./DEVELOPMENT.md) file for information about application development.
+
+## Changelog
+
+Check [CHANGELOG.md](./CHANGELOG.md) to view changes in app.
 
 ## License
 

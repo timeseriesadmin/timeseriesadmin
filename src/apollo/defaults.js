@@ -38,7 +38,7 @@ export default {
   server: null,
   resultsTable: {
     order: 'asc',
-    orderBy: null,
+    orderKey: '', // by default skip sorting
     page: 0,
     rowsPerPage: 10,
     timeFormat: initTimeFormat,

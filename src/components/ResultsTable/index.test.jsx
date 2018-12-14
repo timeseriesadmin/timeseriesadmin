@@ -1,16 +1,35 @@
 import React from 'react';
-import { render } from 'test-utils';
+import { render, fireEvent, waitForElement } from 'test-utils';
 import ResultsTable, {
   parseDate,
   sortData,
+  parseQueryResults,
   SET_RESULTS_TABLE,
   GET_RESULTS_TABLE,
 } from './index';
 
+const resultsTable = {
+  order: 'asc',
+  orderKey: '',
+  page: 0,
+  rowsPerPage: 2,
+  timeFormat: 's',
+};
+
 const mocks = [
   {
     request: {
-      mutation: SET_RESULTS_TABLE,
+      query: SET_RESULTS_TABLE,
+      variables: { order: 'desc', orderKey: 'col_1' },
+    },
+    result: {
+      data: {
+        setResultsTable: {
+          ...resultsTable,
+          order: 'desc',
+          orderKey: 'col_1',
+        },
+      },
     },
   },
   {
@@ -19,13 +38,7 @@ const mocks = [
     },
     result: {
       data: {
-        resultsTable: {
-          order: 'asc',
-          orderBy: 2,
-          page: 0,
-          rowsPerPage: 5,
-          timeFormat: 's',
-        },
+        resultsTable,
       },
     },
   },
@@ -36,7 +49,7 @@ describe('<ResultsTable />', () => {
     const request = { params: { q: 'SELECT * FROM test' } };
     const response = {
       status: 200,
-      data: 'col_1,col_2,col_3,col_4\n1,2,3,4\n11,12,13,14',
+      data: 'col_1,col_2,col_3,col_4\n11,12,13,14\n21,22,23,24\n1,2,3,4\n',
       statusText: 'Status info',
     };
     const { getByText } = render(
@@ -62,7 +75,17 @@ describe('<ResultsTable />', () => {
     expect(getByText(request.params.q)).toBeDefined();
     expect(getByText('col_4')).toBeDefined();
     expect(getByText('14')).toBeDefined();
-    expect(getByText('1-2 of 2')).toBeDefined();
+    expect(getByText('1-2 of 3')).toBeDefined();
+
+    // TODO: ensure that sort is working
+    // (there is a problem with checking if apollo mock gets called)
+    // sorting
+    // fireEvent.click(getByText('col_1'));
+    // await waitForElement(() => getByText('21'));
+    // fireEvent.click(getByText('col_1'));
+    // await waitForElement(() => getByText('1'));
+    // debug();
+    // expect(queryByText('2')).toBeNull();
   });
 });
 
@@ -86,47 +109,67 @@ describe('parseDate()', () => {
 });
 
 describe('sortData()', () => {
-  test('sort ascending', () => {
-    const data = [
-      ['11', '12', '13', '14'],
-      ['21', '22', '23', '24'],
-      ['101', '102', '103', '104'],
-      ['1', '1', '1', '1'],
+  let data;
+  beforeAll(() => {
+    data = [
+      { n: 'test', time: '0.123123' },
+      { n: 'test', time: '123123123' },
+      { n: 'test', time: '-0.123123' },
+      { n: 'test', time: '' },
     ];
-    const sorted = sortData(data, 'asc', 1);
-    expect(sorted[0][1]).toBe('1');
-    expect(sorted[3][1]).toBe('102');
+  });
+  test('sort ascending', () => {
+    const sorted = sortData(data, 'asc', 'time');
+    expect(sorted).toEqual([
+      { n: 'test', time: '' },
+      { n: 'test', time: '-0.123123' },
+      { n: 'test', time: '0.123123' },
+      { n: 'test', time: '123123123' },
+    ]);
   });
   test('sort descending', () => {
-    const data = [
-      ['11', '12', '13', '14'],
-      ['21', '22', '23', '24'],
-      ['101', '102', '103', '104'],
-      ['1', '1', '1', '1'],
-    ];
-    const sorted = sortData(data, 'desc', 3);
-    expect(sorted[0][1]).toBe('102');
-    expect(sorted[3][1]).toBe('1');
+    const sorted = sortData(data, 'desc', 'time');
+    expect(sorted).toEqual([
+      { n: 'test', time: '123123123' },
+      { n: 'test', time: '0.123123' },
+      { n: 'test', time: '-0.123123' },
+      { n: 'test', time: '' },
+    ]);
   });
-  test('handles non-numbers (without an error)', () => {
-    const data = [
-      [132, '12', '13', '14'],
-      [undefined, '22', '23', '24'],
-      ['abcdef', '102', '103', '104'],
-      [null, '1', '1', '1'],
+  test('handles edge cases without an error', () => {
+    const input = [
+      { n: 'test', time: Number.NaN },
+      { n: 'test', time: '' },
+      { n: 'test', time: null },
+      { n: 'test', time: undefined },
     ];
-    const sorted = sortData(data, 'desc', 0);
-    expect(sorted[0][1]).toBe('12');
-    expect(sorted[3][1]).toBe('1');
+    const sorted = sortData(input, 'desc', 'time');
+    expect(sorted).toEqual([
+      { n: 'test', time: Number.NaN },
+      { n: 'test', time: undefined },
+      { n: 'test', time: null },
+      { n: 'test', time: '' },
+    ]);
   });
   test('handles no sorting', () => {
-    const data = [
-      ['101', '102', '103', '104'],
-      ['11', '12', '13', '14'],
-      ['1', '1', '1', '1'],
-      ['21', '22', '23', '24'],
+    const input = [
+      { n: '123', b: '789' },
+      { n: '5123', b: '1789' },
+      { n: '1', b: '1' },
     ];
-    const sorted = sortData(data, 'desc', null);
-    expect(sorted).toEqual(sorted);
+    const sorted = sortData(input, 'desc', '');
+    expect(sorted).toEqual(input);
+  });
+});
+
+describe('parseQueryResults()', () => {
+  test('sample string parsing', () => {
+    const result = parseQueryResults(
+      'col_1,col_2,col_3,col_4\n1,2,3,4\n11,12,13,14',
+    );
+    expect(result.data).toEqual([
+      { col_1: '1', col_2: '2', col_3: '3', col_4: '4' },
+      { col_1: '11', col_2: '12', col_3: '13', col_4: '14' },
+    ]);
   });
 });
