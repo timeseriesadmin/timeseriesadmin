@@ -112,7 +112,7 @@ const QueryResults = ({ classes, called, loading, query, error }: Props) => {
     <Paper className={classes.root}>
       <ResultsTable
         parsedData={results.data}
-        title={query.executeQuery.response.params.q}
+        title={query.executeQuery.request.params.q}
       />
     </Paper>
   );

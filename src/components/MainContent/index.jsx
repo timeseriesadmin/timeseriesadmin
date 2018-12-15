@@ -9,7 +9,7 @@ const MainContent = () => (
   <div>
     <br />
     <Mutation mutation={FORM_QUERY}>
-      {(executeQuery, queryState) => (
+      {(executeQuery, { called, loading, data, error }) => (
         <Mutation mutation={UPDATE_FORM}>
           {formMutate => {
             const onSubmit = (values): void => {
@@ -21,7 +21,12 @@ const MainContent = () => (
             return (
               <div>
                 <FormInflux onSubmit={onSubmit} />
-                <QueryResults queryState={queryState} />
+                <QueryResults
+                  called={called}
+                  loading={loading}
+                  query={data}
+                  error={error}
+                />
               </div>
             );
           }}

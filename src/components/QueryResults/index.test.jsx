@@ -6,10 +6,12 @@ jest.mock('../ResultsTable', () => jest.fn(() => <div />));
 
 const query = {
   executeQuery: {
+    request: {
+      params: { q: 'SELECT * FROM test' },
+    },
     response: {
       data: 'a,b,c\n1,2,3',
       status: 200,
-      params: { q: 'SELECT * FROM test' },
     },
   },
 };
@@ -27,7 +29,7 @@ describe('<QueryResults />', () => {
     expect(ResultsTable).toBeCalledTimes(1);
     expect(ResultsTable.mock.calls[0][0]).toEqual({
       parsedData: [{ a: '1', b: '2', c: '3' }],
-      title: query.executeQuery.response.params.q,
+      title: query.executeQuery.request.params.q,
     });
   });
   test('rendering loading state', () => {
