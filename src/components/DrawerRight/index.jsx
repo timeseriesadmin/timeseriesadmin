@@ -20,22 +20,22 @@ const styles = theme => ({
   },
   header: {
     ...theme.mixins.toolbar,
-		width: 480,
-		position: 'fixed',
-		top: 0,
-		right: 0,
-		boxSizing: 'border-box',
+    width: 480,
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-end',
     padding: '0 8px',
-		background: theme.palette.common.white,
-		zIndex: theme.zIndex.appBar,
+    background: theme.palette.common.white,
+    zIndex: theme.zIndex.appBar,
   },
   tab: {
     minHeight: 64,
-    minWidth: (480 - theme.spacing.unit*3) / 4, // 4 - number of tabs
+    minWidth: (480 - theme.spacing.unit * 3) / 4, // 4 - number of tabs
   },
   tabIcon: {
     fontSize: theme.typography.pxToRem(20),
@@ -65,7 +65,7 @@ class DrawerRight extends React.Component<Props, State> {
 
   handleChange = (event, value) => {
     this.setState({ activeTab: value });
-  }
+  };
 
   render = () => {
     const { classes } = this.props;
@@ -74,24 +74,29 @@ class DrawerRight extends React.Component<Props, State> {
     return (
       <div className={classes.root}>
         <div className={classes.header}>
-          <Tabs value={activeTab}
+          <Tabs
+            value={activeTab}
             indicatorColor="primary"
             textColor="primary"
             onChange={this.handleChange}
           >
-            <Tab label="Connect"
+            <Tab
+              label="Connect"
               className={classes.tab}
               icon={<InfluxConnectionsIcon className={classes.tabIcon} />}
             />
-            <Tab label="Explorer"
+            <Tab
+              label="Explorer"
               className={classes.tab}
               icon={<InfluxExplorerIcon className={classes.tabIcon} />}
             />
-            <Tab label="History"
+            <Tab
+              label="History"
               className={classes.tab}
               icon={<QueryHistoryIcon className={classes.tabIcon} />}
             />
-            <Tab label="Reference"
+            <Tab
+              label="Reference"
               className={classes.tab}
               icon={<QueryReferenceIcon className={classes.tabIcon} />}
             />
@@ -99,14 +104,14 @@ class DrawerRight extends React.Component<Props, State> {
         </div>
 
         <div className={classes.content}>
-          {activeTab === 0 && <PanelConnect/>}
-          {activeTab === 1 && <PanelExplorer/>}
-          {activeTab === 2 && <PanelHistory/>}
-          {activeTab === 3 && <PanelReference/>}
+          {activeTab === 0 && <PanelConnect />}
+          {activeTab === 1 && <PanelExplorer />}
+          {activeTab === 2 && <PanelHistory />}
+          {activeTab === 3 && <PanelReference />}
         </div>
       </div>
     );
-  }
+  };
 }
 
 export default withStyles(styles)(DrawerRight);
