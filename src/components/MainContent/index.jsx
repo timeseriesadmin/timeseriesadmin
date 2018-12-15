@@ -6,44 +6,40 @@ import FormInflux from '../FormInflux';
 import QueryResults from '../QueryResults';
 
 const MainContent = () => (
-  <div>
-    <br />
-    <Mutation mutation={FORM_QUERY}>
-      {(executeQuery, { called, loading, data, error }) => (
-        <Mutation mutation={UPDATE_FORM}>
-          {formMutate => {
-            const onSubmit = (values): void => {
-              formMutate({ variables: values });
-              // prevent displaying errors in console (they are handled in resolvers)
-              executeQuery({ variables: {} }).catch(err => {});
-            };
+  <Mutation mutation={FORM_QUERY}>
+    {(executeQuery, { called, loading, data, error }) => (
+      <Mutation mutation={UPDATE_FORM}>
+        {formMutate => {
+          const onSubmit = (values): void => {
+            formMutate({ variables: values });
+            // prevent displaying errors in console (they are handled in resolvers)
+            executeQuery({ variables: {} }).catch(err => {});
+          };
 
-            return (
-              <div>
-                <FormInflux onSubmit={onSubmit} />
-                <QueryResults
-                  called={called}
-                  loading={loading}
-                  query={data}
-                  error={error}
-                />
-              </div>
-            );
-          }}
-        </Mutation>
-      )}
-    </Mutation>
-  </div>
+          return (
+            <div>
+              <FormInflux onSubmit={onSubmit} />
+              <QueryResults
+                called={called}
+                loading={loading}
+                query={data}
+                error={error}
+              />
+            </div>
+          );
+        }}
+      </Mutation>
+    )}
+  </Mutation>
 );
 
-// TODO: use query instead, with no-cache policy
-const FORM_QUERY = gql`
+export const FORM_QUERY = gql`
   mutation executeQuery {
     executeQuery @client
   }
 `;
 
-const UPDATE_FORM = gql`
+export const UPDATE_FORM = gql`
   mutation updateForm(
     $url: String
     $u: String
