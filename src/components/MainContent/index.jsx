@@ -5,7 +5,7 @@ import { Mutation } from 'react-apollo';
 import FormInflux from '../FormInflux';
 import QueryResults from '../QueryResults';
 
-const PageHome = () => (
+const MainContent = () => (
   <div>
     <br />
     <Mutation mutation={FORM_QUERY}>
@@ -50,4 +50,4 @@ const UPDATE_FORM = gql`
   }
 `;
 
-export default PageHome;
+export default MainContent;

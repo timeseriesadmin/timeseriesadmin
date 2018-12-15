@@ -16,7 +16,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
 
-import PageHome from '../PageHome';
+import MainContent from '../MainContent';
 import DrawerRight from '../DrawerRight';
 import IconMain from '../IconMain';
 
@@ -175,7 +175,7 @@ const App = ({ classes }) => (
             </AppBar>
 
             <main className={classes.content}>
-              <PageHome />
+              <MainContent />
             </main>
 
             <Drawer
