@@ -66,13 +66,15 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 2,
-    paddingTop: theme.mixins.toolbar.minHeight,
-    // eslint-disable-next-line no-useless-computed-key
+    paddingTop: theme.mixins.toolbar.minHeight + theme.spacing.unit * 2,
     [mediaRule]: {
-      paddingTop: theme.mixins.toolbar[mediaRule].minHeight,
+      paddingTop:
+        theme.mixins.toolbar[mediaRule].minHeight + theme.spacing.unit * 2,
     },
     [theme.breakpoints.up('sm')]: {
-      paddingTop: theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight,
+      paddingTop:
+        theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight +
+        theme.spacing.unit * 2,
     },
   },
   drawerPaper: {
