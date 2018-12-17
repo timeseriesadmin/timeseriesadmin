@@ -63,7 +63,12 @@ export const sortData = (
   if (orderKey === '' || !order) {
     return data;
   }
-  return orderBy(data, orderKey, order);
+  return orderBy(
+    // $FlowFixMe
+    data,
+    val => (!val[orderKey] ? Number.NEGATIVE_INFINITY : Number(val[orderKey])),
+    order,
+  );
 };
 
 const handleSort = (update: any => any, settings: ResultsSettings) => (
