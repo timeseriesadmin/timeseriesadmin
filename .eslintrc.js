@@ -1,5 +1,7 @@
 module.exports = {
-  // env: {
+  env: {
+    'cypress/globals': true,
+  },
   //   browser: true,
   //   es6: true,
   //   'jest/globals': true,
@@ -11,6 +13,7 @@ module.exports = {
     // 'plugin:react/recommended',
     // 'plugin:flowtype/recommended',
   ],
+  plugins: ['cypress'],
   // plugins: ['react', 'flowtype', 'jest'],
   // settings: {
   //   react: {

@@ -49,17 +49,22 @@
     "dist:mac": "yarn build && electron-builder -m -c.extraMetadata.main=build/electron.js",
     "dist:win": "yarn build && electron-builder -w -c.extraMetadata.main=build/electron.js",
     "dist:linux": "yarn build && electron-builder -l -c.extraMetadata.main=build/electron.js",
-    "dist:all": "yarn dist:docker && electron-builder -mwl -c.extraMetadata.main=build/electron.js"
+    "dist:all": "yarn dist:docker && electron-builder -mwl -c.extraMetadata.main=build/electron.js",
+    "cypress:run": "cypress run",
+    "cypress:open": "cypress open"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "benchmark": "^2.1.4",
+    "cypress": "^3.1.3",
+    "cypress-testing-library": "^2.3.4",
     "electron": "^3.0.3",
     "electron-builder": "^20.27.1",
     "electron-debug": "^2.0.0",
     "eslint": "^5.6.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-config-react-app": "^3.0.3",
+    "eslint-plugin-cypress": "^2.1.3",
     "eslint-plugin-flowtype": "^2.50.3",
     "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-jest": "^21.24.1",
