@@ -23,6 +23,12 @@ const styles = theme => ({
   list: {
     padding: 0,
   },
+  noList: {
+    paddingTop: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+    fontSize: 14,
+  },
   listItem: {
     padding: 0,
     // paddingTop: 0,
@@ -69,13 +75,16 @@ const Connections = ({ classes }: Props) => (
             <Mutation mutation={SET_FORM_QUERY}>
               {updateForm =>
                 loading ? (
-                  <div>Loading...</div>
+                  <div className={classes.noList}>Loading...</div>
                 ) : !data ||
                 !data.connections ||
                 data.connections.length === 0 ? (
-                  <div>No data</div>
+                  <div className={classes.noList}>
+                    No saved connections. <br />
+                    Add one using SAVE CONNECTION DATA button.
+                  </div>
                 ) : error ? (
-                  <div>Error!</div>
+                  <div className={classes.noList}>Error!</div>
                 ) : (
                   <List className={classes.list}>
                     {data.connections.map((conn, index) => (

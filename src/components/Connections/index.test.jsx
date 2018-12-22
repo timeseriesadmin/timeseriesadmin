@@ -22,6 +22,10 @@ describe('<Connections />', () => {
     const { getByText } = render(<Connections mocks={mocks} />);
 
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() => getByText('No data'));
+    await waitForElement(() =>
+      getByText(
+        'No saved connections. Add one using SAVE CONNECTION DATA button.',
+      ),
+    );
   });
 });
