@@ -1,9 +1,8 @@
 import React from 'react';
-import { render, fireEvent, waitForElement } from 'test-utils';
+import { render } from 'test-utils';
 import ResultsTable, {
   parseDate,
   sortData,
-  parseQueryResults,
   SET_RESULTS_TABLE,
   GET_RESULTS_TABLE,
 } from './index';
