@@ -67,67 +67,64 @@ const Connections = ({ classes }: Props) => (
   <Query query={GET_CONNECTIONS}>
     {({ loading, error, data }: QueryRenderProps<{ connections: any[] }>) => (
       <Mutation mutation={DELETE_CONNECTION}>
-        {deleteConnection => {
-          const handleDelete = id => () => {
-            deleteConnection({ variables: { id } });
-          };
-          return (
-            <Mutation mutation={SET_FORM_QUERY}>
-              {updateForm =>
-                loading ? (
-                  <div className={classes.noList}>Loading...</div>
-                ) : !data ||
-                !data.connections ||
-                data.connections.length === 0 ? (
-                  <div className={classes.noList}>
-                    No saved connections. <br />
-                    Add one using SAVE CONNECTION DATA button.
-                  </div>
-                ) : error ? (
-                  <div className={classes.noList}>Error!</div>
-                ) : (
-                  <List className={classes.list}>
-                    {data.connections.map((conn, index) => (
-                      <ListItem key={index} className={classes.listItem}>
-                        <Button
-                          className={classes.btnConnect}
-                          onClick={() => updateForm({ variables: { ...conn } })}
-                        >
-                          <Typography variant="body1">{conn.url}</Typography>
-                          {conn.db && (
-                            <Typography
-                              variant="body1"
-                              color="textSecondary"
-                              style={{ fontSize: 12 }}
-                            >
-                              database: {conn.db}
-                            </Typography>
-                          )}
-                          {conn.u && (
-                            <Typography
-                              variant="body1"
-                              color="textSecondary"
-                              style={{ fontSize: 12 }}
-                            >
-                              user: {conn.u}
-                            </Typography>
-                          )}
-                        </Button>
-                        <Button
-                          className={classes.btnDelete}
-                          onClick={handleDelete(conn.id)}
-                          aria-label="Delete"
-                        >
-                          <DeleteIcon style={{ fontSize: 18 }} />
-                        </Button>
-                      </ListItem>
-                    ))}
-                  </List>
-                )
-              }
-            </Mutation>
-          );
-        }}
+        {deleteConnection => (
+          <Mutation mutation={SET_FORM_QUERY}>
+            {updateForm =>
+              loading ? (
+                <div className={classes.noList}>Loading...</div>
+              ) : !data ||
+              !data.connections ||
+              data.connections.length === 0 ? (
+                <div className={classes.noList}>
+                  No saved connections. <br />
+                  Add one using SAVE CONNECTION DATA button.
+                </div>
+              ) : error ? (
+                <div className={classes.noList}>Error!</div>
+              ) : (
+                <List className={classes.list}>
+                  {data.connections.map((conn, index) => (
+                    <ListItem key={index} className={classes.listItem}>
+                      <Button
+                        className={classes.btnConnect}
+                        onClick={() => updateForm({ variables: { ...conn } })}
+                      >
+                        <Typography variant="body1">{conn.url}</Typography>
+                        {conn.db && (
+                          <Typography
+                            variant="body1"
+                            color="textSecondary"
+                            style={{ fontSize: 12 }}
+                          >
+                            database: {conn.db}
+                          </Typography>
+                        )}
+                        {conn.u && (
+                          <Typography
+                            variant="body1"
+                            color="textSecondary"
+                            style={{ fontSize: 12 }}
+                          >
+                            user: {conn.u}
+                          </Typography>
+                        )}
+                      </Button>
+                      <Button
+                        className={classes.btnDelete}
+                        onClick={() =>
+                          deleteConnection({ variables: { id: conn.id } })
+                        }
+                        aria-label="Delete"
+                      >
+                        <DeleteIcon style={{ fontSize: 18 }} />
+                      </Button>
+                    </ListItem>
+                  ))}
+                </List>
+              )
+            }
+          </Mutation>
+        )}
       </Mutation>
     )}
   </Query>
