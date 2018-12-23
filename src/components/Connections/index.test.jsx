@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitForElement, fireEvent } from 'test-utils';
-import Connections, { GET_CONNECTIONS } from './index';
+import Connections, { GET_CONNECTIONS, DELETE_CONNECTION } from './index';
 
 const mocks = (connections = []) => [
   {
@@ -10,6 +10,17 @@ const mocks = (connections = []) => [
     result: {
       data: {
         connections,
+      },
+    },
+  },
+  {
+    request: {
+      query: DELETE_CONNECTION,
+      variables: { id: 'test' },
+    },
+    result: {
+      data: {
+        result: 'ok',
       },
     },
   },

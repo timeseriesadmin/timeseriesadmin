@@ -43,7 +43,9 @@ describe('Form', () => {
       .closest('button')
       .next()
       .click();
-    cy.getByText('database: TestDatabase').should('not.exist');
-    cy.getByText('No data').should('exist');
+    cy.queryByText('database: TestDatabase').should('not.exist');
+    cy.getByText(
+      'No saved connections. Add one using SAVE CONNECTION DATA button.',
+    ).should('exist');
   });
 });
