@@ -116,6 +116,7 @@ const Connections = ({ classes }: Props) => (
                         <Button
                           className={classes.btnDelete}
                           onClick={handleDelete(conn.id)}
+                          aria-label="Delete"
                         >
                           <DeleteIcon style={{ fontSize: 18 }} />
                         </Button>
