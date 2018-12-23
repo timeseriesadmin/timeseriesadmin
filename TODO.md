@@ -1,5 +1,4 @@
-TODO
-===
+# TODO
 
 List of things that are in the project backlog:
 
@@ -15,4 +14,4 @@ List of things that are in the project backlog:
 - UX: allow for copy/paste from Explorer Panel e.g. measurement name
 - BUG: prevent uppercasing of measurement names in Explorer Panel
 - CORE: secure passwords stored in app with node-keytar https://medium.com/cameron-nokes/how-to-securely-store-sensitive-information-in-electron-with-node-keytar-51af99f1cfc4
-
+- UX: add confirmation message (and undo button), after saved connection removal
