@@ -25,7 +25,7 @@ jobs: # a collection of steps
           command: yarn test
       - run: # run coverage report
           name: code-coverage report generation and upload
-          command: 'yarn test --coverage && codecov -t 1034d70c-6870-4421-986f-6ac405850292'
+          command: 'yarn test --coverage && yarn codecov -t 1034d70c-6870-4421-986f-6ac405850292'
       # - store_artifacts: # special step to save test results as as artifact
       #     # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
       #     path: test-results.xml
