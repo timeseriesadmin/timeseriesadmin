@@ -12,6 +12,8 @@ Forms are handled with [React Final Form](https://github.com/final-form/react-fi
 Yarn is used for dependency management.
 Eslint provides JS linting.
 Flow is used for type hinting.
+CI is ensured with CircleCI.
+Coverage reports are uploaded to Codecov service.
 
 ## Build development environment
 
@@ -32,6 +34,20 @@ Created DB will have following credentials:
 
 Use `yarn electron:dev` to develop Electron with live updates.
 Use `yarn build` and `yarn electron` to test Electron releases before bundling.
+
+## Tests
+
+Unit & integration tests:
+
+0. `yarn test` will trigger single run of all Jest tests
+1. `yarn test:watch` starts watching for file changes and reruns Jest tests
+
+End-to-end tests:
+
+0. Start application with `yarn start`
+1. Execute `yarn cypress:run` to start end-to-end Cypress based tests in headless mode
+
+**NOTE:** You may open Cypress tests UI with `yarn cypress:open`.
 
 ## Deployment
 
