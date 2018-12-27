@@ -1,38 +1,72 @@
-version: 2 # use CircleCI 2.0
+version: 2.1
+
 jobs: # a collection of steps
-  build: # runs not using Workflows must have a `build` job as entry point
-    # working_directory: ~/mern-starter # directory where steps will run
+  build:
     docker: # run the steps with Docker
-      - image: circleci/node:8.12.0 # ...with this image as the primary container; this is where all `steps` will run
-      # - image: influxdb:1.6 # and this image as the secondary service container
-    steps: # a collection of executable commands
+      # - image: circleci/node:8.12.0 # ...with this image as the primary container; this is where all `steps` will run
+      - image: cypress/base:8 # ...with this image as the primary container; this is where all `steps` will run
+        environment:
+          TERM: xterm
+    steps:
       - checkout # special step to check out source code to working directory
-      - run:
-          name: yarn install
-          command: 'yarn install'
       - restore_cache: # special step to restore the dependency cache
-          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: node-cache{{ checksum "package.json" }}
       - run:
-          name: yarn-install-after-restore
           command: yarn install
       - save_cache: # special step to save the dependency cache
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: node-cache{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run: # run tests
-          name: test
-          command: yarn test
-      - run: # run coverage report
-          name: code-coverage report generation and upload
-          command: 'yarn test --coverage && yarn codecov -t 1034d70c-6870-4421-986f-6ac405850292'
-      # - store_artifacts: # special step to save test results as as artifact
-      #     # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-      #     path: test-results.xml
-      #     prefix: tests
-      # - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-      #     path: coverage
-      #     prefix: coverage
-      # - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-      #     path: test-results.xml
-      # # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+            - /root/.cache
+
+  run_tests:
+    docker:
+      - image: cypress/base:8
+        environment:
+          TERM: xterm
+    steps:
+      - checkout # special step to check out source code to working directory
+      - restore_cache: # special step to restore the dependency cache
+          key: node-cache{{ checksum "package.json" }}
+      - run:
+          command: yarn install
+      - run:
+          command: yarn test --coverage && yarn codecov -t 1034d70c-6870-4421-986f-6ac405850292
+
+  run_e2e_tests:
+    docker:
+      # - image: circleci/node:8.12.0 # ...with this image as the primary container; this is where all `steps` will run
+      - image: cypress/base:8
+        environment:
+          TERM: xterm
+      # in case of overlapping port numbers provide name param
+      # https://support.circleci.com/hc/en-us/articles/360007186173-Port-conflicts-with-service-containers-on-Docker-executor
+      - image: influxdb:1.6-alpine
+        environment:
+          INFLUXDB_ADMIN_USER: 'admin'
+          INFLUXDB_ADMIN_PASSWORD: 'password'
+          INFLUXDB_DB: 'testdb'
+    steps:
+      - checkout # special step to check out source code to working directory
+      - restore_cache: # special step to restore the dependency cache
+          key: node-cache{{ checksum "package.json" }}
+      - run:
+          command: yarn install
+      - run:
+          command: yarn start
+          background: true
+      - run:
+          command: yarn wait-on http://localhost:3000 && yarn wait-on http://localhost:8086/ping
+      - run:
+          command: yarn cypress:run --record --key 88bbc6e8-9210-4eaf-9d61-e3c1a53f2962
+
+workflows:
+  tests:
+    jobs:
+      - build
+      - run_tests:
+          requires:
+            - build
+      - run_e2e_tests:
+          requires:
+            - build

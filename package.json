@@ -74,7 +74,8 @@
     "flow-bin": "^0.82.0",
     "flow-typed": "^2.5.1",
     "react-testing-library": "^5.3.2",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "wait-on": "^3.2.0"
   },
   "main": "public/electron.js",
   "homepage": ".",
