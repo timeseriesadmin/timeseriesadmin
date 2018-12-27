@@ -2,11 +2,11 @@
 
 # Time Series Admin
 
-![license](https://img.shields.io/github/license/timeseriesadmin/timeseriesadmin.svg)
-![version](https://img.shields.io/github/release/timeseriesadmin/timeseriesadmin.svg)
-![dependencies status](https://img.shields.io/david/timeseriesadmin/timeseriesadmin.svg)
-![CI build](https://img.shields.io/circleci/project/github/timeseriesadmin/timeseriesadmin/master.svg)
-![code coverage](https://img.shields.io/codecov/c/github/timeseriesadmin/timeseriesadmin.svg)
+[![license](https://img.shields.io/github/license/timeseriesadmin/timeseriesadmin.svg)](https://opensource.org/licenses/MIT)
+[![version](https://img.shields.io/github/release/timeseriesadmin/timeseriesadmin.svg)](https://github.com/timeseriesadmin/timeseriesadmin/releases/latest)
+[![dependencies status](https://img.shields.io/david/timeseriesadmin/timeseriesadmin.svg)](https://david-dm.org/timeseriesadmin/timeseriesadmin)
+[![CI build](https://img.shields.io/circleci/project/github/timeseriesadmin/timeseriesadmin/master.svg)](https://circleci.com/gh/timeseriesadmin/timeseriesadmin)
+[![code coverage](https://img.shields.io/codecov/c/github/timeseriesadmin/timeseriesadmin.svg)](https://codecov.io/gh/timeseriesadmin/timeseriesadmin)
 
 Time Series Admin is an open source administration panel and querying interface for [InfluxDB](https://www.influxdata.com/time-series-platform/influxdb/) databases.
 
