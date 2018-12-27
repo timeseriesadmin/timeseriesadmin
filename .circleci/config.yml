@@ -43,6 +43,7 @@ jobs: # a collection of steps
       # https://support.circleci.com/hc/en-us/articles/360007186173-Port-conflicts-with-service-containers-on-Docker-executor
       - image: influxdb:1.6-alpine
         environment:
+          INFLUXDB_HTTP_AUTH_ENABLED: true
           INFLUXDB_ADMIN_USER: 'admin'
           INFLUXDB_ADMIN_PASSWORD: 'password'
           INFLUXDB_DB: 'testdb'

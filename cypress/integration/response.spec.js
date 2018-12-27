@@ -5,9 +5,9 @@ describe('Response', () => {
   it('displays default message', () => {
     cy.getByText('Go ahead and "RUN QUERY"!').should('exist');
   });
-  describe('invalid input', () => {
+  describe('invalid request', () => {
     it('is displaying 401 error message', () => {
-      cy.getByLabelText('Database URL').type('http://test.test:8086');
+      cy.getByLabelText('Database URL').type('http://localhost:8086');
       cy.getByLabelText('Query').type('SELECT * FROM test');
       cy.getByText('Run query').click();
       cy.getByText(
@@ -15,12 +15,12 @@ describe('Response', () => {
       ).should('exist');
     });
   });
-  describe('valid input', () => {
+  describe('valid request', () => {
     before(() => {
       cy.server();
       cy.route(
         'POST',
-        'http://test.test:8086/query',
+        'http://localhost:8086/query',
         'first,second\n' +
           // 0 - 9801 (99^2) , 1 - 100
           new Array(100)
@@ -29,7 +29,7 @@ describe('Response', () => {
             .join('\n'),
       );
       cy.visit('/');
-      cy.getByLabelText('Database URL').type('http://test.test:8086');
+      cy.getByLabelText('Database URL').type('http://localhost:8086');
       cy.getByLabelText('Query').type('SELECT * FROM test');
       cy.getByText('Run query').click();
     });
