@@ -16,6 +16,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
 
+import VersionInfo from './VersionInfo';
 import MainContent from '../MainContent';
 import DrawerRight from '../DrawerRight';
 import IconMain from '../IconMain';
@@ -53,9 +54,6 @@ const styles = theme => ({
     // [theme.breakpoints.up('md')]: {
     //   paddingLeft: theme.spacing.unit * 2,
     // },
-  },
-  versionInfo: {
-    fontSize: 10,
   },
   rightPanel: {
     paddingRight: theme.spacing.unit * 2,
@@ -139,14 +137,7 @@ const App = ({ classes }) => (
                     style={{ alignSelf: 'center' }}
                   >
                     Time Series Admin
-                    <Typography
-                      variant="caption"
-                      color="inherit"
-                      className={classes.versionInfo}
-                    >
-                      ver.{' '}
-                      <span id="version">{process.env.REACT_APP_VERSION}</span>
-                    </Typography>
+                    <VersionInfo />
                   </Typography>
                 </div>
                 <div className={classes.rightPanel}>

@@ -1,6 +1,15 @@
 describe('Home Page', () => {
   before(() => {
+    cy.server();
+    cy.route(
+      'GET',
+      'https://api.github.com/repos/timeseriesadmin/timeseriesadmin/releases/latest',
+      { tag_name: 'v9.9.9' },
+    );
     cy.visit('/');
+  });
+  it('shows new version info', () => {
+    cy.getByText('New version available').should('exist');
   });
   it('successfully loads all content', () => {
     // sidebar panels
