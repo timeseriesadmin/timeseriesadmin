@@ -7,6 +7,7 @@ import mergeWith from 'lodash/mergeWith';
 
 import type { QueryParams } from 'influx-api';
 import storage from '../helpers/storage';
+import { getLatestVersion } from './resolvers/github';
 
 export type ResultsSettings = {
   order: 'asc' | 'desc',
@@ -72,6 +73,9 @@ type FormParams = {
   q?: string,
 };
 export const resolvers = {
+  Query: {
+    getLatestVersion,
+  },
   Mutation: {
     setOpenDrawer: (
       _obj: void,
