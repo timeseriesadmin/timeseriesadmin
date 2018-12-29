@@ -26,5 +26,10 @@ describe('<MainContent />', () => {
     expect(FormInflux).toBeCalledTimes(1);
     expect(QueryResults).toBeCalledTimes(1);
   });
-  // TODO: more tests needed (e.g. submit handling)
+
+  // test('onSubmit()', () => {
+  //   render(<MainContent mocks={mocks} />);
+  //   FormInflux.mock.calls[0][0].onSubmit({ val1: 'test1', val2: 'test2' });
+  //   // TODO: expect formMutate and executeQuery calls
+  // });
 });

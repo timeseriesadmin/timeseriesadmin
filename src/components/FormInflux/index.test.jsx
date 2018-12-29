@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitForElement } from 'test-utils';
+import { render, waitForElement, fireEvent } from 'test-utils';
 
 // The component AND the query need to be exported
 import FormInflux, { GET_INITIAL, SAVE_CONNECTION } from './index';
@@ -23,14 +23,15 @@ const mocks = [
   },
   {
     request: {
-      mutation: SAVE_CONNECTION,
+      query: SAVE_CONNECTION,
     },
   },
 ];
 
 describe('<FormInflux />', () => {
-  test('rendering', async () => {
-    const spy = jest.fn();
+  test('rendering and submitting', async () => {
+    // spy has to be async to properly trigger "submitting" form state
+    const spy = jest.fn(async () => undefined);
     const { getByText, getByLabelText } = render(
       <FormInflux mocks={mocks} onSubmit={spy} />,
     );
@@ -44,11 +45,16 @@ describe('<FormInflux />', () => {
     expect(getByLabelText('Database').value).toBe('test_db');
     expect(getByLabelText('Query').value).toBe('test query');
 
-    // TODO: fix tests, spy is not called after form submission
-
-    // fireEvent.click(getByText('Run query'));
-    // await waitForElement(() => getByText('Executing query...'));
-    // expect(spy).toBeCalledTimes(1);
-    // expect(spy).toBeCalledWith('');
+    fireEvent.submit(getByText('Run query')); // .click() doesn't work, it has to be .submit()
+    await waitForElement(() => getByText('Executing query...'));
+    await waitForElement(() => getByText('Run query'));
+    expect(spy).toBeCalledTimes(1);
+    expect(spy.mock.calls[0][0]).toEqual({
+      db: 'test_db',
+      p: 'test_pass',
+      q: 'test query',
+      u: 'test_user',
+      url: 'http://test.test:8086',
+    });
   });
 });

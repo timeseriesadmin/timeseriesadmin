@@ -27,11 +27,15 @@ describe('Response', () => {
             .fill(0)
             .map((el, index) => `${index ** 2},${index + 1}`)
             .join('\n'),
+        { delay: 500 }, // ensure delay for executing state
       );
       cy.visit('/');
       cy.getByLabelText('Database URL').type('http://localhost:8086');
       cy.getByLabelText('Query').type('SELECT * FROM test');
+    });
+    it('shows executing state', () => {
       cy.getByText('Run query').click();
+      cy.getByText('Executing query...').should('exist');
     });
     it('shows data returned from API', () => {
       cy.get('form')

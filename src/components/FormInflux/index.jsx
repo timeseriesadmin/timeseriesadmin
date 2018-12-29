@@ -30,7 +30,7 @@ const styles = (theme: Object) => ({
 
 type Props = {
   classes: any,
-  onSubmit: Function,
+  onSubmit: (values: {}) => Promise<void>,
 };
 const FormInflux = ({ classes, onSubmit }: Props) => (
   <Query query={GET_INITIAL}>

@@ -10,10 +10,10 @@ const MainContent = () => (
     {(executeQuery, { called, loading, data, error }) => (
       <Mutation mutation={UPDATE_FORM}>
         {formMutate => {
-          const onSubmit = (values): void => {
-            formMutate({ variables: values });
+          const onSubmit = async (values): Promise<void> => {
+            await formMutate({ variables: values });
             // prevent displaying errors in console (they are handled in resolvers)
-            executeQuery({ variables: {} }).catch(err => {});
+            await executeQuery({ variables: {} }).catch(err => {});
           };
 
           return (
