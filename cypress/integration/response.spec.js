@@ -9,7 +9,9 @@ describe('Response', () => {
     it('is displaying 401 error message', () => {
       cy.getByLabelText('Database URL').type('http://localhost:8086');
       cy.getByLabelText('Query').type('SELECT * FROM test');
-      cy.getByText('Run query').click();
+      // ensure that CTRL/CMD+ENTER shortcut works
+      cy.getByLabelText('Query').type('{meta}{enter}'); // meta = command/cmd
+      // ensure
       cy.getByText(
         '401:Unauthorized error unable to parse authentication credentials',
       ).should('exist');

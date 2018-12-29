@@ -56,5 +56,17 @@ describe('<FormInflux />', () => {
       u: 'test_user',
       url: 'http://test.test:8086',
     });
+
+    // simulate CTRL/CMD + ENTER
+    fireEvent.keyDown(getByLabelText('Query'), {
+      key: 'Enter',
+      keyCode: 13,
+      which: 13,
+      metaKey: true,
+      ctrlKey: true,
+    });
+    await waitForElement(() => getByText('Executing query...'));
+    await waitForElement(() => getByText('Run query'));
+    expect(spy).toBeCalledTimes(2);
   });
 });

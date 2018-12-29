@@ -112,6 +112,15 @@ const FormInflux = ({ classes, onSubmit }: Props) => (
                   validate={composeValidators(isRequired)}
                   multiline
                   rows={5}
+                  helperText="Use CTRL/CMD+ENTER to submit"
+                  onKeyDown={event => {
+                    if (
+                      event.keyCode === 13 &&
+                      (event.metaKey || event.ctrlKey)
+                    ) {
+                      form.submit();
+                    }
+                  }}
                 />
               </Grid>
 
