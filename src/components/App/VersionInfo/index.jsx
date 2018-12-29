@@ -5,7 +5,7 @@ import { Query } from 'react-apollo';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import { REPO_LATEST_RELEASE_URL } from '../../../apollo/resolvers/github';
+import { LATEST_RELEASE_URL } from '../../../apollo/resolvers/github';
 import compareVersions from 'compare-versions';
 import { CURRENT_VERSION } from '../../../config';
 
@@ -52,7 +52,7 @@ const VersionInfo = ({ classes }) => (
           <Button
             variant="contained"
             size="small"
-            href={REPO_LATEST_RELEASE_URL}
+            href={LATEST_RELEASE_URL}
             className={classes.button}
           >
             New version available

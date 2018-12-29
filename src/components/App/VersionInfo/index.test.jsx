@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, waitForElement } from 'test-utils';
 import VersionInfo, { versionIsUpToDate, GET_LATEST_VERSION } from './index';
-// import { REPO_LATEST_RELEASE_URL } from '../../../apollo/resolvers/github';
 import '../../../config';
 jest.mock('../../../config', () => ({
   CURRENT_VERSION: '0.1.1',
