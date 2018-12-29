@@ -1,6 +1,12 @@
 // @flow
 import React from 'react';
-import { Typography, IconButton, Collapse, Button, List } from '@material-ui/core';
+import {
+  Typography,
+  IconButton,
+  Collapse,
+  Button,
+  List,
+} from '@material-ui/core';
 import { Mutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
@@ -10,8 +16,7 @@ import theme from '../../theme';
 import TooltipError from '../../TooltipError';
 
 const styles = theme => ({
-  root: {
-  },
+  root: {},
 });
 
 type Props = {
@@ -39,7 +44,8 @@ class ExplorerItem extends React.Component<Props, State> {
       <Mutation mutation={query} variables={{ db, meas, tagKey }}>
         {(mutate, { called, loading, data, error }) => {
           const handleExpand = (expand: boolean = true) => () => {
-            if (!called) { // execute mutation on first expansion
+            if (!called) {
+              // execute mutation on first expansion
               // $FlowFixMe
               mutate();
             }
@@ -49,32 +55,55 @@ class ExplorerItem extends React.Component<Props, State> {
           const handleRefresh = () => {
             // $FlowFixMe
             mutate();
-          }
+          };
           return (
             <div className={classes.root}>
-              <Button size="small"
-                aria-label={this.state.isExpanded ? "Collapse" : "Expand"} 
-                onClick={handleExpand(!this.state.isExpanded)}>
+              <Button
+                size="small"
+                aria-label={this.state.isExpanded ? 'Collapse' : 'Expand'}
+                onClick={handleExpand(!this.state.isExpanded)}
+              >
                 {this.state.isExpanded ? <CollapseIcon /> : <ExpandIcon />}
                 {label}
               </Button>
-              {called &&
-              <IconButton onClick={handleRefresh} style={{ width: 24, height: 24 }}>
-                <RefreshIcon style={{ margin: 0, fontSize: 18, color: theme.palette.secondary.dark }} />
-              </IconButton>
-              }
-              {!called ? null :
-                loading ? <div>Loading...</div> :
-                error ? <div><TooltipError content={JSON.stringify(error)} /></div> :
-                !data || !data[resultsKey] ? <Typography variant="caption" color="primary" style={{ marginLeft: 22 }}>
+              {called && (
+                <IconButton
+                  aria-label="Refresh"
+                  onClick={handleRefresh}
+                  style={{ width: 24, height: 24 }}
+                >
+                  <RefreshIcon
+                    style={{
+                      margin: 0,
+                      fontSize: 18,
+                      color: theme.palette.secondary.dark,
+                    }}
+                  />
+                </IconButton>
+              )}
+              {!called ? null : loading ? (
+                <div>Loading...</div>
+              ) : error ? (
+                <div>
+                  <TooltipError content={JSON.stringify(error)} />
+                </div>
+              ) : !data || !data[resultsKey] ? (
+                <Typography
+                  variant="caption"
+                  color="primary"
+                  style={{ marginLeft: 22 }}
+                >
                   Results are empty, probably there is no data in this section.
-                </Typography> :
-                <Collapse in={this.state.isExpanded} timeout="auto" unmountOnExit>
-                  <List>
-                    {this.props.children(data[resultsKey])}
-                  </List>
+                </Typography>
+              ) : (
+                <Collapse
+                  in={this.state.isExpanded}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  <List>{this.props.children(data[resultsKey])}</List>
                 </Collapse>
-              }
+              )}
             </div>
           );
         }}
