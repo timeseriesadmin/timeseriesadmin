@@ -2,26 +2,15 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Tooltip,
-  Drawer,
-} from '@material-ui/core';
-import DrawerOpenIcon from '@material-ui/icons/Menu';
-import DrawerCloseIcon from '@material-ui/icons/ChevronRight';
+import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
 
-import VersionInfo from './VersionInfo';
+import TopBar from '../TopBar';
 import MainContent from '../MainContent';
 import DrawerRight from '../DrawerRight';
-import IconMain from '../IconMain';
 
-const drawerWidth = 480;
+export const drawerWidth = 480;
 const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
 const styles = theme => ({
   root: {
@@ -40,23 +29,6 @@ const styles = theme => ({
   },
   rootWithDrawer: {
     paddingRight: drawerWidth,
-  },
-  flex: {
-    flex: 1,
-  },
-  appBar: {
-    background: grey['900'],
-  },
-  toolbar: {
-    ...theme.mixins.toolbar,
-    paddingLeft: theme.spacing.unit * 2,
-    // paddingLeft: 0,
-    // [theme.breakpoints.up('md')]: {
-    //   paddingLeft: theme.spacing.unit * 2,
-    // },
-  },
-  rightPanel: {
-    paddingRight: theme.spacing.unit * 2,
   },
   content: {
     maxWidth: '100%',
@@ -77,17 +49,6 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
-  },
-  appBarShifted: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: drawerWidth,
-  },
-  disabledBtn: {
-    color: `${theme.palette.common.white} !important`, // TODO: is it the only way to override default color?
   },
 });
 
@@ -113,59 +74,14 @@ const App = ({ classes }) => (
               [classes.rootWithDrawer]: isOpenDrawer,
             })}
           >
-            <AppBar
-              className={classNames(classes.appBar, {
-                [classes.appBarShifted]: isOpenDrawer,
-              })}
-            >
-              <Toolbar disableGutters className={classes.toolbar}>
-                <div
-                  className={classes.flex}
-                  style={{ display: 'flex', flexDirection: 'row' }}
-                >
-                  <IconMain
-                    style={{
-                      width: 48,
-                      height: 48,
-                      alignSelf: 'center',
-                      marginRight: 8,
-                    }}
-                  />
-                  <Typography
-                    variant="title"
-                    color="inherit"
-                    style={{ alignSelf: 'center' }}
-                  >
-                    Time Series Admin
-                    <VersionInfo />
-                  </Typography>
-                </div>
-                <div className={classes.rightPanel}>
-                  <Tooltip
-                    title={isOpenDrawer ? 'Close sidebar' : 'Open sidebar'}
-                  >
-                    <div>
-                      <IconButton
-                        classes={{ disabled: classes.disabledBtn }}
-                        size="small"
-                        color="inherit"
-                        onClick={() =>
-                          setOpenDrawer({
-                            variables: { isOpen: !isOpenDrawer },
-                          })
-                        }
-                      >
-                        {isOpenDrawer ? (
-                          <DrawerCloseIcon />
-                        ) : (
-                          <DrawerOpenIcon />
-                        )}
-                      </IconButton>
-                    </div>
-                  </Tooltip>
-                </div>
-              </Toolbar>
-            </AppBar>
+            <TopBar
+              isOpenDrawer={isOpenDrawer}
+              toggleDrawer={() =>
+                setOpenDrawer({
+                  variables: { isOpen: !isOpenDrawer },
+                })
+              }
+            />
 
             <main className={classes.content}>
               <MainContent />
@@ -191,4 +107,4 @@ const App = ({ classes }) => (
   </Query>
 );
 
-export default withStyles(styles, { withTheme: true })(App);
+export default withStyles(styles)(App);

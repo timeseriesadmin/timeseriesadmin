@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, waitForElement } from 'test-utils';
 import VersionInfo, { versionIsUpToDate, GET_LATEST_VERSION } from './index';
-import '../../../config';
-jest.mock('../../../config', () => ({
+import '../../config';
+jest.mock('../../config', () => ({
   CURRENT_VERSION: '0.1.1',
 }));
 

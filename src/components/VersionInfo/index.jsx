@@ -5,9 +5,9 @@ import { Query } from 'react-apollo';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import { LATEST_RELEASE_URL } from '../../../apollo/resolvers/github';
+import { LATEST_RELEASE_URL } from '../../apollo/resolvers/github';
 import compareVersions from 'compare-versions';
-import { CURRENT_VERSION } from '../../../config';
+import { CURRENT_VERSION } from '../../config';
 
 export const GET_LATEST_VERSION = gql`
   query getLatestVersion {
