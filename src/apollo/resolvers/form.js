@@ -46,5 +46,12 @@ export const getForm = (cache: any) => {
       }
     `,
   });
-  return form;
+  return {
+    url: '',
+    u: '',
+    p: '',
+    db: '',
+    q: '',
+    ...form,
+  };
 };

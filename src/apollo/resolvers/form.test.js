@@ -37,14 +37,40 @@ describe('form resolvers', () => {
     });
     expect(setMock).toBeCalledWith(
       'form',
-      JSON.stringify({
+      '{"url":"http://url.test","u":"new_user","p":"new_pass","db":"db","q":"QUERY","__typename":"FormData"}',
+    );
+  });
+  test('updateForm() ensure default values', async () => {
+    const setMock = jest.fn();
+    const writeMock = jest.fn();
+    const readMock = jest.fn(() => ({
+      form: {
         url: 'http://url.test',
-        u: 'new_user',
-        p: 'new_pass',
-        db: 'db',
-        q: 'QUERY',
-        __typename: 'FormData',
-      }),
+      },
+    }));
+    storage.set.mockImplementation(setMock);
+    expect(
+      updateForm(
+        null,
+        { url: 'http://new.test' },
+        { cache: { readQuery: readMock, writeData: writeMock } },
+      ),
+    ).toBe(null);
+    expect(writeMock).toBeCalledWith({
+      data: {
+        form: {
+          __typename: 'FormData',
+          url: 'http://new.test',
+          u: '',
+          p: '',
+          db: '',
+          q: '',
+        },
+      },
+    });
+    expect(setMock).toBeCalledWith(
+      'form',
+      '{"url":"http://new.test","u":"","p":"","db":"","q":"","__typename":"FormData"}',
     );
   });
 });
