@@ -9,6 +9,7 @@ const connections = JSON.parse(storage.get('connections', '[]')).map(conn => ({
   db: '',
   ...conn,
 }));
+
 // TODO: prevent adding history with no query instead of filtering on init
 // HERE filter invalid connection data
 const queryHistory = JSON.parse(storage.get('queryHistory', '[]'))
@@ -18,6 +19,7 @@ const queryHistory = JSON.parse(storage.get('queryHistory', '[]'))
     error: '',
     ...hist,
   }));
+
 const form = {
   url: '',
   u: '',
@@ -27,7 +29,9 @@ const form = {
   __typename: 'FormData',
   ...JSON.parse(storage.get('form')),
 };
+
 const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
+
 const initTimeFormat = storage.get('timeFormat', 'timestamp');
 
 export default {
