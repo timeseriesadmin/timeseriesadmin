@@ -8,6 +8,15 @@ import mergeWith from 'lodash/mergeWith';
 import type { QueryParams } from 'influx-api';
 import storage from '../helpers/storage';
 import { getLatestVersion } from './resolvers/github';
+import {
+  databases,
+  series,
+  policies,
+  measurements,
+  fieldKeys,
+  tagKeys,
+  tagValues,
+} from './resolvers/explorer';
 
 export type ResultsSettings = {
   order: 'asc' | 'desc',
@@ -18,52 +27,6 @@ export type ResultsSettings = {
 };
 
 export const HISTORY_MAX_LENGTH = 30;
-
-const queryBase = (cache: any, query: string): QueryParams<'csv'> => {
-  const { form } = cache.readQuery({
-    query: gql`
-      {
-        form {
-          url
-          u
-          p
-        }
-      }
-    `,
-  });
-
-  return {
-    ...form,
-    q: query,
-    responseType: 'csv',
-  };
-};
-
-const parseResults = (
-  result: string,
-  remap: { [string]: string },
-  type: string,
-) => {
-  const response = result.trim();
-  if (!response) {
-    return null;
-  }
-  const results = Papa.parse(response, {
-    header: true,
-  });
-  if (results.errors.length > 0) {
-    throw new Error(JSON.stringify(results.errors));
-  }
-  // console.log(results);
-  return results.data.map(entry => ({
-    __typename: type,
-    // TODO: this might be underperformant solution
-    ...Object.keys(remap).reduce(
-      (acc, key) => ({ ...acc, [key]: entry[remap[key]] }),
-      {},
-    ),
-  }));
-};
 
 type FormParams = {
   url: string,
@@ -77,6 +40,13 @@ export const resolvers = {
     getLatestVersion,
   },
   Mutation: {
+    databases,
+    series,
+    policies,
+    measurements,
+    fieldKeys,
+    tagKeys,
+    tagValues,
     setOpenDrawer: (
       _obj: void,
       { isOpen }: { isOpen: boolean },
@@ -239,112 +209,6 @@ export const resolvers = {
         request: { params: queryArgs },
         response: queryResult,
       };
-    },
-    // TODO: support multiserver with { url }: { url: string } args
-    databases: async (_: void, _args: void, { cache }: any): Promise<any> => {
-      const result = await influxQuery(queryBase(cache, 'SHOW DATABASES'));
-      return parseResults(
-        result.data,
-        { id: 'name', name: 'name' },
-        'Database',
-      );
-    },
-    series: async (
-      _: void,
-      { db, meas }: { db: string, meas?: string },
-      { cache }: any,
-    ): Promise<any> => {
-      const result = await influxQuery(
-        queryBase(
-          cache,
-          `SHOW SERIES ON "${db}"${meas ? ` FROM "${meas}"` : ''}`,
-        ),
-      );
-      return parseResults(
-        result.data,
-        { id: 'key', key: 'key', tags: 'tags' },
-        'Series',
-      );
-    },
-    policies: async (
-      _: void,
-      { db }: { db: string },
-      { cache }: any,
-    ): Promise<any> => {
-      const result = await influxQuery(
-        queryBase(cache, `SHOW RETENTION POLICIES ON "${db}"`),
-      );
-      return parseResults(
-        result.data,
-        {
-          id: 'name',
-          name: 'name',
-          duration: 'duration',
-          shardGroupDuration: 'shardGroupDuration',
-          replicaN: 'replicaN',
-          default: 'default',
-        },
-        'RetentionPolicy',
-      );
-    },
-    measurements: async (
-      _: void,
-      { db }: { db: string },
-      { cache }: any,
-    ): Promise<any> => {
-      const result = await influxQuery(
-        queryBase(cache, `SHOW MEASUREMENTS ON "${db}"`),
-      );
-      return parseResults(
-        result.data,
-        { id: 'name', name: 'name' },
-        'Measurement',
-      );
-    },
-    fieldKeys: async (
-      _: void,
-      { db, meas }: { db: string, meas: string },
-      { cache }: any,
-    ): Promise<any> => {
-      const result = await influxQuery(
-        queryBase(cache, `SHOW FIELD KEYS ON "${db}" FROM "${meas}"`),
-      );
-      return parseResults(
-        result.data,
-        { id: 'fieldKey', name: 'fieldKey', type: 'fieldType' },
-        'FieldKey',
-      );
-    },
-    tagKeys: async (
-      _: void,
-      { db, meas }: { db: string, meas: string },
-      { cache }: any,
-    ): Promise<any> => {
-      const result = await influxQuery(
-        queryBase(cache, `SHOW TAG KEYS ON "${db}" FROM "${meas}"`),
-      );
-      return parseResults(
-        result.data,
-        { id: 'tagKey', name: 'tagKey' },
-        'TagKey',
-      );
-    },
-    tagValues: async (
-      _: void,
-      { db, meas, tagKey }: { db: string, meas: string, tagKey: string },
-      { cache }: any,
-    ): Promise<any> => {
-      const result = await influxQuery(
-        queryBase(
-          cache,
-          `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${tagKey}"`,
-        ),
-      );
-      return parseResults(
-        result.data,
-        { id: 'value', value: 'value' },
-        'TagValue',
-      );
     },
     saveConnection: (
       _obj: void,
