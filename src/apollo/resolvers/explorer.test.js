@@ -1,5 +1,5 @@
 import { query } from 'influx-api';
-import { queryBase } from './helpers';
+import { queryBase } from '../helpers/query';
 import {
   databases,
   series,
@@ -9,10 +9,7 @@ import {
   tagKeys,
   tagValues,
 } from './explorer';
-jest.mock('./helpers', () => ({
-  ...jest.requireActual('./helpers'),
-  queryBase: jest.fn(),
-}));
+jest.mock('../helpers/query');
 jest.mock('influx-api');
 
 describe('explorer resolvers', () => {
