@@ -41,12 +41,12 @@ jobs: # a collection of steps
           TERM: xterm
       # in case of overlapping port numbers provide name param
       # https://support.circleci.com/hc/en-us/articles/360007186173-Port-conflicts-with-service-containers-on-Docker-executor
-      - image: influxdb:1.6-alpine
-        environment:
-          INFLUXDB_HTTP_AUTH_ENABLED: true
-          INFLUXDB_ADMIN_USER: 'admin'
-          INFLUXDB_ADMIN_PASSWORD: 'password'
-          INFLUXDB_DB: 'testdb'
+      # - image: influxdb:1.6-alpine
+      #   environment:
+      #     INFLUXDB_HTTP_AUTH_ENABLED: true
+      #     INFLUXDB_ADMIN_USER: 'admin'
+      #     INFLUXDB_ADMIN_PASSWORD: 'password'
+      #     INFLUXDB_DB: 'testdb'
     steps:
       - checkout # special step to check out source code to working directory
       - restore_cache: # special step to restore the dependency cache
@@ -57,7 +57,8 @@ jobs: # a collection of steps
           command: yarn start
           background: true
       - run:
-          command: yarn wait-on http://localhost:3000 && yarn wait-on http://localhost:8086/ping
+          command: yarn wait-on http://localhost:3000
+          # command: yarn wait-on http://localhost:3000 && yarn wait-on http://localhost:8086/ping
       - run:
           command: yarn cypress:run --record --key 88bbc6e8-9210-4eaf-9d61-e3c1a53f2962
 

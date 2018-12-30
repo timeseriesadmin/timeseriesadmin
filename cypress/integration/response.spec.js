@@ -6,6 +6,16 @@ describe('Response', () => {
     cy.getByText('Go ahead and "RUN QUERY"!').should('exist');
   });
   describe('invalid request', () => {
+    before(() => {
+      cy.server({
+        status: 401,
+      });
+      cy.route(
+        'POST',
+        'http://localhost:8086/query',
+        'error\nunable to parse authentication credentials',
+      );
+    });
     it('is displaying 401 error message', () => {
       cy.getByLabelText('Database URL').type('http://localhost:8086');
       cy.getByLabelText('Query').type('SELECT * FROM test');
