@@ -11,7 +11,7 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit,
   },
   info: {
-    padding: theme.spacing.unit*2,
+    padding: theme.spacing.unit * 2,
     paddingBottom: 0,
   },
 });
@@ -22,10 +22,11 @@ type Props = {
 const PanelHistory = ({ classes }: Props) => (
   <div>
     <Typography variant="body1" className={classes.info}>
-      List of most recent queries executed, with max length of {HISTORY_MAX_LENGTH} items.
+      List of most recent queries executed, with max length of{' '}
+      {HISTORY_MAX_LENGTH} items.
     </Typography>
     <div className={classes.root}>
-      <QueryHistory/>
+      <QueryHistory />
     </div>
   </div>
 );
