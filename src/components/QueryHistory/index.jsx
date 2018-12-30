@@ -16,13 +16,19 @@ const styles = theme => ({
   listItem: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    paddingLeft: theme.spacing.unit*2,
-    paddingRight: theme.spacing.unit*2,
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
   },
   listItemText: {
     paddingLeft: theme.spacing.unit,
     paddingRight: 0,
-  }
+  },
+  noList: {
+    paddingTop: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+    fontSize: 14,
+  },
 });
 
 const SET_FORM_QUERY = gql`
@@ -32,8 +38,8 @@ const SET_FORM_QUERY = gql`
 `;
 
 const GET_HISTORY = gql`
-  query queryHistory {
-    queryHistory {
+  {
+    queryHistory @client {
       query
       error
     }
@@ -45,37 +51,53 @@ type Props = {
 // TODO: display Error details somehow, not with a Tooltip because of performance issues when there are 100 Tooltips...
 const QueryHistory = ({ classes }: Props) => (
   <Query query={GET_HISTORY}>
-  {({ loading, error, data }) => (
-    <Mutation mutation={SET_FORM_QUERY}>
-    {(setFormQuery, mutateState) => {
-      const handleQueryClick = (query: string) => (event: Event) => {
-        setFormQuery({ variables: { query } });
-      };
-      // $FlowFixMe
-      if (!data || !data.queryHistory) return null;
-      return (
-        <List dense>
-          {data.queryHistory.map((executeQuery, index) => (
-            <ListItem button disableGutters
-              className={classes.listItem}
-              key={index}
-              onClick={handleQueryClick(executeQuery.query)}
-            >
-              {executeQuery.error !== null &&
-              <ListItemIcon>
-                <ErrorIcon color="error" className={classes.btnIcon}/>
-              </ListItemIcon>
-              }
-              <ListItemText primary={executeQuery.query}
-                className={classes.listItemText}
-              />
-            </ListItem>
-          ))}
-        </List>
-      );
-    }}
-    </Mutation>
-  )}
+    {({ loading, error, data }) => (
+      <Mutation mutation={SET_FORM_QUERY}>
+        {(setFormQuery, mutateState) => {
+          const handleQueryClick = (query: string) => (event: Event) => {
+            setFormQuery({ variables: { query } });
+          };
+          // $FlowFixMe
+          if (!data || !data.queryHistory || data.queryHistory.length === 0) {
+            return (
+              <div className={classes.noList}>
+                Query history is empty.
+                <br />
+                Execute your first query using{' '}
+                <a href="#influx-q">Query form</a>
+              </div>
+            );
+          }
+          return (
+            <List dense>
+              {data.queryHistory.map((executeQuery, index) => (
+                <ListItem
+                  button
+                  disableGutters
+                  className={classes.listItem}
+                  key={index}
+                  onClick={handleQueryClick(executeQuery.query)}
+                >
+                  {executeQuery.error !== null && (
+                    <ListItemIcon>
+                      <ErrorIcon
+                        aria-label="Invalid query"
+                        color="error"
+                        className={classes.btnIcon}
+                      />
+                    </ListItemIcon>
+                  )}
+                  <ListItemText
+                    primary={executeQuery.query}
+                    className={classes.listItemText}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          );
+        }}
+      </Mutation>
+    )}
   </Query>
 );
 
