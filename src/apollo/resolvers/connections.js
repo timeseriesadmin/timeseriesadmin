@@ -4,12 +4,8 @@ import storage from '../../helpers/storage';
 
 import type { FormParams } from './form';
 
-export const saveConnection = (
-  _obj: void,
-  { url, u, p, db }: FormParams,
-  { cache }: any,
-): null => {
-  let { connections } = cache.readQuery({
+const getConnections = cache => {
+  const { connections } = cache.readQuery({
     query: gql`
       {
         connections @client {
@@ -24,9 +20,26 @@ export const saveConnection = (
   });
   if (!connections) {
     // initialize if empty
-    connections = [];
+    return [];
   }
+  return connections;
+};
 
+const updateConnections = (cache, connections) => {
+  storage.set('connections', JSON.stringify(connections));
+  cache.writeData({
+    data: {
+      connections,
+    },
+  });
+};
+
+export const saveConnection = (
+  _obj: void,
+  { url, u, p, db }: FormParams,
+  { cache }: any,
+): null => {
+  const connections = getConnections(cache);
   const connection = {
     url,
     u,
@@ -43,38 +56,18 @@ export const saveConnection = (
     connections[id] = connection;
   }
 
-  storage.set('connections', JSON.stringify(connections));
-  cache.writeData({
-    data: {
-      connections,
-    },
-  });
+  updateConnections(cache, connections);
 
   // it is important to return anything e.g. null (in other case you will see a warning)
   return null;
 };
+
 export const deleteConnection = (
   _obj: void,
   { id }: { id: string },
   { cache }: any,
 ): null => {
-  let { connections } = cache.readQuery({
-    query: gql`
-      {
-        connections @client {
-          id
-          url
-          u
-          p
-          db
-        }
-      }
-    `,
-  });
-  if (!connections) {
-    // initialize if empty
-    connections = [];
-  }
+  const connections = getConnections(cache);
 
   const index = connections.findIndex(c => c.id === id);
   if (index < 0) {
@@ -83,12 +76,8 @@ export const deleteConnection = (
     connections.splice(index, 1);
   }
 
-  storage.set('connections', JSON.stringify(connections));
-  cache.writeData({
-    data: {
-      connections,
-    },
-  });
+  updateConnections(cache, connections);
 
+  // it is important to return anything e.g. null (in other case you will see a warning)
   return null;
 };

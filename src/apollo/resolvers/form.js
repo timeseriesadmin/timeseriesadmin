@@ -15,19 +15,7 @@ export const updateForm = (
   submitted: FormParams,
   { cache }: any,
 ): null => {
-  const { form } = cache.readQuery({
-    query: gql`
-      {
-        form {
-          url
-          u
-          p
-          db
-          q
-        }
-      }
-    `,
-  });
+  const form = getForm(cache);
 
   const newForm = {
     ...form,
@@ -42,4 +30,21 @@ export const updateForm = (
   });
   // it is important to return anything e.g. null (in other case you will see a warning)
   return null;
+};
+
+export const getForm = (cache: any) => {
+  const { form } = cache.readQuery({
+    query: gql`
+      {
+        form {
+          url
+          u
+          p
+          db
+          q
+        }
+      }
+    `,
+  });
+  return form;
 };

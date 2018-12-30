@@ -1,11 +1,10 @@
 // @flow
-import gql from 'graphql-tag';
 import { query as influxQuery } from 'influx-api';
-import { ApolloError } from 'apollo-client';
-import Papa from 'papaparse';
 
-import storage from '../../helpers/storage';
-import { HISTORY_MAX_LENGTH } from '../resolvers';
+import { getForm } from './form';
+import { resetResultsTable } from '../helpers/results';
+import { saveQueryHistory } from '../helpers/history';
+import { handleQueryError } from '../helpers/errors';
 
 import type { QueryParams } from 'influx-api';
 
@@ -19,26 +18,10 @@ export const executeQuery = async (
   // q += ' limit 100'; // TODO: increase LIMIT value
   // }
 
-  const readQuery = cache.readQuery({
-    query: gql`
-      {
-        queryHistory {
-          query
-          error
-        }
-        form {
-          url
-          u
-          p
-          db
-          q
-        }
-      }
-    `,
-  });
-  let { queryHistory } = readQuery;
+  const form = getForm(cache);
+
   const queryArgs = {
-    ...readQuery.form,
+    ...form,
     ...queryParams,
     responseType: 'csv',
   };
@@ -51,77 +34,11 @@ export const executeQuery = async (
     queryError = error;
   }
 
-  const historyIndex = queryHistory.findIndex(
-    hist => hist.query === queryArgs.q,
-  );
+  saveQueryHistory(queryArgs.q, cache, queryError);
 
-  if (historyIndex !== 0) {
-    if (historyIndex > 0) {
-      // remove any other history entries with same query
-      queryHistory = queryHistory.filter(hist => hist.query !== queryArgs.q);
-    }
+  handleQueryError(queryError);
 
-    // add query as first history element
-    queryHistory.unshift({
-      query: queryArgs.q,
-      error: queryError ? JSON.stringify(queryError) : null,
-      __typename: 'InfluxQuery',
-    });
-
-    // limit max length of query history
-    queryHistory = queryHistory.slice(0, HISTORY_MAX_LENGTH);
-
-    storage.set('queryHistory', JSON.stringify(queryHistory));
-    cache.writeData({
-      data: {
-        queryHistory,
-      },
-    });
-  }
-  // else { in case query has index 0 do nothing (it is already at the top) }
-
-  if (queryError) {
-    let errorMessage = `${queryError.response.status}:${
-      queryError.response.statusText
-    } `;
-    try {
-      errorMessage += Papa.parse(queryError.response.data, {
-        trimHeaders: true,
-        skipEmptyLines: true,
-      }).data[1][0];
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
-
-    throw new ApolloError({
-      errorMessage,
-      networkError: queryError.response,
-      extraInfo: queryError,
-    });
-  }
-
-  // reset current page number to 0 (first page), orderKey and order
-  const { resultsTable } = cache.readQuery({
-    query: gql`
-      {
-        resultsTable {
-          rowsPerPage
-          timeFormat
-        }
-      }
-    `,
-  });
-  cache.writeData({
-    data: {
-      resultsTable: {
-        ...resultsTable,
-        page: 0,
-        orderKey: '',
-        order: 'desc',
-      },
-    },
-  });
+  resetResultsTable(cache);
 
   return {
     request: { params: queryArgs },

@@ -1,6 +1,7 @@
 // @flow
 import { query as influxQuery } from 'influx-api';
-import { parseResults, queryBase } from './helpers';
+import { parseResults } from '../helpers/parser';
+import { queryBase } from '../helpers/query';
 
 // TODO: support multiserver with { url }: { url: string } args
 export const databases = async (
