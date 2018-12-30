@@ -1,0 +1,16 @@
+// @flow
+import storage from '../../helpers/storage';
+
+export const setOpenDrawer = (
+  _obj: void,
+  { isOpen }: { isOpen: boolean },
+  { cache }: any,
+): null => {
+  cache.writeData({
+    data: {
+      isOpenDrawer: isOpen,
+    },
+  });
+  storage.set('isOpenDrawer', isOpen ? 'true' : 'false');
+  return null;
+};
