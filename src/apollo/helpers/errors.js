@@ -12,13 +12,21 @@ export const handleQueryError = (queryError: any) => {
     queryError.response.statusText
   } `;
   try {
-    errorMessage += Papa.parse(queryError.response.data, {
+    const msg = Papa.parse(queryError.response.data, {
       trimHeaders: true,
       skipEmptyLines: true,
-    }).data[1][0];
+    });
+    if (msg.data && msg.data.length > 1 && msg.data[1].length > 0) {
+      errorMessage += msg.data[1][0];
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(error);
+    // console.error(error);
+    throw new ApolloError({
+      errorMessage: error,
+      networkError: queryError.response,
+      extraInfo: queryError,
+    });
   }
 
   throw new ApolloError({

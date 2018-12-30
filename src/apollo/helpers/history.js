@@ -23,28 +23,32 @@ export const saveQueryHistory = (
 
   const historyIndex = queryHistory.findIndex(hist => hist.query === query);
 
-  if (historyIndex !== 0) {
-    if (historyIndex > 0) {
-      // remove any other history entries with same query
-      queryHistory = queryHistory.filter(hist => hist.query !== query);
-    }
-
-    // add query as first history element
-    queryHistory.unshift({
-      query: query,
-      error: queryError ? JSON.stringify(queryError) : null,
-      __typename: 'InfluxQuery',
-    });
-
-    // limit max length of query history
-    queryHistory = queryHistory.slice(0, HISTORY_MAX_LENGTH);
-
-    storage.set('queryHistory', JSON.stringify(queryHistory));
-    cache.writeData({
-      data: {
-        queryHistory,
-      },
-    });
+  if (historyIndex === 0) {
+    // already at the top of the history list
+    return false;
   }
-  // else { in case query has index 0 do nothing (it is already at the top) }
+
+  if (historyIndex > 0) {
+    // remove any other history entries with same query
+    queryHistory = queryHistory.filter(hist => hist.query !== query);
+  }
+
+  // add query as first history element
+  queryHistory.unshift({
+    query: query,
+    error: queryError ? JSON.stringify(queryError) : null,
+    __typename: 'InfluxQuery',
+  });
+
+  // limit max length of query history
+  queryHistory = queryHistory.slice(0, HISTORY_MAX_LENGTH);
+
+  storage.set('queryHistory', JSON.stringify(queryHistory));
+  cache.writeData({
+    data: {
+      queryHistory,
+    },
+  });
+
+  return queryHistory;
 };

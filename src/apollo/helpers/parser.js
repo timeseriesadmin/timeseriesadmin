@@ -1,6 +1,5 @@
 // @flow
 import Papa from 'papaparse';
-import gql from 'graphql-tag';
 
 // internal method exported just for tests
 export const parseResults = (

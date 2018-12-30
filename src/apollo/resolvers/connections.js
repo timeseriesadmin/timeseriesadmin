@@ -1,38 +1,7 @@
 // @flow
-import gql from 'graphql-tag';
-import storage from '../../helpers/storage';
+import { getConnections, updateConnections } from '../helpers/connections';
 
 import type { FormParams } from './form';
-
-const getConnections = cache => {
-  const { connections } = cache.readQuery({
-    query: gql`
-      {
-        connections @client {
-          id
-          url
-          u
-          p
-          db
-        }
-      }
-    `,
-  });
-  if (!connections) {
-    // initialize if empty
-    return [];
-  }
-  return connections;
-};
-
-const updateConnections = (cache, connections) => {
-  storage.set('connections', JSON.stringify(connections));
-  cache.writeData({
-    data: {
-      connections,
-    },
-  });
-};
 
 export const saveConnection = (
   _obj: void,
