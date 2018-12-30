@@ -1,17 +1,9 @@
 describe('Home Page', () => {
   before(() => {
-    cy.server();
-    cy.route(
-      'GET',
-      'https://api.github.com/repos/timeseriesadmin/timeseriesadmin/releases/latest',
-      { tag_name: 'v9.9.9' },
-    );
     cy.visit('/');
   });
-  it('shows new version info', () => {
-    cy.getByText('New version available').should('exist');
-  });
   it('successfully loads all content', () => {
+    cy.queryByText('New version available').should('not.exist');
     // sidebar panels
     cy.getByText('Connect').should('exist');
     cy.getByText('Explorer').should('exist');
@@ -40,5 +32,24 @@ describe('Home Page', () => {
     cy.getByText('List of all saved connections').then(el =>
       cy.wrap(el).should('not.be.visible'),
     );
+  });
+});
+
+describe('New version button', () => {
+  before(() => {
+    cy.server();
+    cy.route(
+      'GET',
+      'https://api.github.com/repos/timeseriesadmin/timeseriesadmin/releases/latest',
+      { tag_name: 'v9.9.9' },
+    );
+    cy.visit('/');
+  });
+  it('shows new version info', () => {
+    cy.getByText('New version available').should('exist');
+    cy.getByText('New version available').click();
+    cy.url().should('include', 'timeseriesadmin.github.io');
+    cy.url().should('include', 'download');
+    cy.title().should('include', 'Time Series Admin');
   });
 });
