@@ -48,6 +48,10 @@ export const setupClient = resolvers => {
   return client;
 };
 
+// it is sometimes required to wait for a while in order to execute Apollo Query or Mutation
+export const wait = async (timeout = 0) =>
+  new Promise(res => setTimeout(res, timeout));
+
 // re-export everything
 export * from 'react-testing-library';
 
