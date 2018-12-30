@@ -1,21 +1,11 @@
 // @flow
-import gql from 'graphql-tag';
+import { getForm } from '../resolvers/form';
 
 import type { QueryParams } from 'influx-api';
 
 // internal method exported just for tests
 export const queryBase = (cache: any, query: string): QueryParams<'csv'> => {
-  const { form } = cache.readQuery({
-    query: gql`
-      {
-        form {
-          url
-          u
-          p
-        }
-      }
-    `,
-  });
+  const form = getForm(cache);
 
   return {
     ...form,

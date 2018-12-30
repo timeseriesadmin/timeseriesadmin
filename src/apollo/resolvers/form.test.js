@@ -52,7 +52,7 @@ describe('form resolvers', () => {
     expect(
       updateForm(
         null,
-        { url: 'http://new.test' },
+        { url: 'http://new.test', u: undefined },
         { cache: { readQuery: readMock, writeData: writeMock } },
       ),
     ).toBe(null);

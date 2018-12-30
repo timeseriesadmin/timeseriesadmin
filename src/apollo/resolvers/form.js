@@ -15,13 +15,18 @@ export const updateForm = (
   submitted: FormParams,
   { cache }: any,
 ): null => {
+  const normalized = {}; // with non-string values converted to strings
+  Object.keys(submitted).forEach(key => {
+    normalized[key] = submitted[key] ? submitted[key].toString() : '';
+  });
   const form = getForm(cache);
 
   const newForm = {
     ...form,
-    ...submitted,
+    ...normalized,
     __typename: 'FormData',
   };
+
   storage.set('form', JSON.stringify(newForm));
   cache.writeData({
     data: {
