@@ -71,4 +71,4 @@ workflows:
             - build
       - run_e2e_tests:
           requires:
-            - build
+            - run_tests
