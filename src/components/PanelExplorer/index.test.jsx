@@ -7,9 +7,12 @@ import {
   within,
 } from 'test-utils';
 
-import Explorer from './index';
+import PanelExplorer from './index';
 
 const mocks = {
+  Query: {
+    form: () => ({ __typename: 'FormData', url: 'http://test.test:8086' }),
+  },
   Mutation: {
     databases: () => [{ __typename: 'Database', id: 'TestDB', name: 'TestDB' }],
     series: () => [
@@ -46,11 +49,29 @@ const mocks = {
   },
 };
 
-describe('<Explorer />', () => {
-  test('rendering', async () => {
-    const { getByText, getByLabelText, queryByText } = render(
-      <Explorer client={setupClient(mocks)} />,
+describe('<PanelExplorer />', () => {
+  test('rendering when not connected', () => {
+    const mockedResolvers = {
+      Query: {
+        form: () => null,
+      },
+    };
+    const { getByText, queryByText } = render(
+      <PanelExplorer client={setupClient(mockedResolvers)} />,
     );
+    expect(getByText('Not connected')).toBeDefined();
+    expect(
+      getByText(/Use "RUN QUERY" button to connect to a server/),
+    ).toBeDefined();
+
+    expect(queryByText('Databases')).toBeNull();
+  });
+  test('rendering when connected', async () => {
+    const { getByText, getByLabelText, queryByText } = render(
+      <PanelExplorer client={setupClient(mocks)} />,
+    );
+
+    await waitForElement(() => getByText('Connected to http://test.test:8086'));
 
     // Expanding sections
     fireEvent.click(getByText('Databases'));
