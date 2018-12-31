@@ -16,7 +16,7 @@ describe('Home Page', () => {
   });
   it('has working sidebar panels', () => {
     cy.getByText('Explorer').click();
-    cy.getByText('Explore currently connected server').should('exist');
+    cy.getByText('Not connected').should('exist');
     cy.getByText('History').click();
     cy.getByText(
       'List of most recent queries executed, with max length of 30 items.',

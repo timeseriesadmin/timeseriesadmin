@@ -1,22 +1,22 @@
 // @flow
 import React from 'react';
-import {
-  Typography,
-  IconButton,
-  Collapse,
-  Button,
-  List,
-} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
 import { Mutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
-import ExpandIcon from '@material-ui/icons/ExpandMore';
-import CollapseIcon from '@material-ui/icons/ExpandLess';
 import RefreshIcon from '@material-ui/icons/Refresh';
+
+import ExplorerButton from '../ExplorerButton';
 import theme from '../../theme';
 import TooltipError from '../../TooltipError';
 
 const styles = theme => ({
   root: {},
+  button: {
+    textTransform: 'uppercase',
+  },
 });
 
 type Props = {
@@ -58,29 +58,33 @@ class ExplorerItem extends React.Component<Props, State> {
           };
           return (
             <div className={classes.root}>
-              <Button
-                size="small"
-                aria-label={this.state.isExpanded ? 'Collapse' : 'Expand'}
-                onClick={handleExpand(!this.state.isExpanded)}
-              >
-                {this.state.isExpanded ? <CollapseIcon /> : <ExpandIcon />}
-                {label}
-              </Button>
-              {called && (
-                <IconButton
-                  aria-label="Refresh"
-                  onClick={handleRefresh}
-                  style={{ width: 24, height: 24 }}
-                >
-                  <RefreshIcon
-                    style={{
-                      margin: 0,
-                      fontSize: 18,
-                      color: theme.palette.secondary.dark,
-                    }}
-                  />
-                </IconButton>
-              )}
+              <ExplorerButton
+                featured
+                label={label}
+                isExpanded={this.state.isExpanded}
+                toggle={handleExpand(!this.state.isExpanded)}
+                suffixedContent={
+                  called && (
+                    <IconButton
+                      aria-label="Refresh"
+                      onClick={handleRefresh}
+                      style={{
+                        marginLeft: theme.spacing.unit,
+                        width: 24,
+                        height: 24,
+                      }}
+                    >
+                      <RefreshIcon
+                        style={{
+                          margin: 0,
+                          fontSize: 18,
+                          color: theme.palette.secondary.dark,
+                        }}
+                      />
+                    </IconButton>
+                  )
+                }
+              />
               {!called ? null : loading ? (
                 <div>Loading...</div>
               ) : error ? (

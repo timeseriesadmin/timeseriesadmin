@@ -18,6 +18,7 @@ export default createMuiTheme({
         paddingBottom: 0,
         minHeight: 26,
         borderRadius: 0,
+        textTransform: 'none',
       },
     },
     MuiIconButton: {
@@ -27,7 +28,7 @@ export default createMuiTheme({
     },
     MuiCollapse: {
       wrapper: {
-        paddingLeft: 20,
+        paddingLeft: 10,
       },
     },
     MuiList: {

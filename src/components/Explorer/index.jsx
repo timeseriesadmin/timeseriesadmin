@@ -1,10 +1,11 @@
 // @flow
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import { Button, ListItem, ListItemText } from '@material-ui/core';
-import ExpandIcon from '@material-ui/icons/ExpandMore';
-import CollapseIcon from '@material-ui/icons/ExpandLess';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import ExplorerItem from './ExplorerItem';
+import ExplorerButton from './ExplorerButton';
 import ExplorerCollapse from './ExplorerCollapse';
 import {
   SHOW_DATABASES,
@@ -29,14 +30,11 @@ const Explorer = () => (
           <ListItem key={index}>
             <ExplorerCollapse
               renderToggler={(toggle, isExpanded) => (
-                <Button
-                  size="small"
-                  aria-label={isExpanded ? 'Collapse' : 'Expand'}
-                  onClick={toggle}
-                >
-                  {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
-                  {database.name}
-                </Button>
+                <ExplorerButton
+                  label={database.name}
+                  toggle={toggle}
+                  isExpanded={isExpanded}
+                />
               )}
             >
               <ExplorerItem
@@ -50,14 +48,11 @@ const Explorer = () => (
                     <ListItem key={index}>
                       <ExplorerCollapse
                         renderToggler={(toggle, isExpanded) => (
-                          <Button
-                            size="small"
-                            aria-label={isExpanded ? 'Collapse' : 'Expand'}
-                            onClick={toggle}
-                          >
-                            {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
-                            {meas.name}
-                          </Button>
+                          <ExplorerButton
+                            label={meas.name}
+                            toggle={toggle}
+                            isExpanded={isExpanded}
+                          />
                         )}
                       >
                         <ExplorerItem
@@ -90,20 +85,11 @@ const Explorer = () => (
                               <ListItem key={index}>
                                 <ExplorerCollapse
                                   renderToggler={(toggle, isExpanded) => (
-                                    <Button
-                                      size="small"
-                                      aria-label={
-                                        isExpanded ? 'Collapse' : 'Expand'
-                                      }
-                                      onClick={toggle}
-                                    >
-                                      {isExpanded ? (
-                                        <CollapseIcon />
-                                      ) : (
-                                        <ExpandIcon />
-                                      )}
-                                      {tagKey.name}
-                                    </Button>
+                                    <ExplorerButton
+                                      label={tagKey.name}
+                                      toggle={toggle}
+                                      isExpanded={isExpanded}
+                                    />
                                   )}
                                 >
                                   <ExplorerItem

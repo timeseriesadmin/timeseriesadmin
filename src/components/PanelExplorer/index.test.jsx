@@ -74,7 +74,7 @@ describe('<PanelExplorer />', () => {
     await waitForElement(() => getByText('Connected to http://test.test:8086'));
 
     // Expanding sections
-    fireEvent.click(getByText('Databases'));
+    fireEvent.click(getByLabelText('Expand Databases'));
     expect(getByText('Loading...')).toBeDefined();
     await waitForElement(() => getByText('TestDB'));
 
@@ -83,19 +83,19 @@ describe('<PanelExplorer />', () => {
     expect(getByText('Loading...')).toBeDefined();
     await waitForElement(() => getByText('TestDB'));
 
-    fireEvent.click(getByText('TestDB'));
+    fireEvent.click(getByLabelText('Expand TestDB'));
 
     // Series
-    fireEvent.click(getByText('Series'));
+    fireEvent.click(getByLabelText('Expand Series'));
     expect(getByText('Loading...')).toBeDefined();
     await waitForElement(() => getByText('testS'));
     expect(getByText('tag1=val1')).toBeDefined();
-    fireEvent.click(getByText('Series'));
+    fireEvent.click(getByLabelText('Collapse Series'));
     // hide for future tests
     await waitForElement(() => !queryByText('tag1=val1'));
 
     // RP
-    fireEvent.click(getByText('Retention Policies'));
+    fireEvent.click(getByLabelText('Expand Retention Policies'));
     expect(getByText('Loading...')).toBeDefined();
     await waitForElement(() => getByText('autogen'));
     expect(
@@ -106,34 +106,34 @@ describe('<PanelExplorer />', () => {
     ).toBeDefined();
 
     // Measurements
-    fireEvent.click(getByText('Measurements'));
+    fireEvent.click(getByLabelText('Expand Measurements'));
     expect(getByText('Loading...')).toBeDefined();
     await waitForElement(() => getByText('testM'));
 
-    fireEvent.click(getByText('testM'));
+    fireEvent.click(getByLabelText('Expand testM'));
 
-    fireEvent.click(getByText('Field Keys'));
+    fireEvent.click(getByLabelText('Expand Field Keys'));
     expect(getByText('Loading...')).toBeDefined();
     await waitForElement(() => getByText('fk1'));
     expect(getByText('(integer)')).toBeDefined();
     expect(getByText('fk2')).toBeDefined();
     expect(getByText('(string)')).toBeDefined();
 
-    fireEvent.click(getByText('Tag Keys'));
+    fireEvent.click(getByLabelText('Expand Tag Keys'));
     expect(getByText('Loading...')).toBeDefined();
     await waitForElement(() => getByText('tk1'));
 
-    fireEvent.click(getByText('tk1'));
+    fireEvent.click(getByLabelText('Expand tk1'));
 
-    fireEvent.click(getByText('Tag Values'));
+    fireEvent.click(getByLabelText('Expand Tag Values'));
     expect(getByText('Loading...')).toBeDefined();
     await waitForElement(() => getByText('tag_value'));
 
     // Look for measurement specific series
-    const { getByText: byText } = within(
+    const { getByLabelText: byLabelText, getByText: byText } = within(
       getByText('testM').parentNode.parentNode,
     );
-    fireEvent.click(byText('Series'));
+    fireEvent.click(byLabelText('Expand Series'));
     // loading won't be triggered because of query caching (?)
     // expect(byText('Loading...')).toBeDefined();
     await waitForElement(() => byText('testS'));
