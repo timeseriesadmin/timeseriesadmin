@@ -21,7 +21,10 @@ export const saveQueryHistory = (
     `,
   });
 
-  const historyIndex = queryHistory.findIndex(hist => hist.query === query);
+  const queryToSave = query.trim();
+  const historyIndex = queryHistory.findIndex(
+    hist => hist.query === queryToSave,
+  );
 
   if (historyIndex === 0) {
     // already at the top of the history list
@@ -30,12 +33,12 @@ export const saveQueryHistory = (
 
   if (historyIndex > 0) {
     // remove any other history entries with same query
-    queryHistory = queryHistory.filter(hist => hist.query !== query);
+    queryHistory = queryHistory.filter(hist => hist.query !== queryToSave);
   }
 
   // add query as first history element
   queryHistory.unshift({
-    query: query,
+    query: queryToSave,
     error: queryError ? JSON.stringify(queryError) : null,
     __typename: 'InfluxQuery',
   });

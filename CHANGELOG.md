@@ -1,3 +1,9 @@
+## v0.1.3
+
+#### :bug: Bug Fix
+
+- trim queries saved in history
+
 ## v0.1.2
 
 #### :rocket: New Features

@@ -62,7 +62,7 @@ describe('query history helpers', () => {
     cacheMock.writeData.mockClear();
     cacheMock.readQuery.mockClear();
 
-    const res = saveQueryHistory('SELECT f1 FROM test123', cacheMock, {
+    const res = saveQueryHistory('   SELECT f1 FROM test123  ', cacheMock, {
       message: 'some message',
     });
 
