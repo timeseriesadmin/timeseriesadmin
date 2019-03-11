@@ -79,15 +79,15 @@ describe('<ResultsTable />', () => {
 describe('parseDate()', () => {
   test('s', () => {
     const result = parseDate('1544780295000000000', 's');
-    expect(result).toBe('2018-12-14 10:38:15');
+    expect(result).toBe('2018-12-14 09:38:15');
   });
   test('ms', () => {
     const result = parseDate('1544780295000000000', 'ms');
-    expect(result).toBe('2018-12-14 10:38:15.000');
+    expect(result).toBe('2018-12-14 09:38:15.000');
   });
   test('ns', () => {
     const result = parseDate('1544780295000000000', 'ns');
-    expect(result).toBe('2018-12-14 10:38:15.000000000');
+    expect(result).toBe('2018-12-14 09:38:15.000000000');
   });
   test('timestamp', () => {
     const result = parseDate('1544780295000000000', 'timestamp');

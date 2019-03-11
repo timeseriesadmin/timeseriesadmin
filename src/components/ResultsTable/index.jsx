@@ -29,6 +29,8 @@ const styles = theme => ({
   },
 });
 
+const tzOffset = new Date().getTimezoneOffset();
+
 type Props = {
   classes: any,
   title: string,
@@ -39,16 +41,14 @@ export const parseDate = (
   date: string,
   timeFormat: $PropertyType<ResultsSettings, 'timeFormat'>,
 ): string => {
+  const ts = parseInt(date.slice(0, -6), 10) + tzOffset * 60 * 1000;
   switch (timeFormat) {
     case 's':
-      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-dd HH:mm:ss');
+      return format(ts, 'YYYY-MM-dd HH:mm:ss');
     case 'ms':
-      return format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-dd HH:mm:ss.SSS');
+      return format(ts, 'YYYY-MM-dd HH:mm:ss.SSS');
     case 'ns':
-      return (
-        format(parseInt(date.slice(0, -6), 10), 'YYYY-MM-dd HH:mm:ss.SSS') +
-        date.slice(-6)
-      );
+      return format(ts, 'YYYY-MM-dd HH:mm:ss.SSS') + date.slice(-6);
     default:
       return date;
   }
