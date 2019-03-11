@@ -25,3 +25,7 @@ yarn-error.log*
 # vim
 tags
 *.swp
+
+# cypress
+cypress/examples
+cypress/videos
