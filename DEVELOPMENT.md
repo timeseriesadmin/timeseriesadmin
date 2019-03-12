@@ -53,6 +53,15 @@ End-to-end tests:
 
 Use `yarn dist:[platform]` to create platform specific bundle (`platform` may have following values: `docker`, `mac`, `win`, `linux`, `all`).
 
+## Releases
+
+0. Update CHANGELOG.md
+1. Use `yarn publish` to set new version number (you will be prompted for that)
+2. Execute `./release.sh` script to create Electron packages for every supported system
+3. Push Docker images with `yarn release:docker`
+4. Manually create Github release, upload files from step 2. and changes from CHANGELOG.md
+5. Update `config.toml` file on Github page and follow deployment instruction there
+
 ## Notes
 
 Electron distribution configuration is based on https://medium.freecodecamp.org/building-an-electron-application-with-create-react-app-97945861647c and https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3.
