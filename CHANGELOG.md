@@ -3,6 +3,7 @@
 #### :bug: Bug Fix
 
 - trim queries saved in history
+- display time in UTC
 
 ## v0.1.2
 
