@@ -3,6 +3,7 @@ describe('defaults', () => {
     const defaults = require('./defaults').default;
     expect(defaults).toEqual({
       isOpenDrawer: true,
+      drawerWidth: 480,
       queryHistory: [],
       connections: [],
       form: {

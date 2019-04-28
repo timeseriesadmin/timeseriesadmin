@@ -13,25 +13,27 @@ import PanelHistory from '../PanelHistory';
 import PanelReference from '../PanelReference';
 import PanelConnect from '../PanelConnect';
 import styles from './styles';
-import { drawerWidth } from '../App';
+
+import { MIN_DRAWER_WIDTH, MIN_CONTENT_WIDTH } from '../../apollo/defaults';
 
 type Props = {
-  classes: any,
+  classes: { [string]: string },
+  drawerWidth: number,
+  updateWidth: (width: number) => void,
 };
 type State = {
   activeTab: number,
-  width: number,
+  // customWidth: number,
   lastDownX: number,
   isResizing: boolean,
 };
-// Ensure at least this number of pixels for application below the sidebar
-const SAFETY_OFFSET = 80;
+
 class DrawerRight extends React.Component<Props, State> {
   state = {
     activeTab: 0,
     isResizing: false,
     lastDownX: 0,
-    width: drawerWidth,
+    // customWidth: 0,
   };
 
   handleMousedown = (e: MouseEvent) => {
@@ -49,11 +51,12 @@ class DrawerRight extends React.Component<Props, State> {
     let offsetRight =
       document.body.offsetWidth - (e.clientX - document.body.offsetLeft);
     if (
-      offsetRight > drawerWidth &&
+      offsetRight > MIN_DRAWER_WIDTH &&
       // prevent resizing outside visible area
-      offsetRight < document.body.offsetWidth - SAFETY_OFFSET
+      offsetRight < document.body.offsetWidth - MIN_CONTENT_WIDTH
     ) {
-      this.setState({ width: offsetRight });
+      this.props.updateWidth(offsetRight);
+      // this.setState({ customWidth: offsetRight });
     }
   };
 
@@ -72,13 +75,16 @@ class DrawerRight extends React.Component<Props, State> {
   };
 
   render = () => {
-    const { classes } = this.props;
-    const { activeTab, width } = this.state;
+    const { classes, drawerWidth } = this.props;
+    const { activeTab } = this.state;
 
     return (
-      <div className={classes.root} style={{ width }}>
+      <div className={classes.root} style={{ width: drawerWidth }}>
         <div onMouseDown={this.handleMousedown} className={classes.dragger} />
-        <div className={classes.header} style={{ right: width - drawerWidth }}>
+        <div
+          className={classes.header}
+          style={{ right: drawerWidth - MIN_DRAWER_WIDTH }}
+        >
           <Tabs
             value={activeTab}
             indicatorColor="primary"

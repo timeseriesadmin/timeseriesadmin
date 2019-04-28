@@ -74,11 +74,13 @@ export default `
     executeQuery(url: String!, u: String, p: String, db: String, q: String!): Boolean
     updateForm(url: String, u: String, p: String, db: String, q: String): Boolean
     setOpenDrawer(isOpen: Boolean!): Boolean
+    setDrawerWidth(newWidth: Number!): Boolean
     saveConnection(url: String, u: String, p: String, db: String): Boolean
     deleteConnection(id: String!): Boolean
   }
   type Query {
     isOpenDrawer: Boolean
+    drawerWidth: Number
     form: FormData
     queryHistory: [InfluxQuery!]
     server: Server

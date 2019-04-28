@@ -10,55 +10,34 @@ import {
 import DrawerOpenIcon from '@material-ui/icons/Menu';
 import DrawerCloseIcon from '@material-ui/icons/ChevronRight';
 import { withStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
 
 import VersionInfo from '../VersionInfo';
 import IconMain from '../IconMain';
-import { drawerWidth } from '../App';
 
-const styles = theme => ({
-  flex: {
-    flex: 1,
-  },
-  appBar: {
-    background: grey['900'],
-  },
-  toolbar: {
-    ...theme.mixins.toolbar,
-    paddingLeft: theme.spacing.unit * 2,
-    // paddingLeft: 0,
-    // [theme.breakpoints.up('md')]: {
-    //   paddingLeft: theme.spacing.unit * 2,
-    // },
-  },
-  rightPanel: {
-    paddingRight: theme.spacing.unit * 2,
-  },
-  appBarShifted: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: drawerWidth,
-  },
-  disabledBtn: {
-    color: `${theme.palette.common.white} !important`, // TODO: is it the only way to override default color?
-  },
-});
+import styles from './styles';
 
-type Props = {
+export type Props = {
   classes: { [string]: string },
   isOpenDrawer: boolean,
+  drawerWidth: number,
   toggleDrawer: () => void,
 };
 
-const TopBar = ({ classes, isOpenDrawer, toggleDrawer }: Props) => (
+const TopBar = ({
+  classes,
+  isOpenDrawer,
+  drawerWidth,
+  toggleDrawer,
+}: Props) => (
   <AppBar
     className={classNames(classes.appBar, {
       [classes.appBarShifted]: isOpenDrawer,
     })}
+    style={{
+      width: isOpenDrawer ? `calc(100% - ${drawerWidth}px)` : null,
+      marginRight: isOpenDrawer ? drawerWidth : null,
+    }}
   >
     <Toolbar disableGutters className={classes.toolbar}>
       <div

@@ -34,8 +34,12 @@ const isOpenDrawer = storage.get('isOpenDrawer', 'true') === 'true';
 
 const initTimeFormat = storage.get('timeFormat', 'timestamp');
 
+export const MIN_DRAWER_WIDTH = 480;
+export const MIN_CONTENT_WIDTH = 360;
+
 export default {
   isOpenDrawer,
+  drawerWidth: MIN_DRAWER_WIDTH,
   queryHistory,
   connections,
   form,

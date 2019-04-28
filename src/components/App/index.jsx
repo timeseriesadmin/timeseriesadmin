@@ -4,55 +4,17 @@ import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
 
 import TopBar from '../TopBar';
 import MainContent from '../MainContent';
 import DrawerRight from '../DrawerRight';
 
-// base/minimal drawerWidth
-export const drawerWidth = 480;
-const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexGrow: 1,
-    overflow: 'hidden',
-    position: 'relative',
-    width: '100%',
-    zIndex: 1,
-    minHeight: '100vh',
-    boxSizing: 'border-box',
-    transition: theme.transitions.create('padding', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  rootWithDrawer: {
-    paddingRight: drawerWidth,
-  },
-  content: {
-    maxWidth: '100%',
-    boxSizing: 'border-box',
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 2,
-    paddingTop: theme.mixins.toolbar.minHeight + theme.spacing.unit * 2,
-    [mediaRule]: {
-      paddingTop:
-        theme.mixins.toolbar[mediaRule].minHeight + theme.spacing.unit * 2,
-    },
-    [theme.breakpoints.up('sm')]: {
-      paddingTop:
-        theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight +
-        theme.spacing.unit * 2,
-    },
-  },
-});
+import styles from './styles';
 
-const IS_OPEN_DRAWER = gql`
-  query isOpenDrawer {
+const DRAWER_SETTINGS = gql`
+  query drawerSettings {
     isOpenDrawer @client
+    drawerWidth @client
   }
 `;
 
@@ -62,18 +24,24 @@ const SET_OPEN_DRAWER = gql`
   }
 `;
 
+const SET_DRAWER_WIDTH = gql`
+  mutation setDrawerWidth($width: Number) {
+    setDrawerWidth(width: $width) @client
+  }
+`;
+
 const App = ({ classes }) => (
-  <Query query={IS_OPEN_DRAWER}>
-    {({ data: { isOpenDrawer } }: { data: any }) => (
+  <Query query={DRAWER_SETTINGS}>
+    {({ data: { isOpenDrawer, drawerWidth } }: { data: any }) => (
       <Mutation mutation={SET_OPEN_DRAWER}>
         {setOpenDrawer => (
           <div
-            className={classNames(classes.root, {
-              [classes.rootWithDrawer]: isOpenDrawer,
-            })}
+            style={{ paddingRight: isOpenDrawer ? drawerWidth : null }}
+            className={classes.root}
           >
             <TopBar
               isOpenDrawer={isOpenDrawer}
+              drawerWidth={drawerWidth}
               toggleDrawer={() =>
                 setOpenDrawer({
                   variables: { isOpen: !isOpenDrawer },
@@ -92,8 +60,18 @@ const App = ({ classes }) => (
               ModalProps={{
                 keepMounted: true, // Better open performance on mobile.
               }}
+              PaperProps={{ style: { width: drawerWidth } }}
             >
-              <DrawerRight />
+              <Mutation mutation={SET_DRAWER_WIDTH}>
+                {setDrawerWidth => (
+                  <DrawerRight
+                    drawerWidth={drawerWidth}
+                    updateWidth={(width: number) =>
+                      setDrawerWidth({ variables: { width } })
+                    }
+                  />
+                )}
+              </Mutation>
             </Drawer>
           </div>
         )}
