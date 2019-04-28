@@ -14,7 +14,7 @@ import TableToolbar from './TableToolbar';
 import TableHead from './TableHead';
 import orderBy from 'lodash/orderBy';
 
-import type { ResultsSettings } from '../../apollo/resolvers';
+import type { ResultsSettings } from '../../apollo/resolvers/results';
 
 const styles = theme => ({
   root: {
