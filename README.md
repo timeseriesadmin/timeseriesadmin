@@ -10,7 +10,11 @@
 
 Time Series Admin is an open source administration panel and querying interface for [InfluxDB](https://www.influxdata.com/time-series-platform/influxdb/) databases.
 
-Visit the [project site](https://timeseriesadmin.github.io/) for more information, or download Time Series Admin directly from the [latest releases](https://github.com/timeseriesadmin/timeseriesadmin/releases/latest/) page.
+Visit the [PROJECT SITE](https://timeseriesadmin.github.io/) for more information, or download Time Series Admin directly from the [LATEST RELEASES](https://github.com/timeseriesadmin/timeseriesadmin/releases/latest/) page.
+
+<a href="https://timeseriesadmin.github.io/" title="Time Series Admin - project page">
+  <img src="https://timeseriesadmin.github.io/images-mini/timeseriesadmin.png" alt="Time Series Admin- project page" style="width: 100%" />
+</a>
 
 ## Install
 
