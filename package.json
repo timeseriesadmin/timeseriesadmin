@@ -79,7 +79,7 @@
     "wait-on": "^3.2.0"
   },
   "main": "public/electron.js",
-  "homepage": ".",
+  "homepage": "https://timeseriesadmin.github.io/",
   "build": {
     "appId": "com.grzegorowski.timeseriesadmin",
     "productName": "Time Series Admin",
