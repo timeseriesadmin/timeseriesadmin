@@ -1,7 +1,5 @@
 ## v0.1.4
 
-## v0.1.3
-
 #### :rocket: New Features
 
 - [#4] resizeable sidebar
@@ -9,6 +7,8 @@
 #### :bug: Bug Fix
 
 - [#3] show FIELD KEYS grouped by retention policies
+
+## v0.1.3
 
 #### :bug: Bug Fix
 
