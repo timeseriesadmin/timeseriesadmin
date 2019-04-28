@@ -43,8 +43,8 @@ export const SHOW_RET_POLICIES = gql`
 `;
 
 export const SHOW_FIELD_KEYS = gql`
-  mutation($db: String, $meas: String) {
-    fieldKeys(db: $db, meas: $meas) @client {
+  mutation($db: String, $meas: String, $retPol: String) {
+    fieldKeys(db: $db, meas: $meas, retPol: $retPol) @client {
       id
       name
       type

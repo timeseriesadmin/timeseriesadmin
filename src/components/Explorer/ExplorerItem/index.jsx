@@ -17,6 +17,8 @@ const styles = theme => ({
 });
 
 type Props = {
+  /** Makes label uppercase and bold */
+  featured: boolean,
   classes: any,
   query: any, // gql string
   resultsKey: string,
@@ -24,21 +26,30 @@ type Props = {
   db?: string,
   meas?: string,
   tagKey?: string,
+  retPol?: string,
   children: any,
 };
 type State = {
   isExpanded: boolean,
 };
 class ExplorerItem extends React.Component<Props, State> {
+  static defaultProps = { featured: true };
   state = {
     isExpanded: false,
   };
 
   render() {
-    const { classes, label, resultsKey, query, db, meas, tagKey } = this.props;
+    const {
+      featured,
+      classes,
+      label,
+      resultsKey,
+      query,
+      ...mutationVariables
+    } = this.props;
 
     return (
-      <Mutation mutation={query} variables={{ db, meas, tagKey }}>
+      <Mutation mutation={query} variables={mutationVariables}>
         {(mutate, { called, loading, data, error }) => {
           const handleExpand = (expand: boolean = true) => () => {
             if (!called) {
@@ -56,7 +67,7 @@ class ExplorerItem extends React.Component<Props, State> {
           return (
             <div className={classes.root}>
               <ExplorerButton
-                featured
+                featured={featured}
                 label={label}
                 isExpanded={this.state.isExpanded}
                 toggle={handleExpand(!this.state.isExpanded)}

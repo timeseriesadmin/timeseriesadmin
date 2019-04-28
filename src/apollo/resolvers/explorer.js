@@ -63,11 +63,15 @@ export const measurements = async (
 
 export const fieldKeys = async (
   _: void,
-  { db, meas }: { db: string, meas: string },
+  { db, meas, retPol }: { db: string, meas: string, retPol: ?string },
   { cache }: any,
 ): Promise<any> => {
+  if (!retPol) {
+    // if not provided use "autogen" policy
+    retPol = 'autogen';
+  }
   const result = await influxQuery(
-    queryBase(cache, `SHOW FIELD KEYS ON "${db}" FROM "${meas}"`),
+    queryBase(cache, `SHOW FIELD KEYS ON "${db}" FROM "${retPol}"."${meas}"`),
   );
   return parseResults(
     result.data,

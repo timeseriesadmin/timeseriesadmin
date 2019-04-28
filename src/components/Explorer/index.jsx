@@ -57,18 +57,33 @@ const Explorer = () => (
                       >
                         <ExplorerItem
                           db={database.id}
-                          meas={meas.id}
-                          query={SHOW_FIELD_KEYS}
-                          label="Field Keys"
-                          resultsKey="fieldKeys"
+                          query={SHOW_RET_POLICIES}
+                          label="Field Keys (by retention policy)"
+                          resultsKey="policies"
                         >
                           {data =>
-                            data.map((fieldKey, index) => (
-                              <ListItem key={index}>
-                                <ListItemText
-                                  primary={fieldKey.name}
-                                  secondary={`(${fieldKey.type})`}
-                                />
+                            data.map((retPol, index) => (
+                              <ListItem key={retPol.id}>
+                                <ExplorerItem
+                                  db={database.id}
+                                  meas={meas.id}
+                                  retPol={retPol.id}
+                                  query={SHOW_FIELD_KEYS}
+                                  label={retPol.name}
+                                  resultsKey="fieldKeys"
+                                  featured={false}
+                                >
+                                  {data =>
+                                    data.map((fieldKey, index) => (
+                                      <ListItem key={fieldKey.id}>
+                                        <ListItemText
+                                          primary={fieldKey.name}
+                                          secondary={`(${fieldKey.type})`}
+                                        />
+                                      </ListItem>
+                                    ))
+                                  }
+                                </ExplorerItem>
                               </ListItem>
                             ))
                           }
