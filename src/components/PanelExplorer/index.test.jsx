@@ -112,7 +112,10 @@ describe('<PanelExplorer />', () => {
 
     fireEvent.click(getByLabelText('Expand testM'));
 
-    fireEvent.click(getByLabelText('Expand Field Keys'));
+    fireEvent.click(getByLabelText('Expand Field Keys (by retention policy)'));
+    expect(getByText('Loading...')).toBeDefined();
+    await waitForElement(() => getByLabelText('Expand autogen'));
+    fireEvent.click(getByLabelText('Expand autogen'));
     expect(getByText('Loading...')).toBeDefined();
     await waitForElement(() => getByText('fk1'));
     expect(getByText('(integer)')).toBeDefined();

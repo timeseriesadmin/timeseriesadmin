@@ -13,7 +13,7 @@ jest.mock('../PanelConnect');
 
 describe('<DrawerRight />', () => {
   test('rendering', () => {
-    render(<DrawerRight />);
+    render(<DrawerRight drawerWidth={500} />);
 
     expect(PanelConnect).toBeCalledTimes(1);
   });
@@ -24,7 +24,7 @@ describe('<DrawerRight />', () => {
     PanelReference.mockClear();
     PanelHistory.mockClear();
 
-    const { getByText } = render(<DrawerRight />);
+    const { getByText } = render(<DrawerRight drawerWidth={500} />);
 
     fireEvent.click(getByText('Explorer'));
     expect(PanelExplorer).toBeCalledTimes(1);

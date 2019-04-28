@@ -81,7 +81,7 @@ describe('explorer resolvers', () => {
     ]);
   });
 
-  test('fieldKeys()', async () => {
+  test('fieldKeys() no-policy', async () => {
     query.mockImplementation(() => ({
       data:
         'name,tags,fieldKey,fieldType\nfk_name_1,,fk1,integer\nfk_name_2,fk_tag,fk2,integer\n',
@@ -93,7 +93,27 @@ describe('explorer resolvers', () => {
     );
     expect(queryBase).toBeCalledWith(
       null,
-      'SHOW FIELD KEYS ON "db" FROM "meas"',
+      'SHOW FIELD KEYS ON "db" FROM "autogen"."meas"',
+    );
+    expect(res).toEqual([
+      { __typename: 'FieldKey', id: 'fk1', name: 'fk1', type: 'integer' },
+      { __typename: 'FieldKey', id: 'fk2', name: 'fk2', type: 'integer' },
+    ]);
+  });
+
+  test('fieldKeys() specific policy', async () => {
+    query.mockImplementation(() => ({
+      data:
+        'name,tags,fieldKey,fieldType\nfk_name_1,,fk1,integer\nfk_name_2,fk_tag,fk2,integer\n',
+    }));
+    const res = await fieldKeys(
+      null,
+      { db: 'db', meas: 'meas', retPol: 'some_policy' },
+      { cache: null },
+    );
+    expect(queryBase).toBeCalledWith(
+      null,
+      'SHOW FIELD KEYS ON "db" FROM "some_policy"."meas"',
     );
     expect(res).toEqual([
       { __typename: 'FieldKey', id: 'fk1', name: 'fk1', type: 'integer' },
