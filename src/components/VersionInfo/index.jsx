@@ -54,6 +54,7 @@ const VersionInfo = ({ classes }) => (
             size="small"
             href={LATEST_RELEASE_URL}
             className={classes.button}
+            target="_blank"
           >
             New version available
           </Button>
