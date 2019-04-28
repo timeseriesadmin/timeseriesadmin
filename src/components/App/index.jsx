@@ -10,6 +10,7 @@ import TopBar from '../TopBar';
 import MainContent from '../MainContent';
 import DrawerRight from '../DrawerRight';
 
+// base/minimal drawerWidth
 export const drawerWidth = 480;
 const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
 const styles = theme => ({
@@ -46,9 +47,6 @@ const styles = theme => ({
         theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight +
         theme.spacing.unit * 2,
     },
-  },
-  drawerPaper: {
-    width: drawerWidth,
   },
 });
 
@@ -91,9 +89,6 @@ const App = ({ classes }) => (
               variant="persistent"
               anchor="right"
               open={isOpenDrawer}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
               ModalProps={{
                 keepMounted: true, // Better open performance on mobile.
               }}
