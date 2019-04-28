@@ -27,6 +27,7 @@ export const series = async (
     'Series',
   );
 };
+
 export const policies = async (
   _: void,
   { db }: { db: string },

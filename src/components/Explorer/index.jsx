@@ -27,7 +27,7 @@ const Explorer = () => (
     >
       {data =>
         data.map((database, index) => (
-          <ListItem key={index}>
+          <ListItem key={database.id}>
             <ExplorerCollapse
               renderToggler={(toggle, isExpanded) => (
                 <ExplorerButton
@@ -45,7 +45,7 @@ const Explorer = () => (
               >
                 {data =>
                   data.map((meas, index) => (
-                    <ListItem key={index}>
+                    <ListItem key={meas.id}>
                       <ExplorerCollapse
                         renderToggler={(toggle, isExpanded) => (
                           <ExplorerButton
@@ -82,7 +82,7 @@ const Explorer = () => (
                         >
                           {data =>
                             data.map((tagKey, index) => (
-                              <ListItem key={index}>
+                              <ListItem key={tagKey.id}>
                                 <ExplorerCollapse
                                   renderToggler={(toggle, isExpanded) => (
                                     <ExplorerButton
@@ -102,7 +102,7 @@ const Explorer = () => (
                                   >
                                     {data =>
                                       data.map((tagValue, index) => (
-                                        <ListItem key={index}>
+                                        <ListItem key={tagValue.id}>
                                           <ListItemText
                                             primary={tagValue.value}
                                           />
@@ -124,7 +124,7 @@ const Explorer = () => (
                         >
                           {data =>
                             data.map((se, index) => (
-                              <ListItem key={index}>
+                              <ListItem key={se.id}>
                                 <ListItemText
                                   primary={se.key}
                                   secondary={se.tags ? `(${se.tags})` : null}
@@ -151,7 +151,7 @@ const Explorer = () => (
                       .map(k => `${k}: ${policy[k]}`)
                       .join(', ');
                     return (
-                      <ListItem key={index}>
+                      <ListItem key={policy.id}>
                         <ListItemText
                           primary={policy.name}
                           secondary={description}
@@ -169,7 +169,7 @@ const Explorer = () => (
               >
                 {data =>
                   data.map((se, index) => (
-                    <ListItem key={index}>
+                    <ListItem key={se.id}>
                       <ListItemText primary={se.key} secondary={se.tags} />
                     </ListItem>
                   ))

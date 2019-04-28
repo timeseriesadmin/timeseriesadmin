@@ -14,9 +14,6 @@ import TooltipError from '../../TooltipError';
 
 const styles = theme => ({
   root: {},
-  button: {
-    textTransform: 'uppercase',
-  },
 });
 
 type Props = {
@@ -85,27 +82,30 @@ class ExplorerItem extends React.Component<Props, State> {
                   )
                 }
               />
-              {!called ? null : loading ? (
-                <div>Loading...</div>
-              ) : error ? (
-                <div>
-                  <TooltipError content={JSON.stringify(error)} />
-                </div>
-              ) : !data || !data[resultsKey] ? (
-                <Typography
-                  variant="caption"
-                  color="primary"
-                  style={{ marginLeft: 22 }}
-                >
-                  Results are empty, probably there is no data in this section.
-                </Typography>
-              ) : (
+              {called && (
                 <Collapse
                   in={this.state.isExpanded}
                   timeout="auto"
                   unmountOnExit
                 >
-                  <List>{this.props.children(data[resultsKey])}</List>
+                  {loading ? (
+                    <div>Loading...</div>
+                  ) : error ? (
+                    <div>
+                      <TooltipError content={JSON.stringify(error)} />
+                    </div>
+                  ) : !data || !data[resultsKey] ? (
+                    <Typography
+                      variant="caption"
+                      color="primary"
+                      style={{ marginLeft: 22 }}
+                    >
+                      Results are empty, probably there is no data in this
+                      section.
+                    </Typography>
+                  ) : (
+                    <List>{this.props.children(data[resultsKey])}</List>
+                  )}
                 </Collapse>
               )}
             </div>
