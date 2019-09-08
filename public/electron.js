@@ -1,16 +1,17 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 
-if (process.env.ELECTRON_START_URL) {
-	// so it will be available only for electron in dev mode
-	require('electron-debug')();
+if (process.env.ELECTRON_IS_DEV) {
+  // Enable Google Dev Tools in Electron
+  const debug = require('electron-debug');
+  debug();
 }
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1300,
@@ -28,30 +29,44 @@ function createWindow () {
   // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', function() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null;
   });
 
-  const template = [{
-    label: "Application",
-    submenu: [
-      // { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
-      // { type: "separator" },
-      { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
-    ]}, {
-      label: "Edit",
+  const template = [
+    {
+      label: 'Application',
       submenu: [
-        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-        { type: "separator" },
-        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-        { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-      ]}
+        // { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
+        // { type: "separator" },
+        {
+          label: 'Quit',
+          accelerator: 'Command+Q',
+          click: function() {
+            app.quit();
+          },
+        },
+      ],
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
+        { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
+        { type: 'separator' },
+        { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+        { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+        { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
+        {
+          label: 'Select All',
+          accelerator: 'CmdOrCtrl+A',
+          selector: 'selectAll:',
+        },
+      ],
+    },
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
@@ -60,23 +75,23 @@ function createWindow () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', function () {
+app.on('ready', function() {
   createWindow();
   // autoUpdater.checkForUpdates();
 });
 
 // when the update has been downloaded and is ready to be installed, notify the BrowserWindow
 // autoUpdater.on('update-downloaded', (info) => {
-  // mainWindow.webContents.send('updateReady');
+// mainWindow.webContents.send('updateReady');
 // });
 
 // when receiving a quitAndInstall signal, quit and install the new version ;)
 // ipcMain.on('quitAndInstall', (event, arg) => {
-  // autoUpdater.quitAndInstall();
+// autoUpdater.quitAndInstall();
 // });
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
+app.on('window-all-closed', function() {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
@@ -84,7 +99,7 @@ app.on('window-all-closed', function () {
   }
 });
 
-app.on('activate', function () {
+app.on('activate', function() {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
