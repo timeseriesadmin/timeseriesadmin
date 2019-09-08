@@ -2,7 +2,7 @@
 import gql from 'graphql-tag';
 import storage from '../../helpers/storage';
 
-import { HISTORY_MAX_LENGTH } from '../resolvers';
+import { HISTORY_MAX_LENGTH } from '../../config';
 
 // exported only for tests
 export const saveQueryHistory = (

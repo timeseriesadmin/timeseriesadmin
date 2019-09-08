@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import QueryHistory from '../QueryHistory';
 
-import { HISTORY_MAX_LENGTH } from '../../apollo/resolvers';
+import { HISTORY_MAX_LENGTH } from '../../config';
 
 const styles = theme => ({
   root: {

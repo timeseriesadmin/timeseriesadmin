@@ -15,8 +15,6 @@ import { updateForm } from './resolvers/form';
 import { executeQuery } from './resolvers/query';
 import { setResultsTable } from './resolvers/results';
 
-export const HISTORY_MAX_LENGTH = 30;
-
 export const resolvers = {
   Query: {
     getLatestVersion,
