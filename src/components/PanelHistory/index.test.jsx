@@ -27,7 +27,7 @@ describe('<PanelHistory />', () => {
     expect(getByText('Query form')).toBeDefined();
     expect(
       getByText(
-        'List of most recent queries executed, with max length of 30 items.',
+        'List of most recent queries executed, with max length of 300 items.',
       ),
     ).toBeDefined();
   });

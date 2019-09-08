@@ -5,7 +5,7 @@ import TableToolbar from './index';
 describe('TableToolbar', () => {
   test('rendering', () => {
     const spy = jest.fn();
-    const { getByText } = render(
+    const { getByText, getAllByText } = render(
       <TableToolbar
         title="Toolbar title"
         timeFormat="ns"
@@ -19,7 +19,8 @@ describe('TableToolbar', () => {
     expect(getByText('Timestamp')).toBeDefined();
     expect(getByText('Date with seconds')).toBeDefined();
     expect(getByText('Date with milliseconds')).toBeDefined();
-    expect(getByText('Date with nanoseconds')).toBeDefined();
+    // selected option label and select option entry
+    expect(getAllByText('Date with nanoseconds').length).toBe(2);
     // select one menu item
     fireEvent.click(getByText('Date with seconds'));
     expect(spy.mock.calls.length).toBe(1);
