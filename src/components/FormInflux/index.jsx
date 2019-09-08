@@ -111,7 +111,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => (
                   label="Query"
                   validate={composeValidators(isRequired)}
                   multiline
-                  rows={5}
+                  rows={10}
                   helperText="Use CTRL/CMD+ENTER to submit"
                   onKeyDown={event => {
                     if (
@@ -139,8 +139,8 @@ const FormInflux = ({ classes, onSubmit }: Props) => (
                   {submitting
                     ? 'Executing query...'
                     : loading
-                      ? 'Loading data...'
-                      : 'Run query'}
+                    ? 'Loading data...'
+                    : 'Run query'}
                 </Button>
               </Grid>
             </Grid>
