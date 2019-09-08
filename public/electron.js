@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, Menu } = require('electron');
+const { app, shell, BrowserWindow, ipcMain, Menu } = require('electron');
 
 if (process.env.ELECTRON_IS_DEV) {
   // Enable Google Dev Tools in Electron
@@ -16,6 +16,12 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1300,
     height: 800,
+  });
+
+  // open all target="_blank" links in a new window
+  mainWindow.on('new-window', function(event, url) {
+    event.preventDefault();
+    shell.openExternal(url);
   });
 
   // and load the index.html of the app.

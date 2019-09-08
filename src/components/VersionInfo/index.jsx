@@ -6,7 +6,6 @@ import compareVersions from 'compare-versions';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import isElectron from '../../helpers/isElectron';
 import { LATEST_RELEASE_URL } from '../../apollo/resolvers/github';
 import { CURRENT_VERSION } from '../../config';
 
@@ -32,14 +31,6 @@ const styles = theme => ({
 export const versionIsUpToDate = (version: string): boolean =>
   compareVersions(version, CURRENT_VERSION) <= 0;
 
-const handleClick = () => {
-  if (isElectron()) {
-    require('electron').shell.openExternal(LATEST_RELEASE_URL);
-  } else {
-    window.open(LATEST_RELEASE_URL, '_blank').focus();
-  }
-};
-
 const VersionInfo = ({ classes }) => (
   <Typography variant="caption" color="inherit" className={classes.versionInfo}>
     ver. <span id="version">{CURRENT_VERSION}</span>
@@ -62,7 +53,8 @@ const VersionInfo = ({ classes }) => (
             variant="contained"
             size="small"
             className={classes.button}
-            onClick={handleClick}
+            target="_blank"
+            href={LATEST_RELEASE_URL}
           >
             New version available
           </Button>

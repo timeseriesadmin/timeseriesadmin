@@ -15,6 +15,7 @@ const styles = theme => ({
     textAlign: 'left',
     width: 'calc(100% - 36px)',
     borderRadius: 0,
+    paddingLeft: 20,
   },
   btnDelete: {
     minWidth: 36,
@@ -73,8 +74,8 @@ const Connections = ({ classes }: Props) => (
               loading ? (
                 <div className={classes.noList}>Loading...</div>
               ) : !data ||
-              !data.connections ||
-              data.connections.length === 0 ? (
+                !data.connections ||
+                data.connections.length === 0 ? (
                 <div className={classes.noList}>
                   No saved connections. <br />
                   Add one using SAVE CONNECTION DATA button.
