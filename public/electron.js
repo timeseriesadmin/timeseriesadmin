@@ -19,7 +19,7 @@ function createWindow() {
   });
 
   // open all target="_blank" links in a new window
-  mainWindow.on('new-window', function(event, url) {
+  mainWindow.webContents.on('new-window', function(event, url) {
     event.preventDefault();
     shell.openExternal(url);
   });
@@ -30,9 +30,6 @@ function createWindow() {
   } else {
     mainWindow.loadFile('./build/index.html');
   }
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
