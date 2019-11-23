@@ -12,28 +12,34 @@ const stringifyError = (apolloError: ApolloError): string => {
   if (!error) {
     return JSON.stringify(apolloError);
   }
-  return `${error.status}:${error.statusText} ${error.details || error.data || ''}`;
-}
+  return `${error.status}:${error.statusText} ${error.details ||
+    error.data ||
+    ''}`;
+};
 
 type Props = {
   error: ApolloError,
 };
 const QueryError = ({ error }: Props) => (
   <div>
-    <Typography variant="headline" component="h3" style={{ marginBottom: 8, color: "red" }}>
+    <Typography
+      variant="headline"
+      component="h3"
+      style={{ marginBottom: 8, color: 'red' }}
+    >
       {stringifyError(error)}
     </Typography>
-    <Typography variant="subheading" component="h4" style={{ margin: '18px 0 6px' }}>
+    <Typography
+      variant="subheading"
+      component="h4"
+      style={{ margin: '18px 0 6px' }}
+    >
       Error details
     </Typography>
     <Typography variant="caption" component="p" style={{ margin: '6px 0 6px' }}>
       You should probably look at "response" key
     </Typography>
-    <Inspector
-      theme="chromeLight"
-      data={error.networkError}
-      expandLevel={2}
-    />
+    <Inspector theme="chromeLight" data={error.networkError} expandLevel={2} />
   </div>
 );
 
