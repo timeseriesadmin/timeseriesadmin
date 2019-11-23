@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitForElement, fireEvent } from 'test-utils';
+import { render, waitForElement, fireEvent } from 'utils/test-utils';
 
 // The component AND the query need to be exported
 import FormInflux, { GET_INITIAL, SAVE_CONNECTION } from './index';

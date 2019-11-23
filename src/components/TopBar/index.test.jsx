@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from 'test-utils';
+import { render, fireEvent } from 'utils/test-utils';
 import TopBar from './index';
 import VersionInfo from '../VersionInfo';
 jest.mock('../VersionInfo');

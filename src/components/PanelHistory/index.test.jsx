@@ -5,7 +5,7 @@ import {
   setupClient,
   waitForElement,
   wait,
-} from 'test-utils';
+} from 'utils/test-utils';
 
 import PanelHistory from './index';
 

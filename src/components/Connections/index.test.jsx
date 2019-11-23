@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitForElement, fireEvent } from 'test-utils';
+import { render, waitForElement, fireEvent } from 'utils/test-utils';
 import Connections, { GET_CONNECTIONS, DELETE_CONNECTION } from './index';
 
 const mocks = (connections = []) => [

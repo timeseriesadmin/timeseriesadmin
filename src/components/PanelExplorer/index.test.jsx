@@ -5,7 +5,7 @@ import {
   waitForElement,
   setupClient,
   within,
-} from 'test-utils';
+} from 'utils/test-utils';
 
 import PanelExplorer from './index';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'test-utils';
+import { render } from 'utils/test-utils';
 
 import MainContent, { FORM_QUERY, UPDATE_FORM } from './index';
 import FormInflux from '../FormInflux';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitForElement } from 'test-utils';
+import { render, waitForElement } from 'utils/test-utils';
 import VersionInfo, { versionIsUpToDate, GET_LATEST_VERSION } from './index';
 import '../../config';
 jest.mock('../../config', () => ({
