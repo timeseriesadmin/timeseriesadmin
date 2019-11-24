@@ -28,7 +28,7 @@ function customRender(node: any, options?: any): any {
 }
 
 // custom mocked apollo client
-export const setupClient = (resolvers: any) => {
+export function setupClient(resolvers: any) {
   const cache = new InMemoryCache();
 
   const client = new ApolloClient({
@@ -42,7 +42,7 @@ export const setupClient = (resolvers: any) => {
   });
 
   return client;
-};
+}
 
 // it is sometimes required to wait for a while in order to execute Apollo Query or Mutation
 export const wait = async (timeout = 0) =>

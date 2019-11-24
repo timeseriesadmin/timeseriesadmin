@@ -9,7 +9,7 @@ const cache = new InMemoryCache();
 
 const client = new ApolloClient({
   cache,
-  resolvers,
+  resolvers: resolvers || {},
   typeDefs,
 });
 
