@@ -15,7 +15,6 @@
     "apollo-cache-inmemory": "^1.5.1",
     "apollo-client": "^2.5.1",
     "apollo-link": "^1.2.11",
-    "apollo-link-state": "^0.4.2",
     "axios": "^0.18.0",
     "compare-versions": "^3.4.0",
     "date-fns": "^2.0.0-alpha.16",

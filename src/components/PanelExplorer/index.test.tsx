@@ -101,8 +101,7 @@ describe('<PanelExplorer />', () => {
     await waitForElement(() => getByText('autogen'));
     expect(
       getByText(
-        'id: autogen, name: autogen, duration: 720h0m0s, ' +
-          'shardGroupDuration: 168h0m0s, replicaN: 1, default: true',
+        'name: autogen, id: autogen, duration: 720h0m0s, shardGroupDuration: 168h0m0s, replicaN: 1, default: true',
       ),
     ).toBeDefined();
 
