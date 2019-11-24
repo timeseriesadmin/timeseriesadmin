@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { useQuery } from 'react-apollo';
 import compareVersions from 'compare-versions';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -30,16 +30,21 @@ const styles = () => ({
 export const versionIsUpToDate = (version: string): boolean =>
   compareVersions(version, CURRENT_VERSION) <= 0;
 
-const VersionInfo = ({ classes }: { classes: any }) => (
-  <Typography variant="caption" color="inherit" className={classes.versionInfo}>
-    ver. <span id="version">{CURRENT_VERSION}</span>
-    <Query query={GET_LATEST_VERSION}>
-      {({ data, loading, error }: any) =>
-        loading ||
-        error ||
-        !data ||
-        !data.getLatestVersion ||
-        versionIsUpToDate(data.getLatestVersion) ? null : (
+const VersionInfo = ({ classes }: { classes: any }) => {
+  const { data, loading, error } = useQuery(GET_LATEST_VERSION);
+
+  return (
+    <Typography
+      variant="caption"
+      color="inherit"
+      className={classes.versionInfo}
+    >
+      ver. <span id="version">{CURRENT_VERSION}</span>
+      {!loading &&
+        !error &&
+        data &&
+        data.getLatestVersion &&
+        !versionIsUpToDate(data.getLatestVersion) && (
           <Button
             variant="contained"
             size="small"
@@ -49,10 +54,9 @@ const VersionInfo = ({ classes }: { classes: any }) => (
           >
             New version available
           </Button>
-        )
-      }
-    </Query>
-  </Typography>
-);
+        )}
+    </Typography>
+  );
+};
 
 export default withStyles(styles)(VersionInfo);
