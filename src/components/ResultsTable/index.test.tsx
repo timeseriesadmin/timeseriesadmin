@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'utils/test-utils';
+import { render, wait } from 'utils/test-utils';
 import ResultsTable, {
   parseDate,
   sortData,
@@ -57,7 +57,8 @@ describe('<ResultsTable />', () => {
       { mocks },
     );
 
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await wait(); // Mutation
+    await wait(); // Query
 
     expect(getByText('Test title')).toBeDefined();
     expect(getByText('col_4')).toBeDefined();

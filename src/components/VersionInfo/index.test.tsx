@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitForElement } from 'utils/test-utils';
+import { render, waitForElement, act, wait } from 'utils/test-utils';
 import VersionInfo, { versionIsUpToDate, GET_LATEST_VERSION } from './index';
 import '../../config';
 jest.mock('../../config', () => ({
@@ -34,18 +34,21 @@ describe('<VersionInfo />', () => {
       mocks: mocks('v0.1.1'),
     });
 
+    await wait();
+
     expect(getByText('ver.')).toBeDefined();
     expect(queryByText('New version available')).toBeNull();
   });
 
   test('rendering new version button', async () => {
-    const { getByText, queryByText } = render(<VersionInfo />, {
+    const { getByText } = render(<VersionInfo />, {
       mocks: mocks('v0.1.2'),
     });
 
+    await wait();
+
     expect(getByText('ver.')).toBeDefined();
-    expect(queryByText('New version available')).toBeNull();
-    await waitForElement(() => getByText('New version available'));
+    expect(getByText('New version available')).toBeDefined();
   });
 
   // TODO:

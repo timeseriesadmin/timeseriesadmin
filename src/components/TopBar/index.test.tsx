@@ -7,7 +7,7 @@ jest.mock('../VersionInfo');
 describe('<TopBar />', () => {
   test('rendering and opening sidebar', async () => {
     const toggleDrawer = jest.fn();
-    const { getByText, getByLabelText } = render(
+    const { getByText, getByLabelText } = await render(
       <TopBar isOpenDrawer={false} toggleDrawer={toggleDrawer} />,
     );
     expect(VersionInfo).toBeCalledTimes(1);
@@ -19,7 +19,7 @@ describe('<TopBar />', () => {
   });
   test('closing sidebar', async () => {
     const toggleDrawer = jest.fn();
-    const { getByLabelText } = render(
+    const { getByLabelText } = await render(
       <TopBar isOpenDrawer={true} toggleDrawer={toggleDrawer} />,
     );
     fireEvent.click(getByLabelText('Close sidebar'));

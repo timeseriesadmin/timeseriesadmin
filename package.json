@@ -27,9 +27,9 @@
     "material-ui-password-field": "^2.0.1",
     "papaparse": "^4.6.3",
     "qs": "^6.7.0",
-    "react": "^16.8.6",
+    "react": "^16.12.0",
     "react-apollo": "^3.1.3",
-    "react-dom": "^16.8.6",
+    "react-dom": "^16.12.0",
     "react-final-form": "^4.1.0",
     "react-inspector": "^3.0.2",
     "react-popper": "^1.3.3",
@@ -60,6 +60,7 @@
   },
   "devDependencies": {
     "@apollo/react-testing": "^3.1.3",
+    "@testing-library/react": "^9.3.2",
     "@types/classnames": "^2.2.9",
     "@types/lodash": "^4.14.149",
     "@types/papaparse": "^5.0.2",
@@ -83,7 +84,6 @@
     "eslint-plugin-jest": "^22.5.1",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
-    "react-testing-library": "^7.0.0",
     "rimraf": "^2.6.3",
     "wait-on": "^3.2.0"
   },

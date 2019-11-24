@@ -5,6 +5,7 @@ import {
   waitForElement,
   setupClient,
   within,
+  wait,
 } from 'utils/test-utils';
 
 import PanelExplorer from './index';
@@ -50,7 +51,7 @@ const mocks = {
 };
 
 describe('<PanelExplorer />', () => {
-  test('rendering when not connected', () => {
+  test('rendering when not connected', async () => {
     const mockedResolvers = {
       Query: {
         form: () => null,
@@ -59,6 +60,8 @@ describe('<PanelExplorer />', () => {
     const { getByText, queryByText } = render(<PanelExplorer />, {
       client: setupClient(mockedResolvers),
     });
+    await wait();
+
     expect(getByText('Not connected')).toBeDefined();
     expect(
       getByText(/Use "RUN QUERY" button to connect to a server/),

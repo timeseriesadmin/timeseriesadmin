@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-testing-library';
+import { render } from '@testing-library/react';
 import QueryResults, { parseQueryResults } from './index';
 import ResultsTable from '../ResultsTable';
 jest.mock('../ResultsTable', () => jest.fn(() => <div />));

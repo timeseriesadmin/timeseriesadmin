@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  fireEvent,
-  setupClient,
-  waitForElement,
-  wait,
-} from 'utils/test-utils';
+import { render, fireEvent, setupClient, wait } from 'utils/test-utils';
 
 import PanelHistory from './index';
 
@@ -24,6 +18,8 @@ describe('<PanelHistory />', () => {
     const { getByText } = render(<PanelHistory />, {
       client: setupClient(mocks()),
     });
+    await wait();
+
     expect(getByText('Query form')).toBeDefined();
     expect(
       getByText(
@@ -49,11 +45,14 @@ describe('<PanelHistory />', () => {
       client: setupClient(mockedResolvers),
     });
 
-    await waitForElement(() => getByText('SELECT * FROM test'));
-    expect(getByLabelText('Invalid query')).toBeDefined();
-
-    fireEvent.click(getByText('SELECT * FROM test'));
     await wait();
+
+    expect(getByText('SELECT * FROM test')).toBeDefined();
+    expect(getByLabelText('Invalid query')).toBeDefined();
+    fireEvent.click(getByText('SELECT * FROM test'));
+
+    await wait();
+
     expect(mockedResolvers.Mutation.updateForm).toBeCalledTimes(1);
     expect(mockedResolvers.Mutation.updateForm.mock.calls[0][1]).toEqual({
       q: 'SELECT * FROM test',

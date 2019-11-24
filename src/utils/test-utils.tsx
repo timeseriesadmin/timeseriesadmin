@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-testing-library';
+import { render, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { ApolloProvider } from 'react-apollo';
 
@@ -46,10 +46,12 @@ export function setupClient(resolvers: any) {
 
 // it is sometimes required to wait for a while in order to execute Apollo Query or Mutation
 export const wait = async (timeout = 0) =>
-  new Promise(res => setTimeout(res, timeout));
+  act(async () => {
+    new Promise(res => setTimeout(res, timeout));
+  });
 
 // re-export everything
-export * from 'react-testing-library';
+export * from '@testing-library/react';
 
 // override render method
 export { customRender as render };
