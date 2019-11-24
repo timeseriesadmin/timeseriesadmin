@@ -34,10 +34,8 @@ type Props = {
 const FormInflux = ({ classes, onSubmit }: Props) => (
   <Query query={GET_INITIAL}>
     {({ loading, data }: any) => (
-      <Form
-        onSubmit={onSubmit}
-        initialValues={get(data, 'form', {})}
-        render={({ handleSubmit, form, submitting, values }) => (
+      <Form onSubmit={onSubmit} initialValues={get(data, 'form', {})}>
+        {({ handleSubmit, form, submitting, values }: any) => (
           <form onSubmit={handleSubmit} className={classes.form}>
             {/* It is here to prevent Chrome from autofilling user and password form fields */}
             <input type="password" style={{ display: 'none' }} />
@@ -149,7 +147,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => (
             </Grid>
           </form>
         )}
-      />
+      </Form>
     )}
   </Query>
 );
