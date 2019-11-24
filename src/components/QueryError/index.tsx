@@ -22,14 +22,14 @@ type Props = {
 const QueryError = ({ error }: Props) => (
   <div>
     <Typography
-      variant="headline"
+      variant="h5"
       component="h3"
       style={{ marginBottom: 8, color: 'red' }}
     >
       {stringifyError(error)}
     </Typography>
     <Typography
-      variant="subheading"
+      variant="subtitle1"
       component="h4"
       style={{ margin: '18px 0 6px' }}
     >

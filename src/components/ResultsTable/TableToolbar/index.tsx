@@ -32,7 +32,7 @@ const TableToolbar = ({
 }: Props) => (
   <Toolbar className={classes.root}>
     <div className={classes.title}>
-      <Typography variant="subheading" id="tableTitle">
+      <Typography variant="subtitle1" id="tableTitle">
         {title}
       </Typography>
     </div>

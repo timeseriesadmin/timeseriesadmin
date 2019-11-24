@@ -45,7 +45,7 @@ const QueryResults = ({ classes, called, loading, query, error }: Props) => {
       <Paper className={classes.root}>
         <div className={classes.contentNoTable}>
           <Typography
-            variant="display1"
+            variant="h4"
             component="p"
             style={{ textAlign: 'center' }}
           >
@@ -61,9 +61,7 @@ const QueryResults = ({ classes, called, loading, query, error }: Props) => {
         <div className={classes.contentNoTable}>
           <div style={{ textAlign: 'center' }}>
             <CircularProgress color="secondary" />
-            <Typography variant="headline">
-              Executing query please wait...
-            </Typography>
+            <Typography variant="h5">Executing query please wait...</Typography>
           </div>
         </div>
       </Paper>
@@ -79,7 +77,7 @@ const QueryResults = ({ classes, called, loading, query, error }: Props) => {
       <Paper className={classes.root}>
         <div className={classes.contentNoTable}>
           <Typography
-            variant="headline"
+            variant="h5"
             component="h3"
             style={{
               marginBottom: 8,

@@ -52,7 +52,7 @@ const TopBar = ({
           }}
         />
         <Typography
-          variant="title"
+          variant="h6"
           color="inherit"
           style={{ alignSelf: 'center' }}
         >

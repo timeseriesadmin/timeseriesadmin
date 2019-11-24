@@ -28,7 +28,7 @@ const mocks = (connections: any = []) => [
 
 describe('<Connections />', () => {
   test('rendering empty data', async () => {
-    const { getByText } = render(<Connections />, { mocks });
+    const { getByText } = render(<Connections />, { mocks: mocks() });
 
     expect(getByText('Loading...')).toBeDefined();
     await waitForElement(() =>
