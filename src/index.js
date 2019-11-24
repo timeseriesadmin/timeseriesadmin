@@ -4,4 +4,4 @@ window.eval = global.eval = function() {
 };
 
 // the only possible entrypoint for CRA is index.js file
-require('./index.jsx');
+require('./index.tsx');
