@@ -128,7 +128,7 @@ const ResultsTable = ({ classes, title, parsedData }: Props) => (
       return (
         <Query query={GET_RESULTS_TABLE}>
           {({
-            data: { resultsTable },
+            data,
             loading: cacheLoading,
           }: {
             // $FlowFixMe
@@ -139,6 +139,7 @@ const ResultsTable = ({ classes, title, parsedData }: Props) => (
               // this is possible only in tests, because real cache has no loading state
               return null;
             }
+            const resultsTable = data.resultsTable || {};
 
             const sortedData = sortData(
               parsedData,
