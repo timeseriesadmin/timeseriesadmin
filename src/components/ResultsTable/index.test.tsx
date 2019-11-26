@@ -2,7 +2,6 @@ import React from 'react';
 import { render, wait } from 'utils/test-utils';
 import ResultsTable, {
   parseDate,
-  sortData,
   SET_RESULTS_TABLE,
   GET_RESULTS_TABLE,
 } from './index';
@@ -93,47 +92,5 @@ describe('parseDate()', () => {
   test('timestamp', () => {
     const result = parseDate('1544780295000000000', 'timestamp');
     expect(result).toBe('1544780295000000000');
-  });
-});
-
-describe('sortData()', () => {
-  let data: any;
-  beforeAll(() => {
-    data = [
-      { n: 'test', time: '0.123123' },
-      { n: 'test', time: '9' },
-      { n: 'test', time: '100' },
-      { n: 'test', time: '-0.123123' },
-      { n: 'test', time: '' },
-    ];
-  });
-  test('sort ascending', () => {
-    const sorted = sortData(data, 'asc', 'time');
-    expect(sorted).toEqual([
-      { n: 'test', time: '' },
-      { n: 'test', time: '-0.123123' },
-      { n: 'test', time: '0.123123' },
-      { n: 'test', time: '9' },
-      { n: 'test', time: '100' },
-    ]);
-  });
-  test('sort descending', () => {
-    const sorted = sortData(data, 'desc', 'time');
-    expect(sorted).toEqual([
-      { n: 'test', time: '100' },
-      { n: 'test', time: '9' },
-      { n: 'test', time: '0.123123' },
-      { n: 'test', time: '-0.123123' },
-      { n: 'test', time: '' },
-    ]);
-  });
-  test('handles no sorting', () => {
-    const input = [
-      { n: '123', b: '789' },
-      { n: '5123', b: '1789' },
-      { n: '1', b: '1' },
-    ];
-    const sorted = sortData(input, 'desc', '');
-    expect(sorted).toEqual(input);
   });
 });

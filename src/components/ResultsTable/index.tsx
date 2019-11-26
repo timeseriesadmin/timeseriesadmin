@@ -1,17 +1,11 @@
 import React from 'react';
 import { withStyles, Theme } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
 import format from 'date-fns/format';
 import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
+import { useQuery, useMutation } from 'react-apollo';
+import MUIDataTable from 'mui-datatables';
 
 import TableToolbar from './TableToolbar';
-import TableHead from './TableHead';
-import orderBy from 'lodash/orderBy';
 import { ResultsSettings } from 'apollo/resolvers/results';
 
 const styles = (theme: Theme): any => ({
@@ -52,153 +46,58 @@ export const parseDate = (
   }
 };
 
-// Sorts data array of arrays with string values
-export const sortData = (
-  data: { [key: string]: string }[],
-  order: ResultsSettings['order'],
-  orderKey: string,
-) => {
-  if (orderKey === '' || !order) {
-    return data;
+const ResultsTable = ({ classes, title, parsedData }: Props) => {
+  const [setResultsTable] = useMutation(SET_RESULTS_TABLE);
+  const { data, loading: cacheLoading } = useQuery(GET_RESULTS_TABLE);
+
+  const handleFormatChange = (event: { target: { value: any } }) => {
+    setResultsTable({
+      variables: { timeFormat: event.target.value },
+    });
+  };
+
+  if (cacheLoading) {
+    // this is possible only in tests, because real cache has no loading state
+    return null;
   }
-  return orderBy(
-    // $FlowFixMe
-    data,
-    val => (!val[orderKey] ? Number.NEGATIVE_INFINITY : Number(val[orderKey])),
-    order,
+  const resultsTable = data.resultsTable || {};
+
+  const tableData = parsedData.map(data => ({
+    ...data,
+    time:
+      resultsTable.timeFormat &&
+      data.time &&
+      parseDate(data.time, resultsTable.timeFormat),
+  }));
+
+  const columns = Object.keys(tableData[0]);
+
+  return (
+    <React.Fragment>
+      <TableToolbar
+        title={title}
+        hasTime={!!parsedData[0]['time']}
+        timeFormat={resultsTable.timeFormat}
+        handleFormatChange={handleFormatChange}
+      />
+      <div className={classes.tableWrapper}>
+        <MUIDataTable
+          title="Query results"
+          data={tableData}
+          columns={columns.map(columnKey => ({
+            name: columnKey,
+            label: columnKey,
+            options: {
+              filter: true,
+              sort: true,
+              fixedHeaderOptions: { xAxis: false, yAxis: true },
+            },
+          }))}
+        />
+      </div>
+    </React.Fragment>
   );
 };
-
-const handleSort = (
-  update: (setResultsTable: any) => any,
-  settings: ResultsSettings,
-) => (orderKey: string) => {
-  const order =
-    settings.orderKey === orderKey && settings.order === 'desc'
-      ? 'asc'
-      : 'desc';
-
-  update({ variables: { order, orderKey } });
-};
-
-const renderBody = (
-  data: { [key: string]: string }[],
-  keys: string[],
-  timeFormat: ResultsSettings['timeFormat'],
-) =>
-  data.map((row, index) => (
-    <TableRow hover tabIndex={-1} key={index}>
-      {keys.map(key => (
-        <TableCell key={key} padding="dense" align="right">
-          {timeFormat && key === 'time'
-            ? parseDate(row[key], timeFormat)
-            : row[key]}
-        </TableCell>
-      ))}
-    </TableRow>
-  ));
-
-const ResultsTable = ({ classes, title, parsedData }: Props) => (
-  <Mutation mutation={SET_RESULTS_TABLE}>
-    {(setResultsTable: {
-      (arg0: { variables: { page: any } }): void;
-      (arg0: { variables: { rowsPerPage: number } }): void;
-      (arg0: { variables: { timeFormat: any } }): void;
-    }) => {
-      const handleChangePage = (_event: any, page: any) => {
-        setResultsTable({ variables: { page } });
-      };
-
-      const handleChangeRowsPerPage = (event: {
-        target: { value: string };
-      }) => {
-        setResultsTable({
-          variables: {
-            rowsPerPage: parseInt(event.target.value, 10),
-          },
-        });
-      };
-
-      const handleFormatChange = (event: { target: { value: any } }) => {
-        setResultsTable({
-          variables: { timeFormat: event.target.value },
-        });
-      };
-
-      return (
-        <Query query={GET_RESULTS_TABLE}>
-          {({
-            data,
-            loading: cacheLoading,
-          }: {
-            // $FlowFixMe
-            data: { resultsTable: ResultsSettings };
-            loading: boolean;
-          }) => {
-            if (cacheLoading) {
-              // this is possible only in tests, because real cache has no loading state
-              return null;
-            }
-            const resultsTable = data.resultsTable || {};
-
-            const sortedData = sortData(
-              parsedData,
-              resultsTable.order,
-              resultsTable.orderKey,
-            );
-
-            const keys = Object.keys(sortedData[0]);
-
-            return (
-              <React.Fragment>
-                <TableToolbar
-                  title={title}
-                  hasTime={!!parsedData[0]['time']}
-                  timeFormat={resultsTable.timeFormat}
-                  handleFormatChange={handleFormatChange}
-                />
-                <div className={classes.tableWrapper}>
-                  <Table className={classes.table} aria-labelledby="tableTitle">
-                    <TableHead
-                      order={resultsTable.order}
-                      orderKey={resultsTable.orderKey}
-                      handleSort={handleSort(setResultsTable, resultsTable)}
-                      headers={keys}
-                    />
-                    <TableBody>
-                      {renderBody(
-                        sortedData.slice(
-                          resultsTable.rowsPerPage * resultsTable.page,
-                          resultsTable.rowsPerPage * (resultsTable.page + 1),
-                        ),
-                        keys,
-                        resultsTable.timeFormat,
-                      )}
-                    </TableBody>
-                  </Table>
-                </div>
-                <TablePagination
-                  component="div"
-                  count={sortedData.length}
-                  rowsPerPage={resultsTable.rowsPerPage}
-                  page={resultsTable.page}
-                  backIconButtonProps={{
-                    'aria-label': 'Previous Page',
-                  }}
-                  nextIconButtonProps={{
-                    'aria-label': 'Next Page',
-                  }}
-                  onChangePage={handleChangePage}
-                  onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-              </React.Fragment>
-            );
-          }}
-        </Query>
-      );
-    }}
-  </Mutation>
-);
 
 export const SET_RESULTS_TABLE = gql`
   mutation setResultsTable(
