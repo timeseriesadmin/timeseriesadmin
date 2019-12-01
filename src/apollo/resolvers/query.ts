@@ -1,6 +1,6 @@
 import { query as influxQuery } from 'influx-api';
 
-import { getForm } from './form';
+import { getForm, FormParams } from './form';
 import { resetResultsTable } from '../helpers/results';
 import { saveQueryHistory } from '../helpers/history';
 import { handleQueryError } from '../helpers/errors';
@@ -37,7 +37,7 @@ export const executeQuery = async (
   // q += ' limit 100'; // TODO: increase LIMIT value
   // }
 
-  const form = getForm(cache);
+  const form: FormParams = getForm(cache);
 
   const queryArgs = {
     ...form,
@@ -51,7 +51,7 @@ export const executeQuery = async (
     if (isElectron()) {
       queryResult = await executeViaElectron({
         queryArgs,
-        rejectUnauthorized: false,
+        rejectUnauthorized: !form.unsafeSsl,
       });
     } else {
       queryResult = await influxQuery(queryArgs);

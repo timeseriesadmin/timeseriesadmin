@@ -7,6 +7,7 @@ const connections = JSON.parse(storage.get('connections', '[]')).map(
     u: '',
     p: '',
     db: '',
+    unsafeSsl: false,
     ...conn,
   }),
 );
@@ -27,6 +28,7 @@ const form = {
   p: '',
   db: '',
   q: '',
+  unsafeSsl: false,
   __typename: 'FormData',
   ...JSON.parse(storage.get('form', '{}')),
 };

@@ -92,10 +92,12 @@ app.on('ready', function() {
 
 // Custom `influx-query` ipc event
 ipcMain.on('influx-query', (event, { queryArgs, rejectUnauthorized }) => {
-  axios.interceptors.request.use(config => {
+  const httpsAgent = new https.Agent({ rejectUnauthorized });
+
+  const interceptor = axios.interceptors.request.use(config => {
     return {
       ...config,
-      httpsAgent: new https.Agent({ rejectUnauthorized }),
+      httpsAgent,
     };
   });
 
@@ -105,6 +107,9 @@ ipcMain.on('influx-query', (event, { queryArgs, rejectUnauthorized }) => {
     })
     .catch(error => {
       mainWindow.webContents.send('influx-query-response', { error });
+    })
+    .finally(() => {
+      axios.interceptors.request.eject(interceptor);
     });
 });
 

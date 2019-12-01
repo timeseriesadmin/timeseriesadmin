@@ -7,6 +7,7 @@ export interface FormParams {
   p?: string;
   db?: string; // required for most SELECT and SHOW queries
   q?: string;
+  unsafeSsl?: boolean;
 }
 
 export const updateForm = (
@@ -46,6 +47,7 @@ export const getForm = (cache: any) => {
           p
           db
           q
+          unsafeSsl
         }
       }
     `,
@@ -56,6 +58,7 @@ export const getForm = (cache: any) => {
     p: '',
     db: '',
     q: '',
+    unsafeSsl: false,
     ...form,
   };
 };

@@ -16,6 +16,7 @@ describe('resolvers helpers', () => {
       const query = queryBase(cacheMock, 'SELECT * FROM test');
       expect(query).toEqual({
         db: '',
+        unsafeSsl: false,
         ...formInput,
         q: 'SELECT * FROM test',
         responseType: 'csv',

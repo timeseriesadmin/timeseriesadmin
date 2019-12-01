@@ -12,6 +12,7 @@ describe('defaults', () => {
         p: '',
         db: '',
         q: '',
+        unsafeSsl: false,
         __typename: 'FormData',
       },
       server: null,
@@ -45,8 +46,8 @@ describe('defaults', () => {
     }));
     const defaults = require('./defaults').default;
     expect(defaults.connections).toEqual([
-      { url: 'http://test.test', u: '', p: '', db: '' },
-      { url: '', u: 'username', p: 'pass', db: '' },
+      { url: 'http://test.test', u: '', p: '', db: '', unsafeSsl: false },
+      { url: '', u: 'username', p: 'pass', db: '', unsafeSsl: false },
     ]);
   });
 });

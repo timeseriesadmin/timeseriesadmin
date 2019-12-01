@@ -32,12 +32,13 @@ describe('form resolvers', () => {
           p: 'new_pass',
           db: 'db',
           q: 'QUERY',
+          unsafeSsl: false,
         },
       },
     });
     expect(setMock).toBeCalledWith(
       'form',
-      '{"url":"http://url.test","u":"new_user","p":"new_pass","db":"db","q":"QUERY","__typename":"FormData"}',
+      '{"url":"http://url.test","u":"new_user","p":"new_pass","db":"db","q":"QUERY","unsafeSsl":false,"__typename":"FormData"}',
     );
   });
   test('updateForm() ensure default values', async () => {
@@ -65,12 +66,13 @@ describe('form resolvers', () => {
           p: '',
           db: '',
           q: '',
+          unsafeSsl: false,
         },
       },
     });
     expect(setMock).toBeCalledWith(
       'form',
-      '{"url":"http://new.test","u":"","p":"","db":"","q":"","__typename":"FormData"}',
+      '{"url":"http://new.test","u":"","p":"","db":"","q":"","unsafeSsl":false,"__typename":"FormData"}',
     );
   });
 });

@@ -45,8 +45,10 @@ export const UPDATE_FORM = gql`
     $p: String
     $db: String
     $q: String
+    $unsafeSsl: Boolean
   ) {
-    updateForm(url: $url, u: $u, p: $p, db: $db, q: $q) @client
+    updateForm(url: $url, u: $u, p: $p, db: $db, q: $q, unsafeSsl: $unsafeSsl)
+      @client
   }
 `;
 

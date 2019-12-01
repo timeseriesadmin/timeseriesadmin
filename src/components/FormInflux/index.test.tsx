@@ -17,6 +17,7 @@ const mocks = [
           p: 'test_pass',
           db: 'test_db',
           q: 'test query',
+          unsafeSsl: false,
         },
       },
     },
@@ -56,6 +57,7 @@ describe('<FormInflux />', () => {
       q: 'test query',
       u: 'test_user',
       url: 'http://test.test:8086',
+      unsafeSsl: false,
     });
 
     // simulate CTRL/CMD + ENTER
