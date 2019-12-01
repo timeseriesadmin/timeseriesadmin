@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait, waitForElement } from 'utils/test-utils';
+import { render, wait, waitForElement } from 'utils/test-utils';
 import Connections, { GET_CONNECTIONS, DELETE_CONNECTION } from './index';
 
 const mocks = (connections: any = []) => [
@@ -30,13 +30,13 @@ describe('<Connections />', () => {
   test('rendering empty data', async () => {
     const { getByText } = render(<Connections />, { mocks: mocks() });
 
-    await wait();
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() =>
+    await wait();
+    expect(
       getByText(
         'No saved connections. Add one using SAVE CONNECTION DATA button.',
       ),
-    );
+    ).toBeDefined();
   });
 
   test('rendering non-empty data', async () => {

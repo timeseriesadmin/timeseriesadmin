@@ -44,7 +44,7 @@
     "build": "./update-env.sh && react-scripts build",
     "db:start": "docker-compose -f dev-db/docker-compose.yml up",
     "test": "TZ=Europe/Warsaw CI=true react-scripts test",
-    "test:watch": "TZ=Europe/Warsaw react-scripts test src",
+    "test:watch": "TZ=Europe/Warsaw react-scripts test src --bail --runInBand",
     "lint": "yarn eslint src",
     "electron:dev": "ELECTRON_IS_DEV=1 ELECTRON_START_URL=http://localhost:3000 electron .",
     "electron": "ELECTRON_IS_DEV=1 electron .",
