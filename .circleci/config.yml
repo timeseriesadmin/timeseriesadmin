@@ -31,7 +31,7 @@ jobs: # a collection of steps
       - run:
           command: yarn install
       - run:
-          command: yarn test:ci && yarn codecov -t 1034d70c-6870-4421-986f-6ac405850292
+          command: yarn ci:test
 
   run_e2e_tests:
     docker:
@@ -58,7 +58,7 @@ jobs: # a collection of steps
           command: yarn wait-on -d 60000 http://localhost:3000
           # command: yarn wait-on http://localhost:3000 && yarn wait-on http://localhost:8086/ping
       - run:
-          command: yarn cypress:run --browser chrome --key 88bbc6e8-9210-4eaf-9d61-e3c1a53f2962
+          command: yarn ci:cypress
 
 workflows:
   tests:
