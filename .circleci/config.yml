@@ -4,7 +4,7 @@ jobs: # a collection of steps
   build:
     docker: # run the steps with Docker
       # - image: circleci/node:8.12.0 # ...with this image as the primary container; this is where all `steps` will run
-      - image: cypress/base:8 # ...with this image as the primary container; this is where all `steps` will run
+      - image: circleci/node:10.15.3 # ...with this image as the primary container; this is where all `steps` will run
         environment:
           TERM: xterm
     steps:
@@ -21,7 +21,7 @@ jobs: # a collection of steps
 
   run_tests:
     docker:
-      - image: cypress/base:8
+      - image: circleci/node:10.15.3
         environment:
           TERM: xterm
     steps:
@@ -31,12 +31,12 @@ jobs: # a collection of steps
       - run:
           command: yarn install
       - run:
-          command: yarn test --coverage && yarn codecov -t 1034d70c-6870-4421-986f-6ac405850292
+          command: yarn ci:test
 
   run_e2e_tests:
     docker:
       # - image: circleci/node:8.12.0 # ...with this image as the primary container; this is where all `steps` will run
-      - image: cypress/base:8
+      - image: cypress/browsers:node10.16.0-chrome77
         environment:
           TERM: xterm
       # in case of overlapping port numbers provide name param
@@ -49,8 +49,6 @@ jobs: # a collection of steps
       #     INFLUXDB_DB: 'testdb'
     steps:
       - checkout # special step to check out source code to working directory
-      - restore_cache: # special step to restore the dependency cache
-          key: node-cache{{ checksum "package.json" }}
       - run:
           command: yarn install
       - run:
@@ -60,7 +58,7 @@ jobs: # a collection of steps
           command: yarn wait-on -d 60000 http://localhost:3000
           # command: yarn wait-on http://localhost:3000 && yarn wait-on http://localhost:8086/ping
       - run:
-          command: yarn cypress:run --record --key 88bbc6e8-9210-4eaf-9d61-e3c1a53f2962
+          command: yarn ci:cypress
 
 workflows:
   tests:
@@ -69,6 +67,4 @@ workflows:
       - run_tests:
           requires:
             - build
-      - run_e2e_tests:
-          requires:
-            - run_tests
+      - run_e2e_tests
