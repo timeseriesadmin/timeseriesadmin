@@ -1,12 +1,24 @@
+## v0.1.5
+
+#### :rocket: New Features
+
+- mui-datatables for easier results preview
+- [#5](https://github.com/timeseriesadmin/timeseriesadmin/issues/5) ignore SSL errors (Electron only)
+
+#### :bug: Bug Fix
+
+- version info / update button
+- opening links in a new browser window in Electron
+
 ## v0.1.4
 
 #### :rocket: New Features
 
-- [#4] resizeable sidebar
+- [#4](https://github.com/timeseriesadmin/timeseriesadmin/issues/4) resizeable sidebar
 
 #### :bug: Bug Fix
 
-- [#3] show FIELD KEYS grouped by retention policies
+- [#3](https://github.com/timeseriesadmin/timeseriesadmin/issues/3) show FIELD KEYS grouped by retention policies
 
 ## v0.1.3
 
