@@ -37,6 +37,7 @@ const TopBar = ({
       width: isOpenDrawer ? `calc(100% - ${drawerWidth}px)` : undefined,
       marginRight: isOpenDrawer ? drawerWidth : undefined,
     }}
+    data-testid="TopBar"
   >
     <Toolbar disableGutters className={classes.toolbar}>
       <div

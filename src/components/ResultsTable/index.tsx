@@ -7,6 +7,7 @@ import MUIDataTable from 'mui-datatables';
 
 import TableToolbar from './TableToolbar';
 import { ResultsSettings } from 'apollo/resolvers/results';
+import orderBy from 'lodash/orderBy';
 
 const styles = (theme: Theme): any => ({
   root: {
@@ -45,6 +46,18 @@ export const parseDate = (
       return date;
   }
 };
+
+function customSort(data: any[], colIndex: number, order: any) {
+  console.log(data, colIndex, order);
+  return orderBy(
+    data,
+    val =>
+      !val.data[colIndex]
+        ? Number.NEGATIVE_INFINITY
+        : Number(val.data[colIndex]),
+    order,
+  );
+}
 
 const ResultsTable = ({ classes, title, parsedData }: Props) => {
   const [setResultsTable] = useMutation(SET_RESULTS_TABLE);
@@ -89,6 +102,7 @@ const ResultsTable = ({ classes, title, parsedData }: Props) => {
             label: columnKey,
           }))}
           options={{
+            customSort,
             print: false,
             rowsPerPage: 100,
             rowsPerPageOptions: [20, 100, 1000, 5000],

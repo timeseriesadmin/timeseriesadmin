@@ -12,14 +12,16 @@ describe('Home Page', () => {
     // default panel content
     cy.getByText('List of all saved connections').should('exist');
     // title
-    cy.getByText('Time Series Admin').should('exist');
+    cy.getByTestId('TopBar').within(() => {
+      cy.getByText('Time Series Admin').should('exist');
+    });
   });
   it('has working sidebar panels', () => {
     cy.getByText('Explorer').click();
     cy.getByText('Not connected').should('exist');
     cy.getByText('History').click();
     cy.getByText(
-      'List of most recent queries executed, with max length of 30 items.',
+      'List of most recent queries executed, with max length of 300 items.',
     ).should('exist');
     cy.getByText('Reference').click();
     cy.getByText('official InfluxDB docs').should('exist');
@@ -47,9 +49,9 @@ describe('New version button', () => {
   });
   it('shows new version info', () => {
     cy.getByText('New version available').should('exist');
-    cy.getByText('New version available').click();
-    cy.url().should('include', 'timeseriesadmin.github.io');
-    cy.url().should('include', 'download');
-    cy.title().should('include', 'Time Series Admin');
+    // cy.getByText('New version available').click();
+    // cy.url().should('include', 'timeseriesadmin.github.io');
+    // cy.url().should('include', 'download');
+    // cy.title().should('include', 'Time Series Admin');
   });
 });
