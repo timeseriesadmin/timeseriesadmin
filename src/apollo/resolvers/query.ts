@@ -4,6 +4,28 @@ import { getForm } from './form';
 import { resetResultsTable } from '../helpers/results';
 import { saveQueryHistory } from '../helpers/history';
 import { handleQueryError } from '../helpers/errors';
+import { isElectron } from 'apollo/helpers/isElectron';
+
+const ipc = (window as any).ipcRenderer;
+
+async function executeViaElectron(eventArg: {
+  queryArgs: any;
+  rejectUnauthorized: boolean;
+}) {
+  return new Promise((resolve, reject) => {
+    ipc.send('influx-query', eventArg);
+    ipc.once('influx-query-response', function(
+      _event: Event,
+      { response, error }: any,
+    ) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(response);
+      }
+    });
+  });
+}
 
 export const executeQuery = async (
   _: void,
@@ -26,7 +48,14 @@ export const executeQuery = async (
   let queryError;
   let queryResult;
   try {
-    queryResult = await influxQuery(queryArgs);
+    if (isElectron()) {
+      queryResult = await executeViaElectron({
+        queryArgs,
+        rejectUnauthorized: false,
+      });
+    } else {
+      queryResult = await influxQuery(queryArgs);
+    }
   } catch (error) {
     queryError = error;
   }

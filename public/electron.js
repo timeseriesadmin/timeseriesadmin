@@ -1,5 +1,8 @@
 // Modules to control application life and create native browser window
 const { app, shell, BrowserWindow, ipcMain, Menu } = require('electron');
+const https = require('https');
+const { query } = require('influx-api');
+const axios = require('axios');
 
 if (process.env.ELECTRON_IS_DEV) {
   // Enable Google Dev Tools in Electron
@@ -16,6 +19,10 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1300,
     height: 800,
+    webPreferences: {
+      nodeIntegration: false,
+      preload: __dirname + '/preload.js',
+    },
   });
 
   // open all target="_blank" links in a new window
@@ -81,6 +88,24 @@ function createWindow() {
 app.on('ready', function() {
   createWindow();
   // autoUpdater.checkForUpdates();
+});
+
+// Custom `influx-query` ipc event
+ipcMain.on('influx-query', (event, { queryArgs, rejectUnauthorized }) => {
+  axios.interceptors.request.use(config => {
+    return {
+      ...config,
+      httpsAgent: new https.Agent({ rejectUnauthorized }),
+    };
+  });
+
+  query(queryArgs)
+    .then(response => {
+      mainWindow.webContents.send('influx-query-response', { response });
+    })
+    .catch(error => {
+      mainWindow.webContents.send('influx-query-response', { error });
+    });
 });
 
 // when the update has been downloaded and is ready to be installed, notify the BrowserWindow
