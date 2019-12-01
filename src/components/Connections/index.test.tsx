@@ -32,11 +32,13 @@ describe('<Connections />', () => {
 
     expect(getByText('Loading...')).toBeDefined();
     await wait();
-    expect(
-      getByText(
-        'No saved connections. Add one using SAVE CONNECTION DATA button.',
+    await waitForElement(() =>
+      expect(
+        getByText(
+          'No saved connections. Add one using SAVE CONNECTION DATA button.',
+        ),
       ),
-    ).toBeDefined();
+    );
   });
 
   test('rendering non-empty data', async () => {
