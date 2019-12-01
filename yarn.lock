@@ -2133,10 +2133,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.149.tgz#1342d63d948c6062838fbf961012f74d4e638440"
   integrity sha512-ijGqzZt/b7BfzcK9vTrS6MFljQRPn5BFWOx8oE0GYxribu6uV+aA9zZuXI1zc/etK9E8nrgdoF2+LgUw7+9tJQ==
 
-"@types/mui-datatables@^2.12.2":
-  version "2.12.2"
-  resolved "https://registry.yarnpkg.com/@types/mui-datatables/-/mui-datatables-2.12.2.tgz#5d2f3916b87e141ef672d10a6c08d2abd7a9f1d0"
-  integrity sha512-JdSKCepZld6yHbFkmRzVVRjl60gDhObfekZcuweMNdfXtBfvn1qamEBv9rNh0LetqU80twYESVn1d5wYqwAQwA==
+"@types/mui-datatables@^2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@types/mui-datatables/-/mui-datatables-2.13.0.tgz#1934957ba33459b18aa2e105dfb8cfcc90db992b"
+  integrity sha512-ukFOFZNFPkFQJuMnyP1meA0oJkaXzJlNyVWBPlGa0lQnOG1zKgo2LvD0Er6As4UvbHDZd+aAu4wUsUUM7YNJ4Q==
   dependencies:
     "@types/react" "*"
 

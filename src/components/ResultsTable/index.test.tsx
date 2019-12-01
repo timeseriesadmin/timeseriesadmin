@@ -44,7 +44,7 @@ const mocks = [
 
 describe('<ResultsTable />', () => {
   test('rendering', async () => {
-    const { getByText } = render(
+    const { getAllByText } = render(
       <ResultsTable
         title="Test title"
         parsedData={[
@@ -59,10 +59,10 @@ describe('<ResultsTable />', () => {
     await wait(); // Mutation
     await wait(); // Query
 
-    expect(getByText('Test title')).toBeDefined();
-    expect(getByText('col_4')).toBeDefined();
-    expect(getByText('114')).toBeDefined();
-    expect(getByText('1-2 of 3')).toBeDefined();
+    expect(getAllByText('Test title')).toBeDefined();
+    expect(getAllByText('col_4')).toBeDefined();
+    expect(getAllByText('114')).toBeDefined();
+    expect(getAllByText('1-3 of 3')).toBeDefined();
 
     // TODO: ensure that sort is working
     // (there is a problem with checking if apollo mock gets called)

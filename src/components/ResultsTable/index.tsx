@@ -87,12 +87,16 @@ const ResultsTable = ({ classes, title, parsedData }: Props) => {
           columns={columns.map(columnKey => ({
             name: columnKey,
             label: columnKey,
-            options: {
-              filter: true,
-              sort: true,
-              fixedHeaderOptions: { xAxis: false, yAxis: true },
-            },
           }))}
+          options={{
+            print: false,
+            rowsPerPage: 100,
+            rowsPerPageOptions: [20, 100, 1000, 5000],
+            disableToolbarSelect: true,
+            onRowsDelete: function() {
+              return false;
+            },
+          }}
         />
       </div>
     </React.Fragment>
