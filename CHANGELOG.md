@@ -1,3 +1,10 @@
+## v0.1.6
+
+#### :bug: Bug Fix
+
+- data sorting
+- connection saving
+
 ## v0.1.5
 
 #### :rocket: New Features
