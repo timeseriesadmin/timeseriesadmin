@@ -33,10 +33,8 @@ describe('<Connections />', () => {
     expect(getByText('Loading...')).toBeDefined();
     await wait();
     await waitForElement(() =>
-      expect(
-        getByText(
-          'No saved connections. Add one using SAVE CONNECTION DATA button.',
-        ),
+      getByText(
+        'No saved connections. Add one using SAVE CONNECTION DATA button.',
       ),
     );
   });
@@ -55,8 +53,8 @@ describe('<Connections />', () => {
       mocks: mocks(connData),
     });
     await wait();
+    await waitForElement(() => getByText(connData[0].url));
 
-    expect(getByText(connData[0].url)).toBeDefined();
     expect(getByText(`database: ${connData[0].db}`)).toBeDefined();
     expect(getByText(`user: ${connData[0].u}`)).toBeDefined();
 

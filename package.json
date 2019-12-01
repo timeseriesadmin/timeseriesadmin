@@ -43,8 +43,8 @@
     "start": "./update-env.sh && react-scripts start",
     "build": "./update-env.sh && react-scripts build",
     "db:start": "docker-compose -f dev-db/docker-compose.yml up",
-    "test": "TZ=Europe/Warsaw CI=true react-scripts test",
-    "test:watch": "TZ=Europe/Warsaw react-scripts test src --bail --runInBand",
+    "test:ci": "TZ=Europe/Warsaw CI=true react-scripts test --coverage --runInBand --bail",
+    "test": "TZ=Europe/Warsaw react-scripts test src --bail --runInBand",
     "lint": "yarn eslint src",
     "electron:dev": "ELECTRON_IS_DEV=1 ELECTRON_START_URL=http://localhost:3000 electron .",
     "electron": "ELECTRON_IS_DEV=1 electron .",
@@ -56,7 +56,7 @@
     "dist:win": "yarn build && electron-builder -w -c.extraMetadata.main=build/electron.js",
     "dist:linux": "yarn build && electron-builder -l -c.extraMetadata.main=build/electron.js",
     "dist:all": "yarn dist:docker && electron-builder -mwl -c.extraMetadata.main=build/electron.js",
-    "cypress:run": "cypress run",
+    "cypress:run": "cypress run --browser chrome",
     "cypress:open": "cypress open"
   },
   "devDependencies": {
