@@ -4,7 +4,7 @@ const REPO_PATH = 'timeseriesadmin/timeseriesadmin';
 export const API_LATEST_RELEASE_URL = `https://api.github.com/repos/${REPO_PATH}/releases/latest`;
 export const LATEST_RELEASE_URL = `https://timeseriesadmin.github.io/#download`;
 
-export const getLatestVersion = async (): Promise<string> => {
+export async function getLatestVersion() {
   const response = await axios.get(API_LATEST_RELEASE_URL, {
     headers: { Accept: 'application/vnd.github.v3+json' },
   });
@@ -16,4 +16,4 @@ export const getLatestVersion = async (): Promise<string> => {
   }
 
   return response.data.tag_name;
-};
+}

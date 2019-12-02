@@ -4,8 +4,8 @@ import { render } from 'utils/test-utils';
 import MainContent, { FORM_QUERY, UPDATE_FORM } from './index';
 import FormInflux from '../FormInflux';
 import QueryResults from '../QueryResults';
-jest.mock('../FormInflux');
-jest.mock('../QueryResults');
+jest.mock('../FormInflux', () => jest.fn(() => <div></div>));
+jest.mock('../QueryResults', () => jest.fn(() => <div></div>));
 
 const mocks = [
   {

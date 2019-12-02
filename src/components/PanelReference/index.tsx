@@ -6,10 +6,10 @@ import { DOCS_URL } from '../../config';
 
 const styles = (theme: Theme): any => ({
   root: {
-    paddingTop: theme.spacing.unit,
+    paddingTop: theme.spacing(),
   },
   info: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     paddingBottom: 0,
   },
   link: {

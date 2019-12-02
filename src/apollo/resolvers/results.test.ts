@@ -8,10 +8,6 @@ describe('results resolvers', () => {
     const cacheMock = {
       readQuery: jest.fn(() => ({
         resultsTable: {
-          order: 'asc',
-          orderKey: 'name',
-          page: 1,
-          rowsPerPage: 10,
           timeFormat: 'ms',
         },
       })),
@@ -22,10 +18,6 @@ describe('results resolvers', () => {
       setResultsTable(
         undefined,
         {
-          page: 2,
-          order: 'desc',
-          orderKey: '',
-          rowsPerPage: 10,
           timeFormat: 'ms',
         },
         { cache: cacheMock },
@@ -39,10 +31,6 @@ describe('results resolvers', () => {
       data: {
         resultsTable: {
           __typename: 'ResultsTable',
-          order: 'desc',
-          orderKey: '',
-          page: 2,
-          rowsPerPage: 10,
           timeFormat: 'ms',
         },
       },

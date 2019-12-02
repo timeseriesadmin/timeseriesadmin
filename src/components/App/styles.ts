@@ -21,16 +21,16 @@ export default function(theme: any): any {
       boxSizing: 'border-box',
       flexGrow: 1,
       backgroundColor: theme.palette.background.default,
-      padding: theme.spacing.unit * 2,
-      paddingTop: theme.mixins.toolbar.minHeight + theme.spacing.unit * 2,
+      padding: theme.spacing(2),
+      paddingTop: theme.mixins.toolbar.minHeight + theme.spacing(2),
       [mediaRule]: {
         paddingTop:
-          theme.mixins.toolbar[mediaRule].minHeight + theme.spacing.unit * 2,
+          theme.mixins.toolbar[mediaRule].minHeight + theme.spacing(2),
       },
       [theme.breakpoints.up('sm')]: {
         paddingTop:
           theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight +
-          theme.spacing.unit * 2,
+          theme.spacing(2),
       },
     },
   };

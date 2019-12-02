@@ -4,11 +4,7 @@ import mergeWith from 'lodash/mergeWith';
 import storage from '../../helpers/storage';
 
 export type ResultsSettings = {
-  order: 'asc' | 'desc',
-  orderKey: string,
-  page: number,
-  rowsPerPage: number,
-  timeFormat: 's' | 'ms' | 'ns' | 'timestamp',
+  timeFormat: 's' | 'ms' | 'ns' | 'timestamp';
 };
 
 export const setResultsTable = (
@@ -20,10 +16,6 @@ export const setResultsTable = (
     query: gql`
       {
         resultsTable {
-          order
-          orderKey
-          page
-          rowsPerPage
           timeFormat
         }
       }

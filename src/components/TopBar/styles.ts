@@ -11,14 +11,14 @@ export default function(theme: Theme) {
     },
     toolbar: {
       ...theme.mixins.toolbar,
-      paddingLeft: theme.spacing.unit * 2,
+      paddingLeft: theme.spacing(2),
       // paddingLeft: 0,
       // [theme.breakpoints.up('md')]: {
-      //   paddingLeft: theme.spacing.unit * 2,
+      //   paddingLeft: theme.spacing(2),
       // },
     },
     rightPanel: {
-      paddingRight: theme.spacing.unit * 2,
+      paddingRight: theme.spacing(2),
     },
     appBarShifted: {
       transition: theme.transitions.create(['margin', 'width'], {

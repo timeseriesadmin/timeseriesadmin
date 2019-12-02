@@ -5,11 +5,11 @@ import Connections from '../Connections';
 
 const styles = (theme: Theme): any => ({
   root: {
-    paddingTop: theme.spacing.unit,
+    paddingTop: theme.spacing(),
     paddingLeft: 0,
   },
   info: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     paddingBottom: 0,
   },
 });

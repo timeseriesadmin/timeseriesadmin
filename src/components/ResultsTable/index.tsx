@@ -12,10 +12,10 @@ import orderBy from 'lodash/orderBy';
 const styles = (theme: Theme): any => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
   },
   contentNoTable: {
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(4),
   },
   tableWrapper: {
     overflowX: 'auto',
@@ -48,7 +48,6 @@ export const parseDate = (
 };
 
 function customSort(data: any[], colIndex: number, order: any) {
-  console.log(data, colIndex, order);
   return orderBy(
     data,
     val =>
@@ -118,30 +117,14 @@ const ResultsTable = ({ classes, title, parsedData }: Props) => {
 };
 
 export const SET_RESULTS_TABLE = gql`
-  mutation setResultsTable(
-    $order: String
-    $orderKey: String
-    $page: Int
-    $rowsPerPage: Int
-    $timeFormat: String
-  ) {
-    setResultsTable(
-      order: $order
-      orderKey: $orderKey
-      page: $page
-      rowsPerPage: $rowsPerPage
-      timeFormat: $timeFormat
-    ) @client
+  mutation setResultsTable($timeFormat: String) {
+    setResultsTable(timeFormat: $timeFormat) @client
   }
 `;
 
 export const GET_RESULTS_TABLE = gql`
   {
-    resultsTable @client {
-      order
-      orderKey
-      page
-      rowsPerPage
+    resultsTable {
       timeFormat
     }
   }

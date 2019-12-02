@@ -43,6 +43,7 @@ describe('New version button', () => {
     cy.route(
       'GET',
       'https://api.github.com/repos/timeseriesadmin/timeseriesadmin/releases/latest',
+      // eslint-disable-next-line @typescript-eslint/camelcase
       { tag_name: 'v9.9.9' },
     );
     cy.visit('/');

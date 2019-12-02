@@ -6,10 +6,10 @@ import PanelExplorer from '../PanelExplorer';
 import PanelHistory from '../PanelHistory';
 import PanelReference from '../PanelReference';
 import PanelConnect from '../PanelConnect';
-jest.mock('../PanelExplorer');
-jest.mock('../PanelHistory');
-jest.mock('../PanelReference');
-jest.mock('../PanelConnect');
+jest.mock('../PanelExplorer', () => jest.fn(() => <div></div>));
+jest.mock('../PanelHistory', () => jest.fn(() => <div></div>));
+jest.mock('../PanelReference', () => jest.fn(() => <div></div>));
+jest.mock('../PanelConnect', () => jest.fn(() => <div></div>));
 
 describe('<DrawerRight />', () => {
   test('rendering', () => {

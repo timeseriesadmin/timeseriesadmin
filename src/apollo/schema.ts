@@ -1,4 +1,3 @@
-
 // In order to extract schema to separate .graphql file it will be required to alter
 // webpack config which is not possible without ejecting or using rewired version of CRA
 export default `
@@ -61,12 +60,9 @@ export default `
     u: String
     p: String
     db: String
+    unsafeSsl: Boolean
   }
   type ResultsTable {
-    order: String!
-    orderKey: String
-    page: Int!
-    rowsPerPage: Int!
     timeFormat: String!
   }
   type Mutation {

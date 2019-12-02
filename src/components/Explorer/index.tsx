@@ -2,6 +2,7 @@ import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { withStyles } from '@material-ui/core/styles';
 
 import ExplorerItem from './ExplorerItem';
 import ExplorerButton from './ExplorerButton';
@@ -17,7 +18,13 @@ import {
 } from './queries';
 import theme from './theme';
 
-const Explorer = () => (
+const styles = (): any => ({
+  listItemText: {
+    margin: 0,
+  },
+});
+
+const Explorer = ({ classes }: { classes: any }) => (
   <MuiThemeProvider theme={theme}>
     <ExplorerItem
       query={SHOW_DATABASES}
@@ -91,6 +98,7 @@ const Explorer = () => (
                                     data.map((fieldKey, index) => (
                                       <ListItem key={fieldKey.id}>
                                         <ListItemText
+                                          className={classes.listItemText}
                                           primary={fieldKey.name}
                                           secondary={`(${fieldKey.type})`}
                                         />
@@ -254,4 +262,4 @@ const Explorer = () => (
   </MuiThemeProvider>
 );
 
-export default Explorer;
+export default withStyles(styles)(Explorer);

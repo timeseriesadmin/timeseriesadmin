@@ -7,10 +7,6 @@ import ResultsTable, {
 } from './index';
 
 const resultsTable = {
-  order: 'asc',
-  orderKey: '',
-  page: 0,
-  rowsPerPage: 2,
   timeFormat: 's',
 };
 
@@ -18,14 +14,12 @@ const mocks = [
   {
     request: {
       query: SET_RESULTS_TABLE,
-      variables: { order: 'desc', orderKey: 'col_1' },
+      variables: {},
     },
     result: {
       data: {
         setResultsTable: {
           ...resultsTable,
-          order: 'desc',
-          orderKey: 'col_1',
         },
       },
     },

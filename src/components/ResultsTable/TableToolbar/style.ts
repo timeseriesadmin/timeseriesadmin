@@ -1,6 +1,6 @@
 const styles = (theme: any) => ({
   root: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing(),
   },
   spacer: {
     // flex: '1 1 100%',
