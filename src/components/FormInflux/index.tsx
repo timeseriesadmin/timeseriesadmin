@@ -175,7 +175,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
 
 export const GET_INITIAL = gql`
   {
-    form @client {
+    form {
       url
       u
       p

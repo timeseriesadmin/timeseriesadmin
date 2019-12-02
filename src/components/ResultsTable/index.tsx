@@ -48,7 +48,6 @@ export const parseDate = (
 };
 
 function customSort(data: any[], colIndex: number, order: any) {
-  console.log(data, colIndex, order);
   return orderBy(
     data,
     val =>
@@ -137,7 +136,7 @@ export const SET_RESULTS_TABLE = gql`
 
 export const GET_RESULTS_TABLE = gql`
   {
-    resultsTable @client {
+    resultsTable {
       order
       orderKey
       page

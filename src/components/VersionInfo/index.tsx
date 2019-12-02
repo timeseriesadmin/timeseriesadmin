@@ -10,7 +10,7 @@ import { CURRENT_VERSION } from '../../config';
 
 export const GET_LATEST_VERSION = gql`
   query getLatestVersion {
-    getLatestVersion @client
+    getLatestVersion
   }
 `;
 
@@ -38,6 +38,7 @@ const VersionInfo = ({ classes }: { classes: any }) => {
       variant="caption"
       color="inherit"
       className={classes.versionInfo}
+      component="div"
     >
       ver. <span id="version">{CURRENT_VERSION}</span>
       {!loading &&
