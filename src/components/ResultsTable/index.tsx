@@ -117,30 +117,14 @@ const ResultsTable = ({ classes, title, parsedData }: Props) => {
 };
 
 export const SET_RESULTS_TABLE = gql`
-  mutation setResultsTable(
-    $order: String
-    $orderKey: String
-    $page: Int
-    $rowsPerPage: Int
-    $timeFormat: String
-  ) {
-    setResultsTable(
-      order: $order
-      orderKey: $orderKey
-      page: $page
-      rowsPerPage: $rowsPerPage
-      timeFormat: $timeFormat
-    ) @client
+  mutation setResultsTable($timeFormat: String) {
+    setResultsTable(timeFormat: $timeFormat) @client
   }
 `;
 
 export const GET_RESULTS_TABLE = gql`
   {
     resultsTable {
-      order
-      orderKey
-      page
-      rowsPerPage
       timeFormat
     }
   }

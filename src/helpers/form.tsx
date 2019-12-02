@@ -11,7 +11,6 @@ import {
   IconButton,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-// import PasswordField from 'material-ui-password-field';
 
 export function RenderField({
   input,

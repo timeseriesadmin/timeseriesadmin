@@ -5,10 +5,6 @@ const cacheMock = {
   readQuery: jest.fn(() => ({
     resultsTable: {
       timeFormat: 'timestamp',
-      rowsPerPage: 20,
-      page: 123,
-      orderKey: 'name',
-      order: 'asc',
     },
   })),
 };
@@ -24,10 +20,6 @@ describe('results helpers', () => {
       data: {
         resultsTable: {
           timeFormat: 'timestamp',
-          rowsPerPage: 20,
-          page: 0,
-          orderKey: '',
-          order: 'desc',
         },
       },
     });
