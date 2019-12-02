@@ -15,7 +15,7 @@ describe('TableToolbar', () => {
     );
     expect(getByText('Toolbar title')).toBeDefined();
     // open menu
-    fireEvent.click(getByText('Date with nanoseconds'));
+    fireEvent.mouseDown(getByText('Date with nanoseconds'));
     expect(getByText('Timestamp')).toBeDefined();
     expect(getByText('Date with seconds')).toBeDefined();
     expect(getByText('Date with milliseconds')).toBeDefined();
