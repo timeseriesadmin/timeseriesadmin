@@ -43,7 +43,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
           {/* It is here to prevent Chrome from autofilling user and password form fields */}
           <input type="password" style={{ display: 'none' }} />
 
-          <Grid container spacing={16}>
+          <Grid container spacing={2}>
             <Grid item xs={6}>
               <Field
                 id="influx-url"

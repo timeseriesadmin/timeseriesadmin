@@ -21,11 +21,11 @@ const styles = (theme: Theme): any => ({
   listItem: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
   listItemText: {
-    paddingLeft: theme.spacing.unit,
+    paddingLeft: theme.spacing(),
     paddingRight: 0,
   },
   noList: {

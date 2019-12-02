@@ -7,11 +7,11 @@ import Explorer from '../Explorer';
 
 const styles = (theme: Theme): any => ({
   root: {
-    paddingTop: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(),
+    paddingLeft: theme.spacing(2),
   },
   info: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     paddingBottom: 0,
   },
   noList: {

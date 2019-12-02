@@ -20,7 +20,7 @@ export default function(theme: any): any {
     },
     tab: {
       minHeight: 64,
-      minWidth: (480 - theme.spacing.unit * 3) / 4, // 4 - number of tabs
+      minWidth: (480 - theme.spacing(3)) / 4, // 4 - number of tabs
     },
     tabIcon: {
       fontSize: theme.typography.pxToRem(20),

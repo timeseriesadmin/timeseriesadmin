@@ -16,7 +16,7 @@ const styles = (theme: Theme): any => ({
   expandCollapse: {
     minWidth: 0,
     padding: '0 4px',
-    marginLeft: theme.spacing.unit,
+    marginLeft: theme.spacing(),
     borderRadius: '50%',
     '& > span': {
       paddingRight: 0,

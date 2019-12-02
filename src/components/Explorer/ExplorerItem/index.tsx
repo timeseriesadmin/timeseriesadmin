@@ -79,7 +79,7 @@ class ExplorerItem extends React.Component<Props, State> {
                       aria-label="Refresh"
                       onClick={handleRefresh}
                       style={{
-                        marginLeft: theme.spacing.unit,
+                        marginLeft: theme.spacing(),
                         width: 24,
                         height: 24,
                       }}
