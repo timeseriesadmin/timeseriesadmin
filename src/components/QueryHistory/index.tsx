@@ -19,10 +19,14 @@ const styles = (theme: Theme): any => ({
     textAlign: 'left',
   },
   listItem: {
-    alignItems: 'flex-start',
+    display: 'flex',
+    alignItems: 'center',
     justifyContent: 'flex-start',
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+  },
+  listIcon: {
+    minWidth: 0,
   },
   listItemText: {
     paddingLeft: theme.spacing(),
@@ -88,7 +92,7 @@ const QueryHistory = ({ classes }: Props) => (
                     onClick={handleQueryClick(executeQuery.query)}
                   >
                     {executeQuery.error !== null && (
-                      <ListItemIcon>
+                      <ListItemIcon className={classes.listIcon}>
                         <ErrorIcon
                           aria-label="Invalid query"
                           color="error"
