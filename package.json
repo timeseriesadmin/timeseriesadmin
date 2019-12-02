@@ -30,7 +30,6 @@
     "history": "^4.9.0",
     "influx-api": "^0.1.4",
     "lodash": "^4.17.11",
-    "material-ui-password-field": "^2.1.0",
     "mui-datatables": "^2.13.1",
     "papaparse": "^4.6.3",
     "qs": "^6.7.0",
