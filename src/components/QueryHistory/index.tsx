@@ -66,7 +66,6 @@ const QueryHistory = ({ classes }: Props) => (
           const handleQueryClick = (query: string) => () => {
             setFormQuery({ variables: { query } });
           };
-          // $FlowFixMe
           if (!data || !data.queryHistory || data.queryHistory.length === 0) {
             return (
               <div className={classes.noList}>

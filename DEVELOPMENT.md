@@ -11,7 +11,7 @@ Forms are handled with [React Final Form](https://github.com/final-form/react-fi
 
 Yarn is used for dependency management.
 Eslint provides JS linting.
-Flow is used for type hinting.
+Typescript is used for type hinting.
 CI is ensured with CircleCI.
 Coverage reports are uploaded to Codecov service.
 
@@ -57,10 +57,10 @@ Use `yarn dist:[platform]` to create platform specific bundle (`platform` may ha
 
 0. Update CHANGELOG.md
 1. Use `yarn publish` to set new version number (you will be prompted for that)
-2. Execute `./release.sh` script to create Electron packages for every supported system
-3. Push Docker images with `yarn release:docker`
-4. Manually create Github release, upload files from step 2. and changes from CHANGELOG.md
-5. Update `config.toml` file on Github page and follow deployment instruction there
+1. Execute `./release.sh` script to create Electron packages for every supported system
+1. Push Docker images with `yarn release:docker`
+1. Manually create Github release, upload files from step 2. and changes from CHANGELOG.md
+1. Update `config.toml` file on Github page and follow deployment instruction there
 
 ## Notes
 

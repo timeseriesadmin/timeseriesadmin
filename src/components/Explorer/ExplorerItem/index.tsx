@@ -56,14 +56,12 @@ class ExplorerItem extends React.Component<Props, State> {
           const handleExpand = (expand: boolean = true) => () => {
             if (!called) {
               // execute mutation on first expansion
-              // $FlowFixMe
               mutate();
             }
             this.setState({ isExpanded: expand });
           };
 
           const handleRefresh = () => {
-            // $FlowFixMe
             mutate();
           };
           return (
