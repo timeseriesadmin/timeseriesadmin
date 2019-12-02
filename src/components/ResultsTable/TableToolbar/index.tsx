@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode, ChangeEvent } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import {
   FormGroup,
@@ -17,8 +17,8 @@ interface Props {
   timeFormat: 's' | 'ms' | 'ns' | 'timestamp';
   handleFormatChange:
     | ((
-        event: React.ChangeEvent<HTMLSelectElement>,
-        child: React.ReactNode,
+        event: ChangeEvent<{ name?: string | undefined; value: unknown }>,
+        child: ReactNode,
       ) => void)
     | undefined;
 }

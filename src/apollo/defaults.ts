@@ -48,10 +48,6 @@ export default {
   form,
   server: null,
   resultsTable: {
-    order: 'asc',
-    orderKey: '', // by default skip sorting
-    page: 0,
-    rowsPerPage: 10,
     timeFormat: initTimeFormat,
     __typename: 'ResultsTable',
   },

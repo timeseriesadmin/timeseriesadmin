@@ -56,14 +56,12 @@ class ExplorerItem extends React.Component<Props, State> {
           const handleExpand = (expand: boolean = true) => () => {
             if (!called) {
               // execute mutation on first expansion
-              // $FlowFixMe
               mutate();
             }
             this.setState({ isExpanded: expand });
           };
 
           const handleRefresh = () => {
-            // $FlowFixMe
             mutate();
           };
           return (
@@ -79,7 +77,7 @@ class ExplorerItem extends React.Component<Props, State> {
                       aria-label="Refresh"
                       onClick={handleRefresh}
                       style={{
-                        marginLeft: theme.spacing.unit,
+                        marginLeft: theme.spacing(),
                         width: 24,
                         height: 24,
                       }}

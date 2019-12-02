@@ -17,10 +17,6 @@ describe('defaults', () => {
       },
       server: null,
       resultsTable: {
-        order: 'asc',
-        orderKey: '',
-        page: 0,
-        rowsPerPage: 10,
         timeFormat: 'timestamp',
         __typename: 'ResultsTable',
       },

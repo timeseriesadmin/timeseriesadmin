@@ -9,10 +9,10 @@ import ResultsTable from '../ResultsTable';
 const styles = (theme: Theme): any => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
   },
   contentNoTable: {
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(4),
   },
 });
 

@@ -19,13 +19,17 @@ const styles = (theme: Theme): any => ({
     textAlign: 'left',
   },
   listItem: {
-    alignItems: 'flex-start',
+    display: 'flex',
+    alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
+  listIcon: {
+    minWidth: 0,
   },
   listItemText: {
-    paddingLeft: theme.spacing.unit,
+    paddingLeft: theme.spacing(),
     paddingRight: 0,
   },
   noList: {
@@ -62,7 +66,6 @@ const QueryHistory = ({ classes }: Props) => (
           const handleQueryClick = (query: string) => () => {
             setFormQuery({ variables: { query } });
           };
-          // $FlowFixMe
           if (!data || !data.queryHistory || data.queryHistory.length === 0) {
             return (
               <div className={classes.noList}>
@@ -88,7 +91,7 @@ const QueryHistory = ({ classes }: Props) => (
                     onClick={handleQueryClick(executeQuery.query)}
                   >
                     {executeQuery.error !== null && (
-                      <ListItemIcon>
+                      <ListItemIcon className={classes.listIcon}>
                         <ErrorIcon
                           aria-label="Invalid query"
                           color="error"

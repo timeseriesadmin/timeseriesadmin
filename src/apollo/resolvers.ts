@@ -1,4 +1,3 @@
-import { getLatestVersion } from './resolvers/github';
 import {
   databases,
   series,
@@ -15,9 +14,6 @@ import { executeQuery } from './resolvers/query';
 import { setResultsTable } from './resolvers/results';
 
 export const resolvers = {
-  Query: {
-    getLatestVersion,
-  },
   Mutation: {
     databases,
     series,

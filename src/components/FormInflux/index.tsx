@@ -7,7 +7,7 @@ import { Form, Field } from 'react-final-form';
 import get from 'lodash/get';
 
 import { composeValidators, isRequired } from '../../helpers/validators';
-import { renderField } from '../../helpers/form';
+import { RenderField } from '../../helpers/form';
 import { isElectron } from 'apollo/helpers/isElectron';
 
 const styles = (theme: Theme): any => ({
@@ -43,13 +43,13 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
           {/* It is here to prevent Chrome from autofilling user and password form fields */}
           <input type="password" style={{ display: 'none' }} />
 
-          <Grid container spacing={16}>
+          <Grid container spacing={2}>
             <Grid item xs={6}>
               <Field
                 id="influx-url"
                 disabled={submitting || fetching}
                 name="url"
-                component={renderField}
+                component={RenderField}
                 label="Database URL"
                 placeholder="https://myinfluxdb.test:8086"
                 validate={composeValidators(isRequired)}
@@ -60,7 +60,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
                 id="influx-u"
                 disabled={submitting || fetching}
                 name="u"
-                component={renderField}
+                component={RenderField}
                 label="User"
               />
             </Grid>
@@ -70,7 +70,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
                 id="influx-p"
                 disabled={submitting || fetching}
                 name="p"
-                component={renderField}
+                component={RenderField}
                 label="Password"
                 type="password"
               />
@@ -80,7 +80,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
                 id="influx-db"
                 disabled={submitting || fetching}
                 name="db"
-                component={renderField}
+                component={RenderField}
                 label="Database"
               />
             </Grid>
@@ -92,7 +92,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
                   !isElectron() && 'Available only in Electron Application'
                 }
                 name="unsafeSsl"
-                component={renderField}
+                component={RenderField}
                 label="Ignore SSL errors"
                 type="checkbox"
               />
@@ -126,7 +126,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
                 id="influx-q"
                 disabled={submitting || fetching}
                 name="q"
-                component={renderField}
+                component={RenderField}
                 label="Query"
                 validate={composeValidators(isRequired)}
                 multiline
@@ -175,7 +175,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
 
 export const GET_INITIAL = gql`
   {
-    form @client {
+    form {
       url
       u
       p

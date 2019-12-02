@@ -1,23 +1,18 @@
 module.exports = {
   env: {
     'cypress/globals': true,
+    browser: true,
+    jasmine: true,
+    jest: true,
   },
-  //   browser: true,
-  //   es6: true,
-  //   'jest/globals': true,
-  // },
   extends: [
     'react-app',
-    //   'airbnb',
-    // 'eslint:recommended',
-    // 'plugin:react/recommended',
-    // 'plugin:flowtype/recommended',
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
   ],
-  plugins: ['cypress'],
-  // plugins: ['react', 'flowtype', 'jest'],
-  // settings: {
-  //   react: {
-  //     version: '16.6',
-  //   },
-  // },
+  plugins: ['cypress', 'react', '@typescript-eslint', 'prettier'],
+  parser: '@typescript-eslint/parser',
 };
