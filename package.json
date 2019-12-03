@@ -82,7 +82,7 @@
     "eslint-config-airbnb": "17.1.1",
     "eslint-config-prettier": "6.7.0",
     "eslint-config-react": "1.1.7",
-    "eslint-config-react-app": "4.0.1",
+    "eslint-config-react-app": "5.0.2",
     "eslint-plugin-cypress": "2.2.1",
     "eslint-plugin-flowtype": "4.5.2",
     "eslint-plugin-import": "2.17.2",
