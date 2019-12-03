@@ -63,7 +63,7 @@
     "cypress:run": "cypress run --browser chrome",
     "cypress:open": "cypress open",
     "ci:test": "TZ=Europe/Warsaw CI=true react-scripts test --coverage --runInBand --bail  && codecov -t 1034d70c-6870-4421-986f-6ac405850292",
-    "ci:cypress": "yarn cypress:run --browser chrome --record"
+    "ci:cypress": "yarn cypress:run --browser chrome"
   },
   "devDependencies": {
     "@apollo/react-testing": "3.1.3",
