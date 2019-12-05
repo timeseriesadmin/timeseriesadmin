@@ -1395,7 +1395,7 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@^7.1.2", "@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.3":
+"@babel/runtime@^7.1.2", "@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4":
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.4.tgz#dc2e34982eb236803aa27a07fea6857af1b9171d"
   integrity sha512-w0+uT71b6Yi7i5SE0co4NioIpSYS6lLiXvCzWzGSKvpK5vdQtCbICHMj+gbAKAOtxiV6HsVh/MBdaF9EQ6faSg==
@@ -1804,14 +1804,6 @@
     slash "^2.0.0"
     source-map "^0.6.1"
     write-file-atomic "2.4.1"
-
-"@jest/types@^24.7.0":
-  version "24.7.0"
-  resolved "https://registry.yarnpkg.com/@jest/types/-/types-24.7.0.tgz#c4ec8d1828cdf23234d9b4ee31f5482a3f04f48b"
-  integrity sha512-ipJUa2rFWiKoBqMKP63Myb6h9+iT3FHRTF2M8OR6irxWzItisa8i4dcSg14IbvmXUnBlHBlUQPYUHWyX3UPpYA==
-  dependencies:
-    "@types/istanbul-lib-coverage" "^2.0.0"
-    "@types/yargs" "^12.0.9"
 
 "@jest/types@^24.9.0":
   version "24.9.0"
@@ -2239,11 +2231,6 @@
   version "13.1.0"
   resolved "https://registry.yarnpkg.com/@types/yargs-parser/-/yargs-parser-13.1.0.tgz#c563aa192f39350a1d18da36c5a8da382bbd8228"
   integrity sha512-gCubfBUZ6KxzoibJ+SCUc/57Ms1jz5NjHe4+dI2krNmU5zCPAphyLJYyTOg06ueIyfj+SaCUqmzun7ImlxDcKg==
-
-"@types/yargs@^12.0.9":
-  version "12.0.12"
-  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-12.0.12.tgz#45dd1d0638e8c8f153e87d296907659296873916"
-  integrity sha512-SOhuU4wNBxhhTHxYaiG5NY4HBhDIDnJF60GU+2LqHAdKKer86//e4yg69aENCtQ04n0ovz+tq2YPME5t5yp4pw==
 
 "@types/yargs@^13.0.0":
   version "13.0.3"
@@ -4572,13 +4559,10 @@ cyclist@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
 
-cypress-testing-library@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/cypress-testing-library/-/cypress-testing-library-3.0.1.tgz#cd5f4ce4423cbb20cafdb869b435b35d01d11b66"
-  integrity sha512-vpGRbcYS229KP/FOASKQuT717GxpO9mG7rnFz2dOe7sz7JPnIHIP5M3KoPvoLfAN1TictFFv05jndyJi2OLa3A==
-  dependencies:
-    "@babel/runtime" "^7.4.3"
-    dom-testing-library "^4.0.0"
+cypress-testing-library@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/cypress-testing-library/-/cypress-testing-library-4.0.0.tgz#e3d19d380ea3f8601281aa94a6e20a13e4f1ff6f"
+  integrity sha512-KDbVw7kgEylLOZZDO4yiDlKySLzJsPLjHn5FfKL0tqCYYR3xbdIamKRap1r96/CXL8y5V05lAunnoAFQkKpIFw==
 
 cypress@3.7.0:
   version "3.7.0"
@@ -4930,16 +4914,6 @@ dom-serializer@0:
   dependencies:
     domelementtype "~1.1.1"
     entities "~1.1.1"
-
-dom-testing-library@^4.0.0:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/dom-testing-library/-/dom-testing-library-4.0.1.tgz#f21ef42aea0bd635969b4227a487e4704dbea735"
-  integrity sha512-Yr0yWlpI2QdTDEgPEk0TEekwP4VyZlJpl9E7nKP2FCKni44cb1jzjsy9KX6hBDsNA7EVlPpq9DHzO2eoEaqDZg==
-  dependencies:
-    "@babel/runtime" "^7.4.3"
-    "@sheerun/mutationobserver-shim" "^0.3.2"
-    pretty-format "^24.7.0"
-    wait-for-expect "^1.1.1"
 
 domain-browser@^1.1.1:
   version "1.2.0"
@@ -10387,16 +10361,6 @@ pretty-format@^24.3.0, pretty-format@^24.9.0:
     ansi-styles "^3.2.0"
     react-is "^16.8.4"
 
-pretty-format@^24.7.0:
-  version "24.7.0"
-  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-24.7.0.tgz#d23106bc2edcd776079c2daa5da02bcb12ed0c10"
-  integrity sha512-apen5cjf/U4dj7tHetpC7UEFCvtAgnNZnBDkfPv3fokzIqyOJckAG9OlAPC1BlFALnqT/lGB2tl9EJjlK6eCsA==
-  dependencies:
-    "@jest/types" "^24.7.0"
-    ansi-regex "^4.0.0"
-    ansi-styles "^3.2.0"
-    react-is "^16.8.4"
-
 private@^0.1.6:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
@@ -12948,11 +12912,6 @@ w3c-xmlserializer@^1.1.2:
     domexception "^1.0.1"
     webidl-conversions "^4.0.2"
     xml-name-validator "^3.0.0"
-
-wait-for-expect@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/wait-for-expect/-/wait-for-expect-1.1.1.tgz#9cd10e07d52810af9e0aaf509872e38f3c3d81ae"
-  integrity sha512-vd9JOqqEcBbCDhARWhW85ecjaEcfBLuXgVBqatfS3iw6oU4kzAcs+sCNjF+TC9YHPImCW7ypsuQc+htscIAQCw==
 
 wait-for-expect@^3.0.0:
   version "3.0.1"
