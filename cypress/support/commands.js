@@ -25,4 +25,4 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 // install cypress-testing-library
-import 'cypress-testing-library/add-commands';
+import '@testing-library/cypress/add-commands';
