@@ -3,15 +3,15 @@ describe('Form', () => {
     cy.visit('/');
   });
   it('renders fields', () => {
-    cy.getByText('Database URL').should('exist');
-    cy.getByText('User').should('exist');
-    cy.getByText('Password').should('exist');
-    cy.getByText('Database').should('exist');
-    cy.getByText('Run query').should('exist');
-    cy.getByText('Save connection data').should('exist');
+    cy.findByText('Database URL').should('exist');
+    cy.findByText('User').should('exist');
+    cy.findByText('Password').should('exist');
+    cy.findByText('Database').should('exist');
+    cy.findByText('Run query').should('exist');
+    cy.findByText('Save connection data').should('exist');
   });
   it('shows and hides password', () => {
-    cy.getByLabelText('Password')
+    cy.findByLabelText('Password')
       .as('input')
       .type('secretPass');
     cy.get('@input').should('have.attr', 'type', 'password');
@@ -25,26 +25,26 @@ describe('Form', () => {
     cy.get('@input').should('have.attr', 'type', 'password');
   });
   it('saves and loads connection data', () => {
-    cy.getByLabelText('Database URL').type('http://test.test:8086');
-    cy.getByLabelText('User').type('Username');
-    cy.getByLabelText('Password').type('SecretPass');
-    cy.getByLabelText('Database').type('TestDatabase');
-    cy.getByText('Save connection data').click();
+    cy.findByLabelText('Database URL').type('http://test.test:8086');
+    cy.findByLabelText('User').type('Username');
+    cy.findByLabelText('Password').type('SecretPass');
+    cy.findByLabelText('Database').type('TestDatabase');
+    cy.findByText('Save connection data').click();
 
-    cy.getByText('http://test.test:8086').should('exist');
-    cy.getByText('database: TestDatabase').should('exist');
-    cy.getByText('user: Username').should('exist');
+    cy.findByText('http://test.test:8086').should('exist');
+    cy.findByText('database: TestDatabase').should('exist');
+    cy.findByText('user: Username').should('exist');
 
-    cy.getByLabelText('User').type('invalidUsername');
-    cy.getByText('http://test.test:8086').click();
-    cy.getByLabelText('User').should('have.value', 'Username');
+    cy.findByLabelText('User').type('invalidUsername');
+    cy.findByText('http://test.test:8086').click();
+    cy.findByLabelText('User').should('have.value', 'Username');
 
-    cy.getByText('http://test.test:8086')
+    cy.findByText('http://test.test:8086')
       .closest('button')
       .next()
       .click();
     cy.queryByText('database: TestDatabase').should('not.exist');
-    cy.getByText(
+    cy.findByText(
       'No saved connections. Add one using SAVE CONNECTION DATA button.',
     ).should('exist');
   });

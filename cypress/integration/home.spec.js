@@ -5,33 +5,33 @@ describe('Home Page', () => {
   it('successfully loads all content', () => {
     cy.queryByText('New version available').should('not.exist');
     // sidebar panels
-    cy.getByText('Connect').should('exist');
-    cy.getByText('Explorer').should('exist');
-    cy.getByText('History').should('exist');
-    cy.getByText('Reference').should('exist');
+    cy.findByText('Connect').should('exist');
+    cy.findByText('Explorer').should('exist');
+    cy.findByText('History').should('exist');
+    cy.findByText('Reference').should('exist');
     // default panel content
-    cy.getByText('List of all saved connections').should('exist');
+    cy.findByText('List of all saved connections').should('exist');
     // title
-    cy.getByTestId('TopBar').within(() => {
-      cy.getByText('Time Series Admin').should('exist');
+    cy.findByTestId('TopBar').within(() => {
+      cy.findByText('Time Series Admin').should('exist');
     });
   });
   it('has working sidebar panels', () => {
-    cy.getByText('Explorer').click();
-    cy.getByText('Not connected').should('exist');
-    cy.getByText('History').click();
-    cy.getByText(
+    cy.findByText('Explorer').click();
+    cy.findByText('Not connected').should('exist');
+    cy.findByText('History').click();
+    cy.findByText(
       'List of most recent queries executed, with max length of 300 items.',
     ).should('exist');
-    cy.getByText('Reference').click();
-    cy.getByText('official InfluxDB docs').should('exist');
-    cy.getByText('Connect').click();
+    cy.findByText('Reference').click();
+    cy.findByText('official InfluxDB docs').should('exist');
+    cy.findByText('Connect').click();
     cy.queryByText('official InfluxDB docs').should('not.exist');
-    cy.getByText('List of all saved connections').should('exist');
+    cy.findByText('List of all saved connections').should('exist');
   });
   it('has working sidebar toggle button', () => {
-    cy.getByTitle('Close sidebar').click();
-    cy.getByText('List of all saved connections').then(el =>
+    cy.findByTitle('Close sidebar').click();
+    cy.findByText('List of all saved connections').then(el =>
       cy.wrap(el).should('not.be.visible'),
     );
   });
@@ -49,8 +49,8 @@ describe('New version button', () => {
     cy.visit('/');
   });
   it('shows new version info', () => {
-    cy.getByText('New version available').should('exist');
-    // cy.getByText('New version available').click();
+    cy.findByText('New version available').should('exist');
+    // cy.findByText('New version available').click();
     // cy.url().should('include', 'timeseriesadmin.github.io');
     // cy.url().should('include', 'download');
     // cy.title().should('include', 'Time Series Admin');
