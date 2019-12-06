@@ -11,7 +11,7 @@
     "@types/classnames": "2.2.9",
     "@types/jest": "24.0.23",
     "@types/lodash": "4.14.149",
-    "@types/mui-datatables": "2.13.0",
+    "@types/mui-datatables": "2.13.1",
     "@types/node": "12.12.14",
     "@types/papaparse": "5.0.2",
     "@types/react": "16.9.15",
