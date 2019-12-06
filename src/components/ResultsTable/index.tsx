@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { withStyles, Theme } from '@material-ui/core/styles';
 import format from 'date-fns/format';
 import gql from 'graphql-tag';
@@ -22,6 +22,20 @@ const styles = (theme: Theme): any => ({
   },
 });
 
+export const SET_RESULTS_TABLE = gql`
+  mutation setResultsTable($timeFormat: String) {
+    setResultsTable(timeFormat: $timeFormat) @client
+  }
+`;
+
+export const GET_RESULTS_TABLE = gql`
+  {
+    resultsTable {
+      timeFormat
+    }
+  }
+`;
+
 const tzOffset = new Date().getTimezoneOffset();
 
 type Props = {
@@ -37,32 +51,36 @@ export const parseDate = (
   const ts = parseInt(date.slice(0, -6), 10) + tzOffset * 60 * 1000;
   switch (timeFormat) {
     case 's':
-      return format(ts, 'YYYY-MM-dd HH:mm:ss');
+      return format(ts, 'yyyy-MM-dd HH:mm:ss');
     case 'ms':
-      return format(ts, 'YYYY-MM-dd HH:mm:ss.SSS');
+      return format(ts, 'yyyy-MM-dd HH:mm:ss.SSS');
     case 'ns':
-      return format(ts, 'YYYY-MM-dd HH:mm:ss.SSS') + date.slice(-6);
+      return format(ts, 'yyyy-MM-dd HH:mm:ss.SSS') + date.slice(-6);
     default:
       return date;
   }
 };
 
-function customSort(data: any[], colIndex: number, order: any) {
+function customSort(
+  data: Props['parsedData'],
+  colIndex: number,
+  order: string,
+): Props['parsedData'] {
   return orderBy(
     data,
     val =>
       !val.data[colIndex]
         ? Number.NEGATIVE_INFINITY
         : Number(val.data[colIndex]),
-    order,
+    order as 'asc' | 'desc',
   );
 }
 
-const ResultsTable = ({ classes, title, parsedData }: Props) => {
+const ResultsTable: FC<Props> = ({ classes, title, parsedData }: Props) => {
   const [setResultsTable] = useMutation(SET_RESULTS_TABLE);
   const { data, loading: cacheLoading } = useQuery(GET_RESULTS_TABLE);
 
-  const handleFormatChange = (event: { target: { value: any } }) => {
+  const handleFormatChange = (event: { target: { value: string } }): void => {
     setResultsTable({
       variables: { timeFormat: event.target.value },
     });
@@ -115,19 +133,5 @@ const ResultsTable = ({ classes, title, parsedData }: Props) => {
     </React.Fragment>
   );
 };
-
-export const SET_RESULTS_TABLE = gql`
-  mutation setResultsTable($timeFormat: String) {
-    setResultsTable(timeFormat: $timeFormat) @client
-  }
-`;
-
-export const GET_RESULTS_TABLE = gql`
-  {
-    resultsTable {
-      timeFormat
-    }
-  }
-`;
 
 export default withStyles(styles)(ResultsTable);
