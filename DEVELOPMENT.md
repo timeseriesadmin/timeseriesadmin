@@ -15,6 +15,13 @@ Typescript is used for type hinting.
 CI is ensured with CircleCI.
 Coverage reports are uploaded to Codecov service.
 
+## Branching strategy
+
+- master - currently released code
+- develop - current state of development
+- feature/\* - feature branch
+- chore/\* - package updates and other maintenance tasks
+
 ## Build development environment
 
 0. Install Yarn
