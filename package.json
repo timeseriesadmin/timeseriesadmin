@@ -30,7 +30,7 @@
     "history": "4.10.1",
     "influx-api": "0.1.4",
     "lodash": "4.17.15",
-    "mui-datatables": "2.13.2",
+    "mui-datatables": "2.13.3",
     "papaparse": "5.1.0",
     "qs": "6.9.1",
     "react": "16.12.0",
