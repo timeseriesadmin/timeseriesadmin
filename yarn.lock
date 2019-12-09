@@ -1397,10 +1397,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@material-ui/core@4.7.1":
-  version "4.7.1"
-  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.7.1.tgz#87b83da3f6adf45772c0a2be9fd9d162e026f10c"
-  integrity sha512-gqbZqpwUT5/59KTrWyA9Mr9s8NaNyfWHlEQToM1tfpiHqrIJajLVg2ZgVDzExvN985v2YQIfbuTNVzJDOnM28Q==
+"@material-ui/core@4.7.2":
+  version "4.7.2"
+  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.7.2.tgz#b4396eded7c85214c43c17a18bad66e94742f92c"
+  integrity sha512-ZbeO6xshTEHcMU2jMNjBY26u9p5ILQFj0y7HvOPZ9WT6POaN6qNKYX2PdXnnRDE1MpN8W2K1cxM4KKkiYWNkCQ==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@material-ui/styles" "^4.7.1"
@@ -10553,10 +10553,10 @@ react-transition-group@^4.3.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-use@13.10.2:
-  version "13.10.2"
-  resolved "https://registry.yarnpkg.com/react-use/-/react-use-13.10.2.tgz#4250d258ca9068662943299c01794a136408c8e9"
-  integrity sha512-z3VFSiPHW6arViGVnajO7YKY5OD+Z9LWcImoJdYHkau23cLSoTctxM3XENLpGxjhJlHaYiQZ6pPgq7pwGTqSZA==
+react-use@13.11.0:
+  version "13.11.0"
+  resolved "https://registry.yarnpkg.com/react-use/-/react-use-13.11.0.tgz#c3dbd1c500a9b8cf0f8297003c50bca8a8cf2c17"
+  integrity sha512-AyaZJd77IZp0uzAQoVJHbzx7LUYjYpkVaNhgxqiei54j9DnnSR+LdmLjVG9sEaz2FI6zmjkMbYgYcLUgN4Sumw==
   dependencies:
     copy-to-clipboard "^3.2.0"
     nano-css "^5.2.1"
