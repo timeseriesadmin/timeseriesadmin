@@ -3,5 +3,9 @@
   "docker-compose": {
     "enabled": false
   },
-  "baseBranches": ["develop"]
+  "baseBranches": ["develop"],
+  "automerge": true,
+  "major": {
+    "automerge": false
+  }
 }
