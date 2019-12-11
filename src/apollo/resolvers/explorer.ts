@@ -1,4 +1,3 @@
-import { query as influxQuery } from 'influx-api';
 import { parseResults } from '../helpers/parser';
 import { queryBase } from '../helpers/query';
 
@@ -8,7 +7,7 @@ export const databases = async (
   _args: void,
   { cache }: any,
 ): Promise<any> => {
-  const result = await influxQuery(queryBase(cache, 'SHOW DATABASES'));
+  const result = await queryBase(cache, { q: 'SHOW DATABASES' }, false);
   return parseResults(result.data, { id: 'name', name: 'name' }, 'Database');
 };
 
@@ -17,8 +16,10 @@ export const series = async (
   { db, meas }: { db: string; meas?: string },
   { cache }: any,
 ): Promise<any> => {
-  const result = await influxQuery(
-    queryBase(cache, `SHOW SERIES ON "${db}"${meas ? ` FROM "${meas}"` : ''}`),
+  const result = await queryBase(
+    cache,
+    { q: `SHOW SERIES ON "${db}"${meas ? ` FROM "${meas}"` : ''}` },
+    false,
   );
   return parseResults(
     result.data,
@@ -32,8 +33,10 @@ export const policies = async (
   { db }: { db: string },
   { cache }: any,
 ): Promise<any> => {
-  const result = await influxQuery(
-    queryBase(cache, `SHOW RETENTION POLICIES ON "${db}"`),
+  const result = await queryBase(
+    cache,
+    { q: `SHOW RETENTION POLICIES ON "${db}"` },
+    false,
   );
   return parseResults(
     result.data,
@@ -54,8 +57,10 @@ export const measurements = async (
   { db }: { db: string },
   { cache }: any,
 ): Promise<any> => {
-  const result = await influxQuery(
-    queryBase(cache, `SHOW MEASUREMENTS ON "${db}"`),
+  const result = await queryBase(
+    cache,
+    { q: `SHOW MEASUREMENTS ON "${db}"` },
+    false,
   );
   return parseResults(result.data, { id: 'name', name: 'name' }, 'Measurement');
 };
@@ -69,8 +74,10 @@ export const fieldKeys = async (
     // if not provided use "autogen" policy
     retPol = 'autogen';
   }
-  const result = await influxQuery(
-    queryBase(cache, `SHOW FIELD KEYS ON "${db}" FROM "${retPol}"."${meas}"`),
+  const result = await queryBase(
+    cache,
+    { q: `SHOW FIELD KEYS ON "${db}" FROM "${retPol}"."${meas}"` },
+    false,
   );
   return parseResults(
     result.data,
@@ -84,8 +91,10 @@ export const tagKeys = async (
   { db, meas }: { db: string; meas: string },
   { cache }: any,
 ): Promise<any> => {
-  const result = await influxQuery(
-    queryBase(cache, `SHOW TAG KEYS ON "${db}" FROM "${meas}"`),
+  const result = await queryBase(
+    cache,
+    { q: `SHOW TAG KEYS ON "${db}" FROM "${meas}"` },
+    false,
   );
   return parseResults(result.data, { id: 'tagKey', name: 'tagKey' }, 'TagKey');
 };
@@ -95,11 +104,10 @@ export const tagValues = async (
   { db, meas, tagKey }: { db: string; meas: string; tagKey: string },
   { cache }: any,
 ): Promise<any> => {
-  const result = await influxQuery(
-    queryBase(
-      cache,
-      `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${tagKey}"`,
-    ),
+  const result = await queryBase(
+    cache,
+    { q: `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${tagKey}"` },
+    false,
   );
   return parseResults(result.data, { id: 'value', value: 'value' }, 'TagValue');
 };
