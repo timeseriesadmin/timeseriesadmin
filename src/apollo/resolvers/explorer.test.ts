@@ -7,8 +7,8 @@ import {
   tagKeys,
   tagValues,
 } from './explorer';
-jest.mock('apollo/helpers/query');
-import { queryBase } from 'apollo/helpers/query';
+jest.mock('apollo/helpers/queryBase');
+import { queryBase } from 'apollo/helpers/queryBase';
 
 describe('explorer resolvers', () => {
   test('database()', async () => {

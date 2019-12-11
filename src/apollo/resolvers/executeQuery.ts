@@ -1,4 +1,4 @@
-import { queryBase } from 'apollo/helpers/query';
+import { queryBase } from 'apollo/helpers/queryBase';
 import { QueryArgs } from 'influx-api';
 
 export const executeQuery = async (

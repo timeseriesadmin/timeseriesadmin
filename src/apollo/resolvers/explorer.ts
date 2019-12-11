@@ -1,5 +1,5 @@
 import { parseResults } from '../helpers/parser';
-import { queryBase } from '../helpers/query';
+import { queryBase } from 'apollo/helpers/queryBase';
 
 // TODO: support multiserver with { url }: { url: string } args
 export const databases = async (

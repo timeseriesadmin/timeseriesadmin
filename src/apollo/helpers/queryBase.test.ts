@@ -1,9 +1,9 @@
-import { queryBase } from 'apollo/helpers/query';
+import { queryBase } from 'apollo/helpers/queryBase';
 
 jest.mock('influx-api');
-import { query as influxQuery, QueryArgs } from 'influx-api';
+import { query as influxQuery } from 'influx-api';
 jest.mock('apollo/resolvers/form');
-import { getForm, FormParams } from 'apollo/resolvers/form';
+import { getForm } from 'apollo/resolvers/form';
 jest.mock('apollo/helpers/results');
 import { resetResultsTable } from 'apollo/helpers/results';
 jest.mock('apollo/helpers/history');
