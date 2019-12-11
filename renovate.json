@@ -5,6 +5,9 @@
   },
   "baseBranches": ["develop"],
   "automerge": true,
+  "mino": {
+    "automerge": true
+  },
   "major": {
     "automerge": false
   }
