@@ -11,7 +11,7 @@ export async function queryBase(
   cache: any,
   queryArgs: QueryArgs | { q: string },
   isManualQuery = true,
-): Promise<{ data: any }> {
+): Promise<{ request: { params: QueryArgs }; response: any }> {
   const form: FormParams = getForm(cache);
 
   const queryParams: QueryArgs = {

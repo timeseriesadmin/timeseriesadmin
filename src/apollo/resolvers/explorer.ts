@@ -8,7 +8,11 @@ export const databases = async (
   { cache }: any,
 ): Promise<any> => {
   const result = await queryBase(cache, { q: 'SHOW DATABASES' }, false);
-  return parseResults(result.data, { id: 'name', name: 'name' }, 'Database');
+  return parseResults(
+    result.response.data,
+    { id: 'name', name: 'name' },
+    'Database',
+  );
 };
 
 export const series = async (
@@ -22,7 +26,7 @@ export const series = async (
     false,
   );
   return parseResults(
-    result.data,
+    result.response.data,
     { id: 'key', key: 'key', tags: 'tags' },
     'Series',
   );
@@ -39,7 +43,7 @@ export const policies = async (
     false,
   );
   return parseResults(
-    result.data,
+    result.response.data,
     {
       id: 'name',
       name: 'name',
@@ -62,7 +66,11 @@ export const measurements = async (
     { q: `SHOW MEASUREMENTS ON "${db}"` },
     false,
   );
-  return parseResults(result.data, { id: 'name', name: 'name' }, 'Measurement');
+  return parseResults(
+    result.response.data,
+    { id: 'name', name: 'name' },
+    'Measurement',
+  );
 };
 
 export const fieldKeys = async (
@@ -80,7 +88,7 @@ export const fieldKeys = async (
     false,
   );
   return parseResults(
-    result.data,
+    result.response.data,
     { id: 'fieldKey', name: 'fieldKey', type: 'fieldType' },
     'FieldKey',
   );
@@ -96,7 +104,11 @@ export const tagKeys = async (
     { q: `SHOW TAG KEYS ON "${db}" FROM "${meas}"` },
     false,
   );
-  return parseResults(result.data, { id: 'tagKey', name: 'tagKey' }, 'TagKey');
+  return parseResults(
+    result.response.data,
+    { id: 'tagKey', name: 'tagKey' },
+    'TagKey',
+  );
 };
 
 export const tagValues = async (
@@ -109,5 +121,9 @@ export const tagValues = async (
     { q: `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${tagKey}"` },
     false,
   );
-  return parseResults(result.data, { id: 'value', value: 'value' }, 'TagValue');
+  return parseResults(
+    result.response.data,
+    { id: 'value', value: 'value' },
+    'TagValue',
+  );
 };
