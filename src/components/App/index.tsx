@@ -9,6 +9,7 @@ import MainContent from '../MainContent';
 import DrawerRight from '../DrawerRight';
 
 import styles from './styles';
+import { SettingsContextProvider } from 'contexts/SettingsContext';
 
 const DRAWER_SETTINGS = gql`
   query drawerSettings {
@@ -43,7 +44,7 @@ const App = ({ classes }: any) => (
             <TopBar
               isOpenDrawer={isOpenDrawer}
               drawerWidth={drawerWidth}
-              toggleDrawer={() =>
+              toggleDrawer={(): void =>
                 setOpenDrawer({
                   variables: { isOpen: !isOpenDrawer },
                 })
@@ -51,7 +52,9 @@ const App = ({ classes }: any) => (
             />
 
             <main className={classes.content}>
-              <MainContent />
+              <SettingsContextProvider>
+                <MainContent />
+              </SettingsContextProvider>
             </main>
 
             <Drawer

@@ -9,6 +9,8 @@ import TableToolbar from './TableToolbar';
 import { ResultsSettings } from 'apollo/resolvers/results';
 import orderBy from 'lodash/orderBy';
 
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
 const styles = (theme: Theme): any => ({
   root: {
     width: '100%',
@@ -36,11 +38,29 @@ export const GET_RESULTS_TABLE = gql`
   }
 `;
 
+const compactLayoutTheme = createMuiTheme({
+  overrides: {
+    PrivateSwitchBase: {
+      root: {
+        padding: 2,
+      },
+    },
+    MUIDataTableBodyCell: {
+      root: {
+        paddingTop: 2,
+        paddingBottom: 2,
+        lineHeight: 1.2,
+      },
+    },
+  },
+} as any);
+
 const tzOffset = new Date().getTimezoneOffset();
 
 type Props = {
   classes: any;
   title: string;
+  compactLayout: boolean;
   parsedData: { [key: string]: string }[];
 };
 
@@ -76,7 +96,12 @@ function customSort(
   );
 }
 
-const ResultsTable: FC<Props> = ({ classes, title, parsedData }: Props) => {
+const ResultsTable: FC<Props> = ({
+  classes,
+  title,
+  parsedData,
+  compactLayout,
+}: Props) => {
   const [setResultsTable] = useMutation(SET_RESULTS_TABLE);
   const { data, loading: cacheLoading } = useQuery(GET_RESULTS_TABLE);
 
@@ -101,7 +126,6 @@ const ResultsTable: FC<Props> = ({ classes, title, parsedData }: Props) => {
   }));
 
   const columns = Object.keys(tableData[0]);
-
   return (
     <React.Fragment>
       <TableToolbar
@@ -111,24 +135,24 @@ const ResultsTable: FC<Props> = ({ classes, title, parsedData }: Props) => {
         handleFormatChange={handleFormatChange}
       />
       <div className={classes.tableWrapper}>
-        <MUIDataTable
-          title="Query results"
-          data={tableData}
-          columns={columns.map(columnKey => ({
-            name: columnKey,
-            label: columnKey,
-          }))}
-          options={{
-            customSort,
-            print: false,
-            rowsPerPage: 100,
-            rowsPerPageOptions: [20, 100, 1000, 5000],
-            disableToolbarSelect: true,
-            onRowsDelete: function() {
-              return false;
-            },
-          }}
-        />
+        <MuiThemeProvider theme={compactLayout ? compactLayoutTheme : {}}>
+          <MUIDataTable
+            title="Query results"
+            data={tableData}
+            columns={columns.map(columnKey => ({
+              name: columnKey,
+              label: columnKey,
+            }))}
+            options={{
+              customSort,
+              print: false,
+              rowsPerPage: 100,
+              rowsPerPageOptions: [20, 100, 500, 1000, 5000],
+              disableToolbarSelect: true,
+              onRowsDelete: (): boolean => false,
+            }}
+          />
+        </MuiThemeProvider>
       </div>
     </React.Fragment>
   );

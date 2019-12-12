@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,10 +9,14 @@ import get from 'lodash/get';
 import { composeValidators, isRequired } from '../../helpers/validators';
 import { RenderField } from '../../helpers/form';
 import { isElectron } from 'apollo/helpers/isElectron';
+import { SettingsContext } from 'contexts/SettingsContext';
 
 const styles = (theme: Theme): any => ({
   footer: {
     textAlign: 'right',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   submit: {
     display: 'inline-block',
@@ -28,17 +32,49 @@ const styles = (theme: Theme): any => ({
   },
 });
 
+export const GET_INITIAL = gql`
+  {
+    form {
+      url
+      u
+      p
+      db
+      q
+      unsafeSsl
+    }
+  }
+`;
+
+export const SAVE_CONNECTION = gql`
+  mutation(
+    $url: String!
+    $u: String
+    $p: String
+    $db: String
+    $unsafeSsl: Boolean
+  ) {
+    saveConnection(url: $url, u: $u, p: $p, db: $db, unsafeSsl: $unsafeSsl)
+      @client
+  }
+`;
+
 type Props = {
   classes: any;
   onSubmit: (values: {}) => Promise<void>;
 };
-const FormInflux = ({ classes, onSubmit }: Props) => {
+const FormInflux: React.FC<Props> = ({ classes, onSubmit }: Props) => {
   const { loading: fetching, data } = useQuery(GET_INITIAL);
   const [saveConnection, { loading: sending }] = useMutation(SAVE_CONNECTION);
+  const settings = React.useContext(SettingsContext);
 
   return (
-    <Form onSubmit={onSubmit} initialValues={get(data, 'form', {})}>
-      {({ handleSubmit, form, submitting, values }: any) => (
+    <Form
+      onSubmit={onSubmit}
+      initialValues={get(data, 'form', {
+        compactLayout: settings.compactLayout,
+      })}
+    >
+      {({ handleSubmit, form, submitting, values }: any): React.ReactNode => (
         <form onSubmit={handleSubmit} className={classes.form}>
           {/* It is here to prevent Chrome from autofilling user and password form fields */}
           <input type="password" style={{ display: 'none' }} />
@@ -113,7 +149,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
                 variant="outlined"
                 color="primary"
                 style={{ float: 'right' }}
-                onClick={() => {
+                onClick={(): void => {
                   saveConnection({ variables: values });
                 }}
               >
@@ -136,7 +172,7 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
                   keyCode: number;
                   metaKey: any;
                   ctrlKey: any;
-                }) => {
+                }): void => {
                   if (
                     event.keyCode === 13 &&
                     (event.metaKey || event.ctrlKey)
@@ -148,6 +184,20 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
             </Grid>
 
             <Grid item xs={12} className={classes.footer}>
+              <Field
+                id="compact-layout"
+                helperText="Results table layout"
+                name="compactLayout"
+                component={RenderField}
+                label="Compact view"
+                input={{
+                  type: 'checkbox',
+                  onChange: (event: ChangeEvent<HTMLInputElement>): void => {
+                    const value = event.target.checked;
+                    settings.setCompactLayout(value);
+                  },
+                }}
+              />
               <Button
                 disabled={submitting || fetching}
                 type="submit"
@@ -172,31 +222,5 @@ const FormInflux = ({ classes, onSubmit }: Props) => {
     </Form>
   );
 };
-
-export const GET_INITIAL = gql`
-  {
-    form {
-      url
-      u
-      p
-      db
-      q
-      unsafeSsl
-    }
-  }
-`;
-
-export const SAVE_CONNECTION = gql`
-  mutation(
-    $url: String!
-    $u: String
-    $p: String
-    $db: String
-    $unsafeSsl: Boolean
-  ) {
-    saveConnection(url: $url, u: $u, p: $p, db: $db, unsafeSsl: $unsafeSsl)
-      @client
-  }
-`;
 
 export default withStyles(styles)(FormInflux);

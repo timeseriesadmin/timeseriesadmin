@@ -2,6 +2,7 @@ import React from 'react';
 import { withStyles, Theme } from '@material-ui/core/styles';
 import { CircularProgress, Typography, Paper } from '@material-ui/core';
 import Papa from 'papaparse';
+import { SettingsContext } from 'contexts/SettingsContext';
 
 import QueryError from '../QueryError';
 import ResultsTable from '../ResultsTable';
@@ -30,7 +31,14 @@ export const parseQueryResults = (data: string) =>
     skipEmptyLines: 'greedy', // skip empty and whitespace lines
   });
 
-const QueryResults = ({ classes, called, loading, query, error }: Props) => {
+const QueryResults: React.FC<Props> = ({
+  classes,
+  called,
+  loading,
+  query,
+  error,
+}: Props) => {
+  const settings = React.useContext(SettingsContext);
   if (error) {
     return (
       <Paper className={classes.root}>
@@ -110,6 +118,7 @@ const QueryResults = ({ classes, called, loading, query, error }: Props) => {
       <ResultsTable
         parsedData={results.data}
         title={query.executeQuery.request.params.q}
+        compactLayout={settings.compactLayout}
       />
     </Paper>
   );

@@ -53,7 +53,7 @@ export function RenderField({
           control={<Checkbox {...input} disabled={custom.disabled} />}
         />
         {custom.helperText && (
-          <FormHelperText style={{ marginTop: -10 }} disabled>
+          <FormHelperText style={{ marginTop: -6 }} disabled>
             {custom.helperText}
           </FormHelperText>
         )}
