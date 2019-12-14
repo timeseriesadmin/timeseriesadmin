@@ -77,7 +77,6 @@ export default `
     isOpenDrawer: Boolean
     drawerWidth: Number
     form: FormData
-    queryHistory: [InfluxQuery!]
     server: Server
     connections: [Connection]!
     getResultsTable: ResultsTable

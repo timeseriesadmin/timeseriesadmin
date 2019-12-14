@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import gql from 'graphql-tag';
 import {
   List,
@@ -8,8 +8,9 @@ import {
   Theme,
 } from '@material-ui/core';
 import { ErrorOutline as ErrorIcon } from '@material-ui/icons';
-import { Query, Mutation } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
+import { QueryHistoryContext } from 'src/contexts/QueryHistoryContext';
 
 const styles = (theme: Theme): any => ({
   btnIcon: {
@@ -46,72 +47,63 @@ const SET_FORM_QUERY = gql`
   }
 `;
 
-const GET_HISTORY = gql`
-  {
-    queryHistory @client {
-      query
-      error
-    }
-  }
-`;
 type Props = {
   classes: any;
 };
 // TODO: display Error details somehow, not with a Tooltip because of performance issues when there are 100 Tooltips...
-const QueryHistory = ({ classes }: Props) => (
-  <Query query={GET_HISTORY}>
-    {({ data }: any) => (
-      <Mutation mutation={SET_FORM_QUERY}>
-        {(setFormQuery: (arg0: { variables: { query: string } }) => void) => {
-          const handleQueryClick = (query: string) => () => {
-            setFormQuery({ variables: { query } });
-          };
-          if (!data || !data.queryHistory || data.queryHistory.length === 0) {
-            return (
-              <div className={classes.noList}>
-                Query history is empty.
-                <br />
-                Execute your first query using{' '}
-                <a href="#influx-q">Query form</a>
-              </div>
-            );
-          }
+const QueryHistory = ({ classes }: Props) => {
+  const { queryHistory } = useContext<QueryHistoryContext>(QueryHistoryContext);
+
+  return (
+    <Mutation mutation={SET_FORM_QUERY}>
+      {(setFormQuery: (arg0: { variables: { query: string } }) => void) => {
+        const handleQueryClick = (query: string) => () => {
+          setFormQuery({ variables: { query } });
+        };
+        if (!queryHistory || queryHistory.length === 0) {
           return (
-            <List dense>
-              {data.queryHistory.map(
-                (
-                  executeQuery: { query: string; error: null },
-                  index: string | number | undefined,
-                ) => (
-                  <ListItem
-                    button
-                    disableGutters
-                    className={classes.listItem}
-                    key={index}
-                    onClick={handleQueryClick(executeQuery.query)}
-                  >
-                    {executeQuery.error !== null && (
-                      <ListItemIcon className={classes.listIcon}>
-                        <ErrorIcon
-                          aria-label="Invalid query"
-                          color="error"
-                          className={classes.btnIcon}
-                        />
-                      </ListItemIcon>
-                    )}
-                    <ListItemText
-                      primary={executeQuery.query}
-                      className={classes.listItemText}
-                    />
-                  </ListItem>
-                ),
-              )}
-            </List>
+            <div className={classes.noList}>
+              Query history is empty.
+              <br />
+              Execute your first query using <a href="#influx-q">Query form</a>
+            </div>
           );
-        }}
-      </Mutation>
-    )}
-  </Query>
-);
+        }
+        return (
+          <List dense>
+            {queryHistory.map(
+              (
+                executeQuery: { query: string; error: null },
+                index: string | number | undefined,
+              ) => (
+                <ListItem
+                  button
+                  disableGutters
+                  className={classes.listItem}
+                  key={index}
+                  onClick={handleQueryClick(executeQuery.query)}
+                >
+                  {executeQuery.error !== null && (
+                    <ListItemIcon className={classes.listIcon}>
+                      <ErrorIcon
+                        aria-label="Invalid query"
+                        color="error"
+                        className={classes.btnIcon}
+                      />
+                    </ListItemIcon>
+                  )}
+                  <ListItemText
+                    primary={executeQuery.query}
+                    className={classes.listItemText}
+                  />
+                </ListItem>
+              ),
+            )}
+          </List>
+        );
+      }}
+    </Mutation>
+  );
+};
 
 export default withStyles(styles)(QueryHistory);

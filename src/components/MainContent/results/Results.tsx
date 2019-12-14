@@ -1,11 +1,10 @@
 import React from 'react';
 import { withStyles, Theme } from '@material-ui/core/styles';
 import { CircularProgress, Typography, Paper } from '@material-ui/core';
-import Papa from 'papaparse';
-import { SettingsContext } from 'contexts/SettingsContext';
+import { SettingsContext } from 'src/contexts/SettingsContext';
 
-import QueryError from '../QueryError';
-import ResultsTable from '../ResultsTable';
+import QueryError from './error/QueryError';
+import ResultsTable from './table/ResultsTable';
 
 const styles = (theme: Theme): any => ({
   root: {
@@ -19,26 +18,19 @@ const styles = (theme: Theme): any => ({
 
 interface Props {
   classes: any;
-  called: boolean;
   loading: boolean;
-  query: any;
+  results: any;
   error?: any;
 }
 
-export const parseQueryResults = (data: string) =>
-  Papa.parse(data, {
-    header: true,
-    skipEmptyLines: 'greedy', // skip empty and whitespace lines
-  });
-
 const QueryResults: React.FC<Props> = ({
   classes,
-  called,
   loading,
-  query,
+  results,
   error,
 }: Props) => {
   const settings = React.useContext(SettingsContext);
+
   if (error) {
     return (
       <Paper className={classes.root}>
@@ -48,7 +40,7 @@ const QueryResults: React.FC<Props> = ({
       </Paper>
     );
   }
-  if (!called) {
+  if (!results && !error && !loading) {
     return (
       <Paper className={classes.root}>
         <div className={classes.contentNoTable}>
@@ -76,11 +68,12 @@ const QueryResults: React.FC<Props> = ({
     );
   }
 
-  // no point in parsing before error check
-  const results = parseQueryResults(query.executeQuery.response.data);
-
-  if (!results.data || !results.data.length) {
-    const statusCode = query.executeQuery.response.status;
+  if (
+    !results.response ||
+    !results.response.data ||
+    results.response.data.length === 0
+  ) {
+    const statusCode = results.response.status;
     return (
       <Paper className={classes.root}>
         <div className={classes.contentNoTable}>
@@ -92,8 +85,7 @@ const QueryResults: React.FC<Props> = ({
               color: statusCode >= 200 && statusCode < 300 ? 'green' : 'red',
             }}
           >
-            {query.executeQuery.response.status}:
-            {query.executeQuery.response.statusText} No data
+            {results.response.status}:{results.response.statusText} No data
           </Typography>
           <Typography component="p" variant="body1">
             Please verify your query if this is not the expected response.
@@ -116,8 +108,8 @@ const QueryResults: React.FC<Props> = ({
   return (
     <Paper className={classes.root}>
       <ResultsTable
-        parsedData={results.data}
-        title={query.executeQuery.request.params.q}
+        parsedData={results.response.data}
+        title={results.request.params.q}
         compactLayout={settings.compactLayout}
       />
     </Paper>

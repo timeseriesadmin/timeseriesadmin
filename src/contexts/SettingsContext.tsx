@@ -7,8 +7,16 @@ type SettingsContext = {
 
 export const SETTINGS_CONTEXT_DEFAULT = {
   compactLayout: false,
+  timeFormat: 'timestamp',
+  isDrawerOpen: true,
   setCompactLayout: function(compactLayout: boolean): void {
     this.compactLayout = compactLayout;
+  },
+  setTimeFormat: function(timeFormat: string): void {
+    this.timeFormat = timeFormat;
+  },
+  setDrawerOpen: function(isOpen: boolean): void {
+    this.isDrawerOpen = isOpen;
   },
 };
 

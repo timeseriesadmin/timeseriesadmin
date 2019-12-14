@@ -1,5 +1,6 @@
 import { parseResults } from '../helpers/parser';
-import { queryBase } from 'apollo/helpers/queryBase';
+import { queryBase } from 'src/apollo/helpers/queryBase';
+import { getForm } from './form';
 
 // TODO: support multiserver with { url }: { url: string } args
 export const databases = async (
@@ -7,7 +8,10 @@ export const databases = async (
   _args: void,
   { cache }: any,
 ): Promise<any> => {
-  const result = await queryBase(cache, { q: 'SHOW DATABASES' }, false);
+  const result = await queryBase(
+    { ...getForm(cache), q: 'SHOW DATABASES' },
+    false,
+  );
   return parseResults(
     result.response.data,
     { id: 'name', name: 'name' },
@@ -21,8 +25,10 @@ export const series = async (
   { cache }: any,
 ): Promise<any> => {
   const result = await queryBase(
-    cache,
-    { q: `SHOW SERIES ON "${db}"${meas ? ` FROM "${meas}"` : ''}` },
+    {
+      ...getForm(cache),
+      q: `SHOW SERIES ON "${db}"${meas ? ` FROM "${meas}"` : ''}`,
+    },
     false,
   );
   return parseResults(
@@ -38,8 +44,7 @@ export const policies = async (
   { cache }: any,
 ): Promise<any> => {
   const result = await queryBase(
-    cache,
-    { q: `SHOW RETENTION POLICIES ON "${db}"` },
+    { ...getForm(cache), q: `SHOW RETENTION POLICIES ON "${db}"` },
     false,
   );
   return parseResults(
@@ -62,8 +67,7 @@ export const measurements = async (
   { cache }: any,
 ): Promise<any> => {
   const result = await queryBase(
-    cache,
-    { q: `SHOW MEASUREMENTS ON "${db}"` },
+    { ...getForm(cache), q: `SHOW MEASUREMENTS ON "${db}"` },
     false,
   );
   return parseResults(
@@ -83,8 +87,10 @@ export const fieldKeys = async (
     retPol = 'autogen';
   }
   const result = await queryBase(
-    cache,
-    { q: `SHOW FIELD KEYS ON "${db}" FROM "${retPol}"."${meas}"` },
+    {
+      ...getForm(cache),
+      q: `SHOW FIELD KEYS ON "${db}" FROM "${retPol}"."${meas}"`,
+    },
     false,
   );
   return parseResults(
@@ -100,8 +106,7 @@ export const tagKeys = async (
   { cache }: any,
 ): Promise<any> => {
   const result = await queryBase(
-    cache,
-    { q: `SHOW TAG KEYS ON "${db}" FROM "${meas}"` },
+    { ...getForm(cache), q: `SHOW TAG KEYS ON "${db}" FROM "${meas}"` },
     false,
   );
   return parseResults(
@@ -117,8 +122,10 @@ export const tagValues = async (
   { cache }: any,
 ): Promise<any> => {
   const result = await queryBase(
-    cache,
-    { q: `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${tagKey}"` },
+    {
+      ...getForm(cache),
+      q: `SHOW TAG VALUES ON "${db}" FROM "${meas}" WITH KEY = "${tagKey}"`,
+    },
     false,
   );
   return parseResults(

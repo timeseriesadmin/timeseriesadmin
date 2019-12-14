@@ -5,11 +5,12 @@ import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
 
 import TopBar from '../TopBar';
-import MainContent from '../MainContent';
+import MainContent from '../MainContent/MainContent';
 import DrawerRight from '../DrawerRight';
 
 import styles from './styles';
-import { SettingsContextProvider } from 'contexts/SettingsContext';
+import { SettingsContextProvider } from 'src/contexts/SettingsContext';
+import { QueryHistoryContextProvider } from 'src/contexts/QueryHistoryContext';
 
 const DRAWER_SETTINGS = gql`
   query drawerSettings {
@@ -31,61 +32,63 @@ const SET_DRAWER_WIDTH = gql`
 `;
 
 const App = ({ classes }: any) => (
-  <Query query={DRAWER_SETTINGS}>
-    {({ data: { isOpenDrawer, drawerWidth } }: { data: any }) => (
-      <Mutation mutation={SET_OPEN_DRAWER}>
-        {(
-          setOpenDrawer: (arg0: { variables: { isOpen: boolean } }) => void,
-        ) => (
-          <div
-            style={{ paddingRight: isOpenDrawer ? drawerWidth : null }}
-            className={classes.root}
-          >
-            <TopBar
-              isOpenDrawer={isOpenDrawer}
-              drawerWidth={drawerWidth}
-              toggleDrawer={(): void =>
-                setOpenDrawer({
-                  variables: { isOpen: !isOpenDrawer },
-                })
-              }
-            />
-
-            <main className={classes.content}>
-              <SettingsContextProvider>
-                <MainContent />
-              </SettingsContextProvider>
-            </main>
-
-            <Drawer
-              variant="persistent"
-              anchor="right"
-              open={isOpenDrawer}
-              ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-              }}
-              PaperProps={{ style: { width: drawerWidth } }}
+  <QueryHistoryContextProvider>
+    <Query query={DRAWER_SETTINGS}>
+      {({ data: { isOpenDrawer, drawerWidth } }: { data: any }) => (
+        <Mutation mutation={SET_OPEN_DRAWER}>
+          {(
+            setOpenDrawer: (arg0: { variables: { isOpen: boolean } }) => void,
+          ) => (
+            <div
+              style={{ paddingRight: isOpenDrawer ? drawerWidth : null }}
+              className={classes.root}
             >
-              <Mutation mutation={SET_DRAWER_WIDTH}>
-                {(
-                  setDrawerWidth: (arg0: {
-                    variables: { width: number };
-                  }) => void,
-                ) => (
-                  <DrawerRight
-                    drawerWidth={drawerWidth}
-                    updateWidth={(width: number) =>
-                      setDrawerWidth({ variables: { width } })
-                    }
-                  />
-                )}
-              </Mutation>
-            </Drawer>
-          </div>
-        )}
-      </Mutation>
-    )}
-  </Query>
+              <TopBar
+                isOpenDrawer={isOpenDrawer}
+                drawerWidth={drawerWidth}
+                toggleDrawer={(): void =>
+                  setOpenDrawer({
+                    variables: { isOpen: !isOpenDrawer },
+                  })
+                }
+              />
+
+              <main className={classes.content}>
+                <SettingsContextProvider>
+                  <MainContent />
+                </SettingsContextProvider>
+              </main>
+
+              <Drawer
+                variant="persistent"
+                anchor="right"
+                open={isOpenDrawer}
+                ModalProps={{
+                  keepMounted: true, // Better open performance on mobile.
+                }}
+                PaperProps={{ style: { width: drawerWidth } }}
+              >
+                <Mutation mutation={SET_DRAWER_WIDTH}>
+                  {(
+                    setDrawerWidth: (arg0: {
+                      variables: { width: number };
+                    }) => void,
+                  ) => (
+                    <DrawerRight
+                      drawerWidth={drawerWidth}
+                      updateWidth={(width: number) =>
+                        setDrawerWidth({ variables: { width } })
+                      }
+                    />
+                  )}
+                </Mutation>
+              </Drawer>
+            </div>
+          )}
+        </Mutation>
+      )}
+    </Query>
+  </QueryHistoryContextProvider>
 );
 
 export default withStyles(styles)(App);

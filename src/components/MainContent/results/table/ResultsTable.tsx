@@ -6,7 +6,7 @@ import { useQuery, useMutation } from 'react-apollo';
 import MUIDataTable from 'mui-datatables';
 
 import TableToolbar from './TableToolbar';
-import { ResultsSettings } from 'apollo/resolvers/results';
+import { ResultsSettings } from 'src/apollo/resolvers/results';
 import orderBy from 'lodash/orderBy';
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';

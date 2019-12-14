@@ -8,7 +8,7 @@ import {
   tagValues,
 } from './explorer';
 jest.mock('apollo/helpers/queryBase');
-import { queryBase } from 'apollo/helpers/queryBase';
+import { queryBase } from 'src/apollo/helpers/queryBase';
 
 describe('explorer resolvers', () => {
   test('database()', async () => {

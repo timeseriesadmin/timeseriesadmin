@@ -6,10 +6,10 @@ import { Button, Grid, Theme } from '@material-ui/core';
 import { Form, Field } from 'react-final-form';
 import get from 'lodash/get';
 
-import { composeValidators, isRequired } from '../../helpers/validators';
-import { RenderField } from '../../helpers/form';
-import { isElectron } from 'apollo/helpers/isElectron';
-import { SettingsContext } from 'contexts/SettingsContext';
+import { composeValidators, isRequired } from 'src/helpers/validators';
+import { RenderField } from 'src/helpers/form';
+import { isElectron } from 'src/apollo/helpers/isElectron';
+import { SettingsContext } from 'src/contexts/SettingsContext';
 
 const styles = (theme: Theme): any => ({
   footer: {

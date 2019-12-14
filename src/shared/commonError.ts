@@ -49,6 +49,3 @@ export function commonError(error: any): any {
     isCommon: true,
   };
 }
-
-// exports.commonError = commonError;
-// module.exports.commonError = commonError;

@@ -4,7 +4,6 @@ describe('defaults', () => {
     expect(defaults).toEqual({
       isOpenDrawer: true,
       drawerWidth: 480,
-      queryHistory: [],
       connections: [],
       form: {
         url: '',
@@ -21,18 +20,6 @@ describe('defaults', () => {
         __typename: 'ResultsTable',
       },
     });
-  });
-
-  test('queryHistory filtering and providing default values', () => {
-    jest.resetModules();
-    jest.doMock('../helpers/storage', () => ({
-      get: () =>
-        '[{},{"query":""},{"something":"test"},{"query":"select","other":"test"}]',
-    }));
-    const defaults = require('./defaults').default;
-    expect(defaults.queryHistory).toEqual([
-      { other: 'test', query: 'select', error: '' },
-    ]);
   });
 
   test('connections default values', () => {

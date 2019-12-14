@@ -1,6 +1,6 @@
 import { executeViaElectron } from './executeViaElectron';
 
-import { getIpcRenderer } from 'apollo/helpers/getIpcRenderer';
+import { getIpcRenderer } from 'src/apollo/helpers/getIpcRenderer';
 jest.mock('apollo/helpers/getIpcRenderer');
 
 const queryArgs = {

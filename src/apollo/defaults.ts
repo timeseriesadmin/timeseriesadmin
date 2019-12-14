@@ -12,22 +12,12 @@ const connections = JSON.parse(storage.get('connections', '[]')).map(
   }),
 );
 
-// TODO: prevent adding history with no query instead of filtering on init
-// HERE filter invalid connection data
-const queryHistory = JSON.parse(storage.get('queryHistory', '[]'))
-  .filter((hist: { query: any }) => hist.query)
-  .map((hist: { query: any }) => ({
-    query: '',
-    error: '',
-    ...hist,
-  }));
-
 const form = {
-  url: '',
-  u: '',
-  p: '',
-  db: '',
-  q: '',
+  q: 'show databases',
+  u: 'admin',
+  p: 'password',
+  url: 'https://localhost:8086',
+  db: 'issue3',
   unsafeSsl: false,
   __typename: 'FormData',
   ...JSON.parse(storage.get('form', '{}')),
@@ -43,7 +33,6 @@ export const MIN_CONTENT_WIDTH = 360;
 export default {
   isOpenDrawer,
   drawerWidth: MIN_DRAWER_WIDTH,
-  queryHistory,
   connections,
   form,
   server: null,

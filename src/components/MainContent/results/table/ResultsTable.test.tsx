@@ -4,7 +4,7 @@ import ResultsTable, {
   parseDate,
   SET_RESULTS_TABLE,
   GET_RESULTS_TABLE,
-} from './index';
+} from './ResultsTable';
 
 const resultsTable = {
   timeFormat: 's',

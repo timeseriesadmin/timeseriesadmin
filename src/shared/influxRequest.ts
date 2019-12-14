@@ -27,7 +27,3 @@ export async function influxRequest({
     ...axiosParams,
   });
 }
-
-// exports.influxRequest = influxRequest;
-
-// module.exports.influxRequest = influxRequest;

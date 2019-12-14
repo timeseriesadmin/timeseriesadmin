@@ -1,32 +1,16 @@
 import React from 'react';
 import Inspector from 'react-inspector';
 import Typography from '@material-ui/core/Typography';
-import get from 'lodash/get';
+// import { commonError } from 'src/shared/commonError';
 
-import { ApolloError } from 'apollo-client';
-
-// Converts ApolloError to string
-const stringifyError = (apolloError: ApolloError): string => {
-  const error = get(apolloError, 'networkError.networkError');
-  if (!error) {
-    return JSON.stringify(apolloError);
-  }
-  return `${error.status}:${error.statusText} ${error.details ||
-    error.data ||
-    ''}`;
-};
-
-type Props = {
-  error: ApolloError;
-};
-const QueryError = ({ error }: Props) => (
+const QueryError: React.FC<any> = ({ error }: any) => (
   <div>
     <Typography
       variant="h5"
       component="h3"
       style={{ marginBottom: 8, color: 'red' }}
     >
-      {stringifyError(error)}
+      {error.title}
     </Typography>
     <Typography
       variant="subtitle1"
@@ -38,7 +22,7 @@ const QueryError = ({ error }: Props) => (
     <Typography variant="caption" component="p" style={{ margin: '6px 0 6px' }}>
       You should probably look at "response" key
     </Typography>
-    <Inspector theme="chromeLight" data={error.networkError} expandLevel={2} />
+    <Inspector theme="chromeLight" data={error.details} expandLevel={2} />
   </div>
 );
 

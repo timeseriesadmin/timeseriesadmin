@@ -13,7 +13,7 @@ import PanelReference from '../PanelReference';
 import PanelConnect from '../PanelConnect';
 import styles from './styles';
 
-import { MIN_DRAWER_WIDTH, MIN_CONTENT_WIDTH } from 'apollo/defaults';
+import { MIN_DRAWER_WIDTH, MIN_CONTENT_WIDTH } from 'src/apollo/defaults';
 
 type Props = {
   classes: { [key: string]: string };

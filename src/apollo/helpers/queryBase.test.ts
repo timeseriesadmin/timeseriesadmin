@@ -1,19 +1,15 @@
-import { queryBase } from 'apollo/helpers/queryBase';
+import { queryBase } from 'src/apollo/helpers/queryBase';
 
-jest.mock('influx-api');
-import { query as influxQuery } from 'influx-api';
 jest.mock('apollo/resolvers/form');
-import { getForm } from 'apollo/resolvers/form';
+import { getForm } from 'src/apollo/resolvers/form';
 jest.mock('apollo/helpers/results');
-import { resetResultsTable } from 'apollo/helpers/results';
-jest.mock('apollo/helpers/history');
-import { saveQueryHistory } from 'apollo/helpers/history';
+import { resetResultsTable } from 'src/apollo/helpers/results';
 jest.mock('apollo/helpers/errors');
-import { handleQueryError } from 'apollo/helpers/errors';
+import { handleQueryError } from 'src/apollo/helpers/errors';
 jest.mock('apollo/helpers/isElectron');
-import { isElectron } from 'apollo/helpers/isElectron';
+import { isElectron } from 'src/apollo/helpers/isElectron';
 jest.mock('apollo/helpers/executeViaElectron');
-import { executeViaElectron } from 'apollo/helpers/executeViaElectron';
+import { executeViaElectron } from 'src/apollo/helpers/executeViaElectron';
 
 const queryArgs = {
   url: 'http://test.test:8086',
@@ -47,7 +43,6 @@ describe('queryBase()', () => {
       },
       response: 'response',
     });
-    expect(saveQueryHistory).not.toBeCalled();
     expect(handleQueryError).not.toBeCalled();
     expect(resetResultsTable).not.toBeCalled();
   });
@@ -76,8 +71,6 @@ describe('queryBase()', () => {
         },
         response: 'response',
       });
-      expect(saveQueryHistory).toBeCalledWith(queryArgs.q, 'cache', undefined);
-      expect(handleQueryError).toBeCalledWith(undefined);
       expect(resetResultsTable).toBeCalledWith('cache');
     });
 
@@ -104,11 +97,6 @@ describe('queryBase()', () => {
         },
         response: undefined,
       });
-      expect(saveQueryHistory).toBeCalledWith(
-        queryArgs.q,
-        'cache',
-        'error message',
-      );
       expect(handleQueryError).toBeCalledWith('error message');
       expect(resetResultsTable).toBeCalledWith('cache');
     });
@@ -136,7 +124,6 @@ describe('queryBase()', () => {
         },
         response: 'response',
       });
-      expect(saveQueryHistory).toBeCalledWith(queryArgs.q, 'cache', undefined);
       expect(handleQueryError).toBeCalledWith(undefined);
       expect(resetResultsTable).toBeCalledWith('cache');
     });

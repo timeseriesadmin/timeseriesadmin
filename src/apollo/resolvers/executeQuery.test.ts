@@ -1,6 +1,6 @@
 import { executeQuery } from './executeQuery';
 
-import { queryBase } from 'apollo/helpers/queryBase';
+import { queryBase } from 'src/apollo/helpers/queryBase';
 jest.mock('apollo/helpers/queryBase');
 
 describe('executeQuery()', () => {
