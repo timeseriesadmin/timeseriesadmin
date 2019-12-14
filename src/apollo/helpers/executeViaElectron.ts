@@ -1,19 +1,16 @@
-import { QueryArgs } from 'influx-api';
-import { getIpcRenderer } from 'apollo/helpers/getIpcRenderer';
+import { getIpcRenderer } from 'src/apollo/helpers/getIpcRenderer';
 
-export async function executeViaElectron(eventArg: {
-  queryArgs: QueryArgs;
-  rejectUnauthorized: boolean;
-}): Promise<string> {
-  // console.log('ipc', ipc);
+const ipc = getIpcRenderer();
+
+export async function executeViaElectron(params: any): Promise<any> {
   return new Promise((resolve, reject) => {
-    const ipc = getIpcRenderer();
-    ipc.send('influx-query', eventArg);
+    ipc.send('influx-query', { params });
     ipc.once('influx-query-response', function(
       _event: Event,
       { response, error }: any,
     ) {
       if (error) {
+        console.log('electron error', error);
         reject(error);
       } else {
         resolve(response);
