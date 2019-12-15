@@ -5,7 +5,7 @@ import { queryBase } from 'src/apollo/helpers/queryBase';
 import { commonError } from 'src/shared/commonError';
 import { QueryHistoryContext } from 'src/contexts/QueryHistoryContext';
 
-const MainContent = () => {
+const MainContent: React.FC<{}> = () => {
   // const [form, setForm] = useState({
   //   q: 'show databases',
   //   u: 'admin',

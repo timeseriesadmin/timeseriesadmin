@@ -3,7 +3,7 @@
     "target": "es5",
     "module": "esnext",
     "strict": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "dom.iterable", "esnext"],

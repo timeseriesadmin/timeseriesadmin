@@ -5,7 +5,6 @@ import { influxRequest } from 'src/shared/influxRequest';
 // import { saveQueryHistory } from 'src/apollo/helpers/history';
 // const influxRequest = require('shared/influxRequest');
 // import influxRequest from 'src/shared/influxRequest';
-console.log('influxRequest', influxRequest);
 
 export async function queryBase(
   form: any,

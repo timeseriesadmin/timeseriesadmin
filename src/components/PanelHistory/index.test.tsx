@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, setupClient, wait } from 'utils/test-utils';
+import { render, fireEvent, setupClient, wait } from 'src/utils/test-utils';
 
 import PanelHistory from './index';
 

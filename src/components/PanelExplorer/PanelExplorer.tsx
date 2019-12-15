@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, Theme } from '@material-ui/core/styles';
-import Explorer from '../Explorer';
+import Explorer from './explorer/Explorer';
 
 const styles = (theme: Theme): any => ({
   root: {
@@ -22,6 +22,17 @@ const styles = (theme: Theme): any => ({
   },
 });
 
+const GET_SERVER = gql`
+  {
+    form @client {
+      url
+      u
+      p
+      unsafeSsl
+    }
+  }
+`;
+
 type Props = {
   classes: any;
 };
@@ -36,12 +47,12 @@ const PanelExplorer = ({ classes }: Props) => (
         </Typography>
         <div className={classes.root}>
           {data && data.form && data.form.url ? (
-            <Explorer />
+            <Explorer form={data.form} />
           ) : (
             <div className={classes.noList}>
-              Use "RUN QUERY" button to connect to a server,
+              Use &quot;RUN QUERY&quot; button to connect to a server,
               <br />
-              or select one from "CONNECT" panel.
+              or select one from &quot;CONNECT&quot; panel.
             </div>
           )}
         </div>
@@ -49,13 +60,5 @@ const PanelExplorer = ({ classes }: Props) => (
     )}
   </Query>
 );
-
-const GET_SERVER = gql`
-  {
-    form @client {
-      url
-    }
-  }
-`;
 
 export default withStyles(styles)(PanelExplorer);

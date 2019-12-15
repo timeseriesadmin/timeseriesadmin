@@ -7,7 +7,7 @@ import QueryReferenceIcon from '@material-ui/icons/Flip';
 import InfluxExplorerIcon from '@material-ui/icons/Explore';
 import InfluxConnectionsIcon from '@material-ui/icons/Link';
 
-import PanelExplorer from '../PanelExplorer';
+import PanelExplorer from '../PanelExplorer/PanelExplorer';
 import PanelHistory from '../PanelHistory';
 import PanelReference from '../PanelReference';
 import PanelConnect from '../PanelConnect';
