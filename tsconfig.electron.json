@@ -6,5 +6,5 @@
     "skipLibCheck": true,
     "moduleResolution": "node"
   },
-  "include": ["src/electron.ts"]
+  "include": ["src/app/electron.ts"]
 }

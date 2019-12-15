@@ -3,8 +3,8 @@ import { render, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { ApolloProvider } from 'react-apollo';
 
-import { ApolloClient } from 'src/apollo-client';
-import { InMemoryCache } from 'src/apollo-cache-inmemory';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 function customRender(node: any, options?: any): any {
   const rendered = render(
