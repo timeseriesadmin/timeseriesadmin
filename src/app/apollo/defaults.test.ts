@@ -2,8 +2,6 @@ describe('defaults', () => {
   test('initial values', () => {
     const defaults = require('./defaults').default;
     expect(defaults).toEqual({
-      isOpenDrawer: true,
-      drawerWidth: 480,
       connections: [],
       form: {
         url: '',
@@ -15,10 +13,6 @@ describe('defaults', () => {
         __typename: 'FormData',
       },
       server: null,
-      resultsTable: {
-        timeFormat: 'timestamp',
-        __typename: 'ResultsTable',
-      },
     });
   });
 
