@@ -47,7 +47,7 @@ class DrawerRight extends React.Component<Props, State> {
       return;
     }
 
-    let offsetRight =
+    const offsetRight =
       document.body.offsetWidth - (e.clientX - document.body.offsetLeft);
     if (
       offsetRight > MIN_DRAWER_WIDTH &&

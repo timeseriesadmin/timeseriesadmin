@@ -14,7 +14,7 @@ import { MIN_DRAWER_WIDTH } from 'app/apollo/defaults';
 export const App: React.FC = () => {
   const [isOpenDrawer, setOpenDrawer] = useState(true);
   const [drawerWidth, setDrawerWidth] = useState(MIN_DRAWER_WIDTH);
-  const classes = useStyles();
+  const classes = useStyles({});
 
   return (
     <QueryHistoryContextProvider>
