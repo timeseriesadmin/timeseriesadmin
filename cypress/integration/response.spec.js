@@ -12,7 +12,7 @@ describe('Response', () => {
       });
       cy.route(
         'POST',
-        'http://localhost:8086/query',
+        'http://localhost:8086/query?q=SELECT+*+FROM+test&db=',
         'error\nunable to parse authentication credentials',
       );
     });
@@ -22,9 +22,7 @@ describe('Response', () => {
       // ensure that CTRL/CMD+ENTER shortcut works
       cy.findByLabelText('Query').type('{meta}{enter}'); // meta = command/cmd
       // ensure
-      cy.findByText(
-        '401:Unauthorized error unable to parse authentication credentials',
-      ).should('exist');
+      cy.findByText('401: Unauthorized').should('exist');
     });
   });
   describe('valid request', () => {
@@ -32,7 +30,7 @@ describe('Response', () => {
       cy.server();
       cy.route(
         'POST',
-        'http://localhost:8086/query',
+        'http://localhost:8086/query?q=SELECT+*+FROM+test&db=',
         'first,second\n' +
           // 10000 - 10100 , 1 - 100
           new Array(100)

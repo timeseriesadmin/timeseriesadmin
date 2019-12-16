@@ -2,11 +2,12 @@
 
 #### :rocket: New Features
 
-- Material UI update
+- material UI update
+- compact results table view
 
 #### :bug: Bug Fix
 
--
+- support "Ignore SSL errors" option in explorer
 
 ## v0.1.6
 
@@ -31,7 +32,7 @@
 
 #### :rocket: New Features
 
-- [#4](https://github.com/timeseriesadmin/timeseriesadmin/issues/4) resizeable sidebar
+- [#4](https://github.com/timeseriesadmin/timeseriesadmin/issues/4) resizable sidebar
 
 #### :bug: Bug Fix
 
