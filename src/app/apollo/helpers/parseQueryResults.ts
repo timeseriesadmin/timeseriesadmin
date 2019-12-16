@@ -10,7 +10,8 @@ export function parseQueryResults(data: string): any {
     return undefined;
   }
   if (parsed.errors && parsed.errors.length > 0) {
-    console.error(parsed.errors);
+    // console.error(parsed.errors);
+    return parsed.data;
   }
   if (parsed.data) {
     return parsed.data;
