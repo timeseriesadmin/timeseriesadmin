@@ -1,7 +1,9 @@
+import { makeStyles, createStyles } from '@material-ui/core/styles';
+
 const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
 
-export default function(theme: any): any {
-  return {
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
     root: {
       display: 'flex',
       flexGrow: 1,
@@ -33,5 +35,5 @@ export default function(theme: any): any {
           theme.spacing(2),
       },
     },
-  };
-}
+  }),
+);
