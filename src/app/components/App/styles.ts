@@ -1,7 +1,9 @@
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+
 const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
 
-export default function(theme: any): any {
-  return {
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
     root: {
       display: 'flex',
       flexGrow: 1,
@@ -22,16 +24,17 @@ export default function(theme: any): any {
       flexGrow: 1,
       backgroundColor: theme.palette.background.default,
       padding: theme.spacing(2),
-      paddingTop: theme.mixins.toolbar.minHeight + theme.spacing(2),
+      paddingTop: (theme.mixins.toolbar.minHeight as any) + theme.spacing(2),
       [mediaRule]: {
         paddingTop:
-          theme.mixins.toolbar[mediaRule].minHeight + theme.spacing(2),
+          ((theme.mixins.toolbar[mediaRule] as any).minHeight as any) +
+          theme.spacing(2),
       },
       [theme.breakpoints.up('sm')]: {
         paddingTop:
-          theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight +
-          theme.spacing(2),
+          ((theme.mixins.toolbar[theme.breakpoints.up('sm')] as any)
+            .minHeight as any) + theme.spacing(2),
       },
     },
-  };
-}
+  }),
+);

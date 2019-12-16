@@ -4,7 +4,7 @@ export function commonError(error: any): any {
   }
 
   if (error.response && error.response.status && error.response.statusText) {
-    console.log('request error');
+    // console.log('request error');
     // probably a request error
     return {
       title: `${error.response.status}: ${error.response.statusText}`,
@@ -14,7 +14,7 @@ export function commonError(error: any): any {
   }
 
   if (error.code && error.message && error.stack) {
-    console.log('native error');
+    // console.log('native error');
     // probably a NodeJS or browser native error
     return {
       title: `${error.code}: ${error.message}`,
@@ -24,7 +24,7 @@ export function commonError(error: any): any {
   }
 
   if (error.message) {
-    console.log('network error');
+    // console.log('network error');
     // probably a network error
     return {
       title: error.message,
@@ -34,7 +34,7 @@ export function commonError(error: any): any {
   }
 
   if (error.isAxiosError) {
-    console.log('axios error');
+    // console.log('axios error');
     return {
       title: error.code,
       details: error,

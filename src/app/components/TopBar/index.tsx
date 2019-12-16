@@ -23,7 +23,7 @@ export interface Props {
   toggleDrawer: () => void;
 }
 
-const TopBar = ({
+const TopBar: React.FC<Props> = ({
   classes,
   isOpenDrawer,
   drawerWidth = 200,
