@@ -1,7 +1,7 @@
 {
   "extends": ["config:base"],
   "docker-compose": {
-    "enabled": false
+    "enabled": false,
   },
   "baseBranches": ["develop"],
   "automerge": true,
@@ -9,6 +9,6 @@
     "automerge": true,
   },
   "major": {
-    "automerge": false
+    "automerge": false,
   }
 }
