@@ -63,7 +63,11 @@ export const DrawerRight: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div className={classes.root} style={{ width: drawerWidth }}>
+    <div
+      className={classes.root}
+      style={{ width: drawerWidth }}
+      data-testid="DrawerRight"
+    >
       <div onMouseDown={handleMousedown} className={classes.dragger} />
       <div
         className={classes.header}
