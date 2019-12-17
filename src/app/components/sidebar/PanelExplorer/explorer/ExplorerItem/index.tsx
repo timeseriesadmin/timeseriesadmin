@@ -8,8 +8,8 @@ import useAsyncFn from 'react-use/lib/useAsyncFn';
 import { queryBase } from 'app/apollo/helpers/queryBase';
 
 import ExplorerButton from '../ExplorerButton';
-import theme from '../../../theme';
-import TooltipError from '../../../TooltipError';
+import theme from '../../../../theme';
+import TooltipError from '../../../../TooltipError';
 
 type Props = {
   /** Makes label uppercase and bold */

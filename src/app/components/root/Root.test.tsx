@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'utils/test-utils';
-import Root from './index';
+import { Root } from './Root';
 
 describe('<App />', () => {
   test('rendering empty data', async () => {

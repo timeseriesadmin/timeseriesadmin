@@ -1,8 +1,9 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, Theme } from '@material-ui/core/styles';
-import QueryReference from '../QueryReference';
-import { DOCS_URL } from '../../../config';
+import QueryHistory from '../QueryHistory';
+
+import { HISTORY_MAX_LENGTH } from '../../../../config';
 
 const styles = (theme: Theme): any => ({
   root: {
@@ -12,10 +13,6 @@ const styles = (theme: Theme): any => ({
     padding: theme.spacing(2),
     paddingBottom: 0,
   },
-  link: {
-    textDecoration: 'underline',
-    cursor: 'pointer',
-  },
 });
 
 type Props = {
@@ -24,14 +21,11 @@ type Props = {
 const PanelHistory = ({ classes }: Props) => (
   <div>
     <Typography variant="body1" className={classes.info}>
-      Some examples taken from{' '}
-      <a target="_blank" rel="noopener noreferrer" href={DOCS_URL}>
-        official InfluxDB docs
-      </a>
-      .
+      List of most recent queries executed, with max length of{' '}
+      {HISTORY_MAX_LENGTH} items.
     </Typography>
     <div className={classes.root}>
-      <QueryReference />
+      <QueryHistory />
     </div>
   </div>
 );

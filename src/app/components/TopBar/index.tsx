@@ -11,8 +11,8 @@ import DrawerCloseIcon from '@material-ui/icons/ChevronRight';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 
-import VersionInfo from '../VersionInfo';
-import IconMain from '../IconMain';
+import { VersionInfo } from './version/VersionInfo';
+import { IconMain } from './icon/IconMain';
 
 import styles from './styles';
 

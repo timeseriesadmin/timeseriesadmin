@@ -3,7 +3,7 @@ import Drawer from '@material-ui/core/Drawer';
 
 import TopBar from '../TopBar';
 import MainContent from '../MainContent/MainContent';
-import DrawerRight from '../DrawerRight';
+import { DrawerRight } from '../sidebar/DrawerRight';
 
 import { useStyles } from './styles';
 import { SettingsContextProvider } from 'app/contexts/SettingsContext';

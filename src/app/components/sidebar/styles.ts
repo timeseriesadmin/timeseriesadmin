@@ -1,7 +1,9 @@
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+
 const mediaRule = '@media (min-width:0px) and (orientation: landscape)';
 
-export default function(theme: any): any {
-  return {
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
     root: {
       width: '100%',
     },
@@ -29,10 +31,11 @@ export default function(theme: any): any {
       paddingTop: theme.mixins.toolbar.minHeight,
       // eslint-disable-next-line no-useless-computed-key
       [mediaRule]: {
-        paddingTop: theme.mixins.toolbar[mediaRule].minHeight,
+        paddingTop: (theme.mixins.toolbar[mediaRule] as any).minHeight,
       },
       [theme.breakpoints.up('sm')]: {
-        paddingTop: theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight,
+        paddingTop: (theme.mixins.toolbar[theme.breakpoints.up('sm')] as any)
+          .minHeight,
       },
     },
     dragger: {
@@ -55,5 +58,5 @@ export default function(theme: any): any {
         backgroundColor: '#fff',
       },
     },
-  };
-}
+  }),
+);

@@ -1,8 +1,10 @@
 import React from 'react';
 import { render, fireEvent } from 'utils/test-utils';
 import TopBar from './index';
-import VersionInfo from '../VersionInfo';
-jest.mock('../VersionInfo', () => jest.fn(() => <div></div>));
+import { VersionInfo } from './version/VersionInfo';
+jest.mock('./version/VersionInfo');
+
+(VersionInfo as jest.Mock<any>).mockReturnValue(<div></div>);
 
 describe('<TopBar />', () => {
   test('rendering and opening sidebar', async () => {

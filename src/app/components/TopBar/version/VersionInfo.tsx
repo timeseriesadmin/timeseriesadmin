@@ -2,13 +2,13 @@ import React from 'react';
 import useAsync from 'react-use/lib/useAsync';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core';
 
-import { CURRENT_VERSION } from '../../../config';
+import { CURRENT_VERSION } from '../../../../config';
 import { getLatestVersion, LATEST_RELEASE_URL } from './getLatestVersion';
 import { isVersionOutdated } from './isVersionOutdated';
 
-const styles = () => ({
+const useStyles = makeStyles({
   root: {
     fontSize: 10,
   },
@@ -21,14 +21,15 @@ const styles = () => ({
   },
 });
 
-function VersionInfo({ classes }: { classes: any }) {
+export const VersionInfo: React.FC = () => {
   const { loading, value, error } = useAsync(getLatestVersion);
+  const classes = useStyles({});
 
   return (
     <Typography
       variant="caption"
       color="inherit"
-      className={classes.versionInfo}
+      className={classes.root}
       component="div"
     >
       ver. <span id="version">{CURRENT_VERSION}</span>
@@ -45,6 +46,4 @@ function VersionInfo({ classes }: { classes: any }) {
       )}
     </Typography>
   );
-}
-
-export default withStyles(styles)(VersionInfo);
+};

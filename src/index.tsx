@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Root from './app/components/Root';
+import { Root } from './app/components/root/Root';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -12,8 +12,8 @@ if (!root) {
 ReactDOM.render(<Root />, root);
 
 if (module.hot) {
-  module.hot.accept('./app/components/Root', () => {
-    const NextRoot = require('./app/components/Root').default;
+  module.hot.accept('./app/components/root/Root', () => {
+    const NextRoot = require('./app/components/root/Root').Root;
     ReactDOM.render(<NextRoot />, root);
   });
 }

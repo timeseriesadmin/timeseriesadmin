@@ -1,15 +1,15 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import DrawerRight from './index';
+import { DrawerRight } from './DrawerRight';
 
-import PanelExplorer from '../PanelExplorer/PanelExplorer';
-import PanelHistory from '../PanelHistory';
-import PanelReference from '../PanelReference';
-import PanelConnect from '../PanelConnect';
-jest.mock('../PanelExplorer/PanelExplorer', () => jest.fn(() => <div></div>));
-jest.mock('../PanelHistory', () => jest.fn(() => <div></div>));
-jest.mock('../PanelReference', () => jest.fn(() => <div></div>));
-jest.mock('../PanelConnect', () => jest.fn(() => <div></div>));
+import PanelExplorer from './PanelExplorer/PanelExplorer';
+import PanelHistory from './PanelHistory';
+import PanelReference from './PanelReference';
+import PanelConnect from './PanelConnect';
+jest.mock('./PanelExplorer/PanelExplorer', () => jest.fn(() => <div></div>));
+jest.mock('./PanelHistory', () => jest.fn(() => <div></div>));
+jest.mock('./PanelReference', () => jest.fn(() => <div></div>));
+jest.mock('./PanelConnect', () => jest.fn(() => <div></div>));
 
 describe('<DrawerRight />', () => {
   test('rendering', () => {
