@@ -5,7 +5,7 @@ echo This script will create new release of TSA version: $VERSION
 echo Press any key to continue...
 read
 
-yarn dist:all
+npm run dist:all
 
 mkdir -p release
 

@@ -5,7 +5,7 @@ function commonError(error) {
         return error;
     }
     if (error.response && error.response.status && error.response.statusText) {
-        console.log('request error');
+        // console.log('request error');
         // probably a request error
         return {
             title: error.response.status + ": " + error.response.statusText,
@@ -14,7 +14,7 @@ function commonError(error) {
         };
     }
     if (error.code && error.message && error.stack) {
-        console.log('native error');
+        // console.log('native error');
         // probably a NodeJS or browser native error
         return {
             title: error.code + ": " + error.message,
@@ -23,7 +23,7 @@ function commonError(error) {
         };
     }
     if (error.message) {
-        console.log('network error');
+        // console.log('network error');
         // probably a network error
         return {
             title: error.message,
@@ -32,7 +32,7 @@ function commonError(error) {
         };
     }
     if (error.isAxiosError) {
-        console.log('axios error');
+        // console.log('axios error');
         return {
             title: error.code,
             details: error,
@@ -47,5 +47,3 @@ function commonError(error) {
     };
 }
 exports.commonError = commonError;
-// exports.commonError = commonError;
-// module.exports.commonError = commonError;
