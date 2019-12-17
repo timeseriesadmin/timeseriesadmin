@@ -6,8 +6,8 @@ jest.mock('./executeViaElectron');
 import { executeViaElectron } from './executeViaElectron';
 jest.mock('./parseQueryResults');
 import { parseQueryResults } from './parseQueryResults';
-jest.mock('../../shared/influxRequest');
-import { influxRequest } from '../../shared/influxRequest';
+jest.mock('../shared/influxRequest');
+import { influxRequest } from '../shared/influxRequest';
 
 const queryArgs = {
   url: 'http://test.test:8086',

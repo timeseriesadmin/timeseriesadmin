@@ -8,7 +8,7 @@ import get from 'lodash/get';
 
 import { composeValidators, isRequired } from 'app/helpers/validators';
 import { RenderField } from 'app/helpers/form';
-import { isElectron } from 'app/apollo/helpers/isElectron';
+import { isElectron } from 'app/helpers/isElectron';
 import { SettingsContext } from 'app/contexts/SettingsContext';
 
 const styles = (theme: Theme): any => ({

@@ -1,6 +1,6 @@
 import { getConnections, updateConnections } from './connections';
-import storage from '../../helpers/storage';
-jest.mock('../../helpers/storage');
+import storage from './storage';
+jest.mock('./storage');
 
 const connections = [
   {

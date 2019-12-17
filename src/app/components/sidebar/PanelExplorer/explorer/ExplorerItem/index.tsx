@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import useAsyncFn from 'react-use/lib/useAsyncFn';
-import { queryBase } from 'app/apollo/helpers/queryBase';
+import { queryBase } from 'app/helpers/queryBase';
 
 import ExplorerButton from '../ExplorerButton';
 import theme from '../../../../theme';

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import Form from './form/Form';
 import Results from './results/Results';
-import { queryBase } from 'app/apollo/helpers/queryBase';
+import { queryBase } from 'app/helpers/queryBase';
 import { commonError } from 'app/shared/commonError';
 import { QueryHistoryContext } from 'app/contexts/QueryHistoryContext';
 

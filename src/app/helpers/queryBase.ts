@@ -1,7 +1,7 @@
 import { isElectron } from './isElectron';
 import { executeViaElectron } from './executeViaElectron';
 import { parseQueryResults } from './parseQueryResults';
-import { influxRequest } from '../../shared/influxRequest';
+import { influxRequest } from '../shared/influxRequest';
 
 export async function queryBase(
   form: any,
