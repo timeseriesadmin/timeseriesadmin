@@ -80,5 +80,3 @@ function influxRequest(_a) {
     });
 }
 exports.influxRequest = influxRequest;
-// exports.influxRequest = influxRequest;
-// module.exports.influxRequest = influxRequest;
