@@ -6,12 +6,10 @@ import theme from '../theme';
 import { App } from '../App';
 import client from '../../apollo';
 
-const Root = () => (
+export const Root = () => (
   <ApolloProvider client={client}>
     <MuiThemeProvider theme={theme}>
       <App />
     </MuiThemeProvider>
   </ApolloProvider>
 );
-
-export default Root;

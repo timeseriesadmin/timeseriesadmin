@@ -1,23 +1,23 @@
 version: 2.1
 
 jobs: # a collection of steps
-  build:
-    docker: # run the steps with Docker
-      # - image: circleci/node:8.12.0 # ...with this image as the primary container; this is where all `steps` will run
-      - image: circleci/node:10.15.3 # ...with this image as the primary container; this is where all `steps` will run
-        environment:
-          TERM: xterm
-    steps:
-      - checkout # special step to check out source code to working directory
-      - restore_cache: # special step to restore the dependency cache
-          key: node-cache{{ checksum "package.json" }}
-      - run:
-          command: npm install
-      - save_cache: # special step to save the dependency cache
-          key: node-cache{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-            - /root/.cache
+  # build:
+  #   docker: # run the steps with Docker
+  #     # - image: circleci/node:8.12.0 # ...with this image as the primary container; this is where all `steps` will run
+  #     - image: circleci/node:10.15.3 # ...with this image as the primary container; this is where all `steps` will run
+  #       environment:
+  #         TERM: xterm
+  #   steps:
+  #     - checkout # special step to check out source code to working directory
+  #     - restore_cache: # special step to restore the dependency cache
+  #         key: node-cache{{ checksum "package.json" }}
+  #     - run:
+  #         command: npm install
+  #     - save_cache: # special step to save the dependency cache
+  #         key: node-cache{{ checksum "package.json" }}
+  #         paths:
+  #           - ./node_modules
+  #           - /root/.cache
 
   run_tests:
     docker:
@@ -26,8 +26,8 @@ jobs: # a collection of steps
           TERM: xterm
     steps:
       - checkout # special step to check out source code to working directory
-      - restore_cache: # special step to restore the dependency cache
-          key: node-cache{{ checksum "package.json" }}
+      # - restore_cache: # special step to restore the dependency cache
+      #     key: node-cache{{ checksum "package.json" }}
       - run:
           command: npm install
       - run:
@@ -55,7 +55,7 @@ jobs: # a collection of steps
           command: npm run start
           background: true
       - run:
-          command: npm run wait-on -d 60000 http://localhost:3000
+          command: npx wait-on -d 60000 http://localhost:3000
           # command: npm run wait-on http://localhost:3000 && npm run wait-on http://localhost:8086/ping
       - run:
           command: npm run ci:cypress
@@ -63,8 +63,9 @@ jobs: # a collection of steps
 workflows:
   tests:
     jobs:
-      - build
-      - run_tests:
-          requires:
-            - build
+      # - build
+      # - run_tests:
+      #     requires:
+      #       - build
+      - run_tests
       - run_e2e_tests

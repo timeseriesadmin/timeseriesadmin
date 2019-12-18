@@ -33,6 +33,7 @@ export function RenderField({
                 onClick={() => setPasswordVisible(true)}
                 onMouseDown={() => setPasswordVisible(false)}
                 edge="end"
+                data-testid="password-visibility-toggle"
               >
                 {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
               </IconButton>

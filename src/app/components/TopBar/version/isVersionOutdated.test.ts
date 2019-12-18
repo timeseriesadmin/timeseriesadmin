@@ -1,6 +1,6 @@
 import { isVersionOutdated } from './isVersionOutdated';
-import '../../../config';
-jest.mock('../../../config', () => ({
+import '../../../../config';
+jest.mock('../../../../config', () => ({
   CURRENT_VERSION: '0.1.1',
 }));
 

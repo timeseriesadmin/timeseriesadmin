@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import storage from '../../helpers/storage';
+import storage from './storage';
 
 export const getConnections = (cache: any) => {
   const { connections } = cache.readQuery({
