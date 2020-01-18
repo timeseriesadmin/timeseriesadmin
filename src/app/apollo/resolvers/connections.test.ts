@@ -1,6 +1,6 @@
 import { saveConnection, deleteConnection } from './connections';
-import { getConnections, updateConnections } from '../helpers/connections';
-jest.mock('../helpers/connections');
+import { getConnections, updateConnections } from '../../helpers/connections';
+jest.mock('../../helpers/connections');
 
 describe('connections resolvers', () => {
   test('saveConnection() new', () => {

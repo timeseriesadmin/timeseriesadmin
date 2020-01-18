@@ -8,8 +8,8 @@ import {
   wait,
 } from 'utils/test-utils';
 
-jest.mock('app/apollo/helpers/queryBase');
-import { queryBase } from 'app/apollo/helpers/queryBase';
+jest.mock('app/helpers/queryBase');
+import { queryBase } from 'app/helpers/queryBase';
 
 import PanelExplorer from './PanelExplorer';
 

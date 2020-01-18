@@ -33,10 +33,12 @@ describe('<FormInflux />', () => {
   test('rendering and submitting', async () => {
     // spy has to be async to properly trigger "submitting" form state
     const spy: any = jest.fn(async () => undefined);
-    const { getByText, getByLabelText } = render(
-      <FormInflux onSubmit={spy} />,
-      { mocks },
-    );
+    const {
+      queryByText,
+      getByText,
+      getByLabelText,
+      getByTestId,
+    } = render(<FormInflux onSubmit={spy} />, { mocks });
     expect(getByText('Loading data...')).toBeDefined();
 
     await waitForElement(() => getByText('Run query'));
@@ -46,6 +48,12 @@ describe('<FormInflux />', () => {
     expect(getByLabelText('Password').value).toBe('test_pass');
     expect(getByLabelText('Database').value).toBe('test_db');
     expect(getByLabelText('Query').value).toBe('test query');
+    expect(getByLabelText('Password').value).toBe('test_pass');
+
+    // toggle password visibility
+    expect(queryByText('test_pass')).toBeNull();
+    fireEvent.click(getByTestId('password-visibility-toggle'));
+    expect(queryByText('test_pass')).toBeDefined();
 
     fireEvent.submit(getByText('Run query')); // .click() doesn't work, it has to be .submit()
     await waitForElement(() => getByText('Executing query...'));

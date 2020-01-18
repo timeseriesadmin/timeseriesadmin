@@ -1,4 +1,4 @@
-import { getConnections, updateConnections } from '../helpers/connections';
+import { getConnections, updateConnections } from '../../helpers/connections';
 
 import { FormParams } from './form';
 

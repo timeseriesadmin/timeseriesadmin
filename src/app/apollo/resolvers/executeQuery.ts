@@ -1,4 +1,4 @@
-import { queryBase } from 'app/apollo/helpers/queryBase';
+import { queryBase } from '../../helpers/queryBase';
 
 export const executeQuery = async (_: void, queryParams: any): Promise<{}> => {
   // TODO: ensure LIMIT if not provided but ONLY for SELECTs
