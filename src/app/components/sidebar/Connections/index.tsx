@@ -35,8 +35,14 @@ const styles = (): any => ({
 });
 
 export const SET_FORM_QUERY = gql`
-  mutation($url: String!, $u: String, $p: String, $db: String) {
-    updateForm(url: $url, u: $u, p: $p, db: $db) @client
+  mutation(
+    $url: String!
+    $u: String
+    $p: String
+    $db: String
+    $unsafeSsl: Boolean
+  ) {
+    updateForm(url: $url, u: $u, p: $p, db: $db, unsafeSsl: $unsafeSsl) @client
   }
 `;
 
@@ -48,6 +54,7 @@ export const GET_CONNECTIONS = gql`
       u
       p
       db
+      unsafeSsl
     }
   }
 `;

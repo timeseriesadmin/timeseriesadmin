@@ -29,8 +29,8 @@ export default `
   }
   type Mutation {
     executeQuery(url: String!, u: String, p: String, db: String, q: String!): Boolean
-    updateForm(url: String, u: String, p: String, db: String, q: String): Boolean
-    saveConnection(url: String, u: String, p: String, db: String): Boolean
+    updateForm(url: String, u: String, p: String, db: String, q: String, unsafeSsl: Boolean): Boolean
+    saveConnection(url: String, u: String, p: String, db: String, unsafeSsl: Boolean): Boolean
     deleteConnection(id: String!): Boolean
   }
   type Query {
