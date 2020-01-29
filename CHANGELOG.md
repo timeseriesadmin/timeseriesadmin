@@ -1,5 +1,11 @@
 ## master
 
+## v0.1.8
+
+### :bug: Bug Fix
+
+- fix "Ignore SSL" in Explorer panel
+
 ## v0.1.7
 
 #### :rocket: New Features
