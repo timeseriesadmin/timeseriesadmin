@@ -11,6 +11,7 @@ export const getConnections = (cache: any) => {
           u
           p
           db
+          unsafeSsl
         }
       }
     `,

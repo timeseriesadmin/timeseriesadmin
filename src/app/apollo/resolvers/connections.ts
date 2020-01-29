@@ -4,7 +4,7 @@ import { FormParams } from './form';
 
 export const saveConnection = (
   _obj: void,
-  { url, u, p, db }: FormParams,
+  { url, u, p, db, unsafeSsl }: FormParams,
   { cache }: any,
 ): null => {
   const connections = getConnections(cache);
@@ -13,6 +13,7 @@ export const saveConnection = (
     u,
     p,
     db,
+    unsafeSsl,
     id: `${url}${u || '_'}${db || '_'}`,
     __typename: 'Connection',
   };
