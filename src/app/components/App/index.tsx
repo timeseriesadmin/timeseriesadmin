@@ -45,7 +45,7 @@ export const App: React.FC = () => {
         >
           <DrawerRight
             drawerWidth={drawerWidth}
-            updateWidth={(width: number) => setDrawerWidth(width)}
+            updateWidth={(width: number): void => setDrawerWidth(width)}
           />
         </Drawer>
       </div>

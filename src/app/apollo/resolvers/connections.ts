@@ -14,7 +14,7 @@ export const saveConnection = (
     p,
     db,
     unsafeSsl,
-    id: `${url}${u || '_'}${db || '_'}${unsafeSsl || '_'}`,
+    id: `${url}${u || '_'}${db || '_'}`,
     __typename: 'Connection',
   };
 

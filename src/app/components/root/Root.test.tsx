@@ -3,6 +3,10 @@ import { render, waitForElement } from 'utils/test-utils';
 import { Root } from './Root';
 import { fireEvent, within } from '@testing-library/react';
 
+jest.mock('app/helpers/queryBase', () => ({
+  queryBase: jest.fn().mockResolvedValue({ response: { status: 200 } }),
+}));
+
 describe('<App />', () => {
   test('connection and query history saving', async () => {
     const { getByText, getByLabelText, getByTestId } = render(<Root />);

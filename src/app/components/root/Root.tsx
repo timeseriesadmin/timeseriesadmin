@@ -6,7 +6,7 @@ import theme from '../theme';
 import { App } from '../App';
 import client from '../../apollo';
 
-export const Root = () => (
+export const Root: React.FC = () => (
   <ApolloProvider client={client}>
     <MuiThemeProvider theme={theme}>
       <App />

@@ -16,7 +16,7 @@ describe('connections resolvers', () => {
       {
         __typename: 'Connection',
         db: undefined,
-        id: 'http://test.testuser__',
+        id: 'http://test.testuser_',
         p: undefined,
         u: 'user',
         url: 'http://test.test',
@@ -30,7 +30,7 @@ describe('connections resolvers', () => {
       {
         __typename: 'Connection',
         db: undefined,
-        id: 'http://test.test___',
+        id: 'http://test.test__',
         p: undefined,
         u: undefined,
         url: 'http://test.test',
@@ -53,7 +53,7 @@ describe('connections resolvers', () => {
       {
         __typename: 'Connection',
         db: undefined,
-        id: 'http://test.test___',
+        id: 'http://test.test__',
         p: 'password',
         u: undefined,
         url: 'http://test.test',
@@ -67,7 +67,7 @@ describe('connections resolvers', () => {
       {
         __typename: 'Connection',
         db: 'db',
-        id: 'http://test.testuserdbtrue',
+        id: 'http://test.testuserdb',
         p: undefined,
         u: 'user',
         url: 'http://test.test',
@@ -91,7 +91,7 @@ describe('connections resolvers', () => {
       {
         __typename: 'Connection',
         db: 'db',
-        id: 'http://test.testuserdbtrue',
+        id: 'http://test.testuserdb',
         p: 'password',
         u: 'user',
         url: 'http://test.test',

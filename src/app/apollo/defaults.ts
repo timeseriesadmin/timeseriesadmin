@@ -2,7 +2,7 @@ import storage from 'app/helpers/storage';
 
 // ensure connection fields existence
 const connections = JSON.parse(storage.get('connections', '[]')).map(
-  (conn: any) => ({
+  (conn: {}) => ({
     url: '',
     u: '',
     p: '',
