@@ -63,7 +63,7 @@ Use `npm run dist:[platform]` to create platform specific bundle (`platform` may
 ## Releases
 
 0. Update CHANGELOG.md
-1. Use `npm publish` to set new version number (you will be prompted for that)
+1. Use `npm version patch` to set new version number and then `npm publish` to publish on NPM
 1. Execute `./release.sh` script to create Electron packages for every supported system
 1. Push Docker images with `npm run release:docker`
 1. Manually create Github release, upload files from step 2. and changes from CHANGELOG.md
