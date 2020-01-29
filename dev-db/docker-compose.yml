@@ -19,5 +19,5 @@ services:
       - INFLUXDB_HTTP_HTTPS_CERTIFICATE=/cert/certificate.pem
       - INFLUXDB_HTTP_HTTPS_PRIVATE_KEY=/cert/key.pem
 
-# In order to simulate unsafe SSL add the following like to your /etc/hosts file and access database from test.dev URL
+# In order to simulate unsafe SSL add the following entry to your /etc/hosts file and access database from test.dev URL
 # 127.0.0.1 test.dev

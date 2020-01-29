@@ -47,6 +47,7 @@ describe('<Connections />', () => {
         u: 'user',
         p: 'pass',
         db: 'db',
+        unsafeSsl: false,
       },
     ];
     const { getByText, getByLabelText } = render(<Connections />, {
