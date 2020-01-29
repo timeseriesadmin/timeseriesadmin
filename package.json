@@ -2,7 +2,7 @@
   "name": "timeseriesadmin",
   "description": "Administration and querying interface for InfluxDB databases",
   "author": "Jan Grzegorowski <grzegorowski@gmail.com> (https://grzegorowski.com)",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": false,
   "license": "MIT",
   "dependencies": {
