@@ -83,7 +83,7 @@
     "eslint-plugin-react": "7.18.3",
     "prettier": "1.19.1",
     "rimraf": "3.0.2",
-    "wait-on": "4.0.0"
+    "wait-on": "4.0.1"
   },
   "main": "public/electron.js",
   "_homepage": "homepage value should not be changed or Electron will not be able to localize source files",
