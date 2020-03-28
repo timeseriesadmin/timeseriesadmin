@@ -21,7 +21,7 @@ const Explorer: React.FC<Props> = ({ classes, form }: Props) => (
   <MuiThemeProvider theme={theme}>
     <ExplorerItem params={{ ...form, q: 'SHOW DATABASES' }} label="Databases">
       {(data: { name: string; tag: string }[]): ReactNode =>
-        data.map(database => (
+        data.map((database) => (
           <ListItem key={database.name}>
             <ExplorerCollapse
               renderToggler={(toggle, isExpanded): ReactNode => (
@@ -161,7 +161,7 @@ const Explorer: React.FC<Props> = ({ classes, form }: Props) => (
                 {(data: {}[]): ReactNode =>
                   data.map((policy: any) => {
                     const description = Object.keys(policy)
-                      .map(k => `${k}: ${policy[k]}`)
+                      .map((k) => `${k}: ${policy[k]}`)
                       .join(', ');
                     return (
                       <ListItem key={policy.name}>

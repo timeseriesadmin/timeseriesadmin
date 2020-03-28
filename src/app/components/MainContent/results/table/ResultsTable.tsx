@@ -55,7 +55,7 @@ function customSort(
 ): Props['parsedData'] {
   return orderBy(
     data,
-    val =>
+    (val) =>
       !val.data[colIndex]
         ? Number.NEGATIVE_INFINITY
         : Number(val.data[colIndex]),
@@ -76,7 +76,7 @@ const ResultsTable: FC<Props> = ({
     setTimeFormat(timeFormat);
   };
 
-  const tableData = parsedData.map(data => {
+  const tableData = parsedData.map((data) => {
     if (timeFormat && data.time) {
       return {
         ...data,
@@ -103,7 +103,7 @@ const ResultsTable: FC<Props> = ({
           <MUIDataTable
             title="Query results"
             data={tableData}
-            columns={columns.map(columnKey => ({
+            columns={columns.map((columnKey) => ({
               name: columnKey,
               label: columnKey,
             }))}
