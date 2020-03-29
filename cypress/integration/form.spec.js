@@ -43,7 +43,7 @@ describe('Form', () => {
       .closest('button')
       .next()
       .click();
-    cy.queryByText('database: TestDatabase').should('not.exist');
+    cy.findAllByText('database: TestDatabase').should('not.exist');
     cy.findByText(
       'No saved connections. Add one using SAVE CONNECTION DATA button.',
     ).should('exist');

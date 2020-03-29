@@ -3,7 +3,6 @@ import { render, fireEvent, setupClient, wait } from 'utils/test-utils';
 
 import PanelHistory from './index';
 import { QueryHistoryContext } from 'app/contexts/QueryHistoryContext';
-import { waitForElement } from '@testing-library/react';
 
 const mocks = {
   Mutation: {
@@ -33,7 +32,7 @@ describe('<PanelHistory />', () => {
       },
     );
 
-    waitForElement(() => getByText('Query form'));
+    wait(() => getByText('Query form'));
     expect(
       getByText(
         'List of most recent queries executed, with max length of 300 items.',
@@ -52,7 +51,7 @@ describe('<PanelHistory />', () => {
       },
     );
 
-    await waitForElement(() => getByText('SELECT * FROM test'));
+    await wait(() => getByText('SELECT * FROM test'));
     expect(getByText('SELECT field1 FROM test123')).toBeDefined();
     fireEvent.click(getByText('SELECT * FROM test'));
 

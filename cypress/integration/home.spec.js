@@ -3,7 +3,7 @@ describe('Home Page', () => {
     cy.visit('/');
   });
   it('successfully loads all content', () => {
-    cy.queryByText('New version available').should('not.exist');
+    cy.findAllByText('New version available').should('not.exist');
     // sidebar panels
     cy.findByText('Connect').should('exist');
     cy.findByText('Explorer').should('exist');
@@ -26,7 +26,7 @@ describe('Home Page', () => {
     cy.findByText('Reference').click();
     cy.findByText('official InfluxDB docs').should('exist');
     cy.findByText('Connect').click();
-    cy.queryByText('official InfluxDB docs').should('not.exist');
+    cy.findAllByText('official InfluxDB docs').should('not.exist');
     cy.findByText('List of all saved connections').should('exist');
   });
   it('has working sidebar toggle button', () => {

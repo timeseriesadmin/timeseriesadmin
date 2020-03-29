@@ -26,7 +26,7 @@ export const QueryHistoryContextProvider: React.FC<Props> = (props: Props) => {
 
   const appendHistoryEntry = (historyEntry: HistoryEntry): HistoryEntry[] => {
     const queryIndex = queryHistory.findIndex(
-      entry => entry.query === historyEntry.query,
+      (entry) => entry.query === historyEntry.query,
     );
 
     const cleanHistory =
