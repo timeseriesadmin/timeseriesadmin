@@ -21,7 +21,6 @@ type Props = {
 
 export const DrawerRight: React.FC<Props> = (props: Props) => {
   const [activeTab, setActiveTab] = useState(0);
-  const [isResizing, setResizing] = useState(false);
   const classes = useStyles(props);
   const { drawerWidth, updateWidth } = props;
 
@@ -43,19 +42,13 @@ export const DrawerRight: React.FC<Props> = (props: Props) => {
   };
 
   const handleMouseup = (): void => {
-    // we don't want to do anything if we aren't resizing.
-    if (!isResizing) {
-      return;
-    }
     document.removeEventListener('mouseup', handleMouseup);
     document.removeEventListener('mousemove', handleMousemove);
-    setResizing(true);
   };
 
   const handleMousedown = (): void => {
     document.addEventListener('mouseup', handleMouseup);
     document.addEventListener('mousemove', handleMousemove);
-    setResizing(true);
   };
 
   const handleChange = (_event: ChangeEvent, value: number): void => {
