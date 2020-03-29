@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitForElement } from 'utils/test-utils';
+import { render, wait } from 'utils/test-utils';
 import { Root } from './Root';
 import { fireEvent, within } from '@testing-library/react';
 
@@ -36,7 +36,7 @@ describe('<App />', () => {
     fireEvent.click(getByText('Save connection data'));
 
     // then
-    await waitForElement(() => getByText('List of all saved connections'));
+    await wait(() => getByText('List of all saved connections'));
 
     expect(sidebar.getByText('http://test.test:8086')).toBeDefined();
     expect(sidebar.getByText('database: test_db')).toBeDefined();
@@ -49,6 +49,6 @@ describe('<App />', () => {
     fireEvent.click(sidebar.getByText('History'));
 
     // then
-    await waitForElement(() => sidebar.getByText('test query'));
+    await wait(() => sidebar.getByText('test query'));
   });
 });

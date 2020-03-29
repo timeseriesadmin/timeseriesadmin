@@ -1,5 +1,11 @@
 ## master
 
+## v0.1.9
+
+### :bug: Bug Fix
+
+- fix resizable sidebar
+
 ## v0.1.8
 
 ### :bug: Bug Fix

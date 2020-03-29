@@ -36,7 +36,7 @@ const ExplorerItem: React.FC<Props> = (props: Props) => {
       // execute mutation on first expansion
       fetch();
     }
-    setExpanded(expanded => !expanded);
+    setExpanded((expanded) => !expanded);
   };
 
   const handleRefresh = (): void => {

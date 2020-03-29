@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitForElement, fireEvent } from 'utils/test-utils';
+import { render, wait, fireEvent } from 'utils/test-utils';
 
 // The component AND the query need to be exported
 import FormInflux, { GET_INITIAL, SAVE_CONNECTION } from './Form';
@@ -41,7 +41,7 @@ describe('<FormInflux />', () => {
     } = render(<FormInflux onSubmit={spy} />, { mocks });
     expect(getByText('Loading data...')).toBeDefined();
 
-    await waitForElement(() => getByText('Run query'));
+    await wait(() => getByText('Run query'));
 
     expect(getByLabelText('Database URL').value).toBe('http://test.test:8086');
     expect(getByLabelText('User').value).toBe('test_user');
@@ -56,8 +56,8 @@ describe('<FormInflux />', () => {
     expect(queryByText('test_pass')).toBeDefined();
 
     fireEvent.submit(getByText('Run query')); // .click() doesn't work, it has to be .submit()
-    await waitForElement(() => getByText('Executing query...'));
-    await waitForElement(() => getByText('Run query'));
+    await wait(() => getByText('Executing query...'));
+    await wait(() => getByText('Run query'));
     expect(spy).toBeCalledTimes(1);
     expect(spy.mock.calls[0][0]).toEqual({
       db: 'test_db',
@@ -76,8 +76,8 @@ describe('<FormInflux />', () => {
       metaKey: true,
       ctrlKey: true,
     });
-    await waitForElement(() => getByText('Executing query...'));
-    await waitForElement(() => getByText('Run query'));
+    await wait(() => getByText('Executing query...'));
+    await wait(() => getByText('Run query'));
     expect(spy).toBeCalledTimes(2);
   });
 });
