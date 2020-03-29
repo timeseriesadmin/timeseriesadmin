@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  render,
-  fireEvent,
-  waitForElement,
-  setupClient,
-  within,
-  wait,
-} from 'utils/test-utils';
+import { render, fireEvent, setupClient, within, wait } from 'utils/test-utils';
 
 jest.mock('app/helpers/queryBase');
 import { queryBase } from 'app/helpers/queryBase';
@@ -50,7 +43,7 @@ describe('<PanelExplorer />', () => {
       { client: setupClient(mocks) },
     );
 
-    await waitForElement(() => getByText('Connected to http://test.test:8086'));
+    await wait(() => getByText('Connected to http://test.test:8086'));
 
     // Expanding sections
     (queryBase as jest.Mock<any>).mockReturnValue({
@@ -60,12 +53,12 @@ describe('<PanelExplorer />', () => {
     });
     fireEvent.click(getByLabelText('Expand Databases'));
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() => getByText('TestDB'));
+    await wait(() => getByText('TestDB'));
 
     // refresh
     fireEvent.click(getByLabelText('Refresh'));
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() => getByText('TestDB'));
+    await wait(() => getByText('TestDB'));
 
     fireEvent.click(getByLabelText('Expand TestDB'));
 
@@ -77,10 +70,10 @@ describe('<PanelExplorer />', () => {
     });
     fireEvent.click(getByLabelText('Expand Series'));
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() => getByText('testS,tag1=val1'));
+    await wait(() => getByText('testS,tag1=val1'));
     fireEvent.click(getByLabelText('Collapse Series'));
     // hide for future tests
-    await waitForElement(() => !queryByText('tag1=val1'));
+    await wait(() => !queryByText('tag1=val1'));
 
     // RP
     (queryBase as jest.Mock<any>).mockReturnValueOnce({
@@ -99,7 +92,7 @@ describe('<PanelExplorer />', () => {
     });
     fireEvent.click(getByLabelText('Expand Retention Policies'));
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() => getByText('autogen'));
+    await wait(() => getByText('autogen'));
     expect(
       getByText(
         'name: autogen, duration: 168h0m0s, default: true, shardGroupDuration: 168h0m0s, replicaN: replicaN, tags:',
@@ -114,7 +107,7 @@ describe('<PanelExplorer />', () => {
     });
     fireEvent.click(getByLabelText('Expand Measurements'));
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() => getByText('testM'));
+    await wait(() => getByText('testM'));
 
     fireEvent.click(getByLabelText('Expand testM'));
 
@@ -135,7 +128,7 @@ describe('<PanelExplorer />', () => {
     });
     fireEvent.click(getByLabelText('Expand Field Keys (by retention policy)'));
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() => getByLabelText('Expand autogen'));
+    await wait(() => getByLabelText('Expand autogen'));
 
     // Field Keys
     (queryBase as jest.Mock<any>).mockReturnValueOnce({
@@ -158,7 +151,7 @@ describe('<PanelExplorer />', () => {
     });
     fireEvent.click(getByLabelText('Expand autogen'));
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() => getByText('fk1'));
+    await wait(() => getByText('fk1'));
     expect(getByText('(integer)')).toBeDefined();
     expect(getByText('fk2')).toBeDefined();
     expect(getByText('(string)')).toBeDefined();
@@ -171,7 +164,7 @@ describe('<PanelExplorer />', () => {
     });
     fireEvent.click(getByLabelText('Expand Tag Keys'));
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() => getByText('tk1'));
+    await wait(() => getByText('tk1'));
 
     fireEvent.click(getByLabelText('Expand tk1'));
 
@@ -183,7 +176,7 @@ describe('<PanelExplorer />', () => {
     });
     fireEvent.click(getByLabelText('Expand Tag Values'));
     expect(getByText('Loading...')).toBeDefined();
-    await waitForElement(() => getByText('tag_value'));
+    await wait(() => getByText('tag_value'));
 
     // Look for measurement specific series
     const measurement = within(getByText('testM').parentNode.parentNode);
@@ -195,6 +188,6 @@ describe('<PanelExplorer />', () => {
     fireEvent.click(measurement.getByLabelText('Expand Series'));
     // loading won't be triggered because of query caching (?)
     expect(measurement.getByText('Loading...')).toBeDefined();
-    await waitForElement(() => measurement.getByText('testX,tag1=val1'));
+    await wait(() => measurement.getByText('testX,tag1=val1'));
   });
 });
