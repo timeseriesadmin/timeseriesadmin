@@ -47,7 +47,7 @@ export function setupClient(resolvers: any) {
 // it is sometimes required to wait for a while in order to execute Apollo Query or Mutation
 export const wait = async (timeout = 0) =>
   act(async () => {
-    new Promise(res => setTimeout(res, timeout));
+    new Promise((res) => setTimeout(res, timeout));
   });
 
 // re-export everything
