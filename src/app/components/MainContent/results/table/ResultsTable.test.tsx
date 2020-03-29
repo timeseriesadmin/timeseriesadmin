@@ -23,9 +23,9 @@ describe('<ResultsTable />', () => {
 
     // TODO: sorting test
     // fireEvent.click(getByText('col1'));
-    // await waitForElement(() => getByText('21'));
+    // await wait(() => getByText('21'));
     // fireEvent.click(getByText('col1'));
-    // await waitForElement(() => getByText('1'));
+    // await wait(() => getByText('1'));
     // debug();
     // expect(queryByText('2')).toBeNull();
   });

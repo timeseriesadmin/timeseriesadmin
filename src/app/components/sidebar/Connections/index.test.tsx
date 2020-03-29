@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, wait, waitForElement } from 'utils/test-utils';
+import { render, wait } from 'utils/test-utils';
 import Connections, { GET_CONNECTIONS, DELETE_CONNECTION } from './index';
 
 const mocks = (connections: any = []) => [
@@ -32,7 +32,7 @@ describe('<Connections />', () => {
 
     expect(getByText('Loading...')).toBeDefined();
     await wait();
-    await waitForElement(() =>
+    await wait(() =>
       getByText(
         'No saved connections. Add one using SAVE CONNECTION DATA button.',
       ),
@@ -54,7 +54,7 @@ describe('<Connections />', () => {
       mocks: mocks(connData),
     });
     await wait();
-    await waitForElement(() => getByText(connData[0].url));
+    await wait(() => getByText(connData[0].url));
 
     expect(getByText(`database: ${connData[0].db}`)).toBeDefined();
     expect(getByText(`user: ${connData[0].u}`)).toBeDefined();
