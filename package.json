@@ -82,7 +82,7 @@
     "eslint": "6.8.0",
     "eslint-plugin-react": "7.19.0",
     "nan": "2.14.0",
-    "prettier": "2.0.3",
+    "prettier": "2.0.4",
     "rimraf": "3.0.2",
     "wait-on": "4.0.1"
   },
