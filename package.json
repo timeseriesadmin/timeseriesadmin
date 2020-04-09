@@ -84,7 +84,7 @@
     "nan": "2.14.0",
     "prettier": "2.0.4",
     "rimraf": "3.0.2",
-    "wait-on": "4.0.1"
+    "wait-on": "4.0.2"
   },
   "main": "public/electron.js",
   "_homepage": "homepage value should not be changed or Electron will not be able to localize source files",
