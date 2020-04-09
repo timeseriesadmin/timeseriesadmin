@@ -20,7 +20,7 @@
     "@types/webpack-env": "1.15.1",
     "apollo-cache-inmemory": "1.6.5",
     "apollo-client": "2.6.8",
-    "apollo-link": "1.2.13",
+    "apollo-link": "1.2.14",
     "axios": "0.19.2",
     "compare-versions": "3.6.0",
     "date-fns": "2.12.0",
