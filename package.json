@@ -23,7 +23,7 @@
     "apollo-link": "1.2.14",
     "axios": "0.19.2",
     "compare-versions": "3.6.0",
-    "date-fns": "2.13.0",
+    "date-fns": "2.14.0",
     "final-form": "4.19.1",
     "graphql": "14.6.0",
     "graphql-tag": "2.10.3",
