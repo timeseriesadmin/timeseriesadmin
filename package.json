@@ -29,7 +29,7 @@
     "graphql-tag": "2.10.3",
     "history": "4.10.1",
     "lodash": "4.17.15",
-    "mui-datatables": "2.14.0",
+    "mui-datatables": "2.15.0",
     "papaparse": "5.2.0",
     "qs": "6.9.4",
     "react": "16.13.1",
