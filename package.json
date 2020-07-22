@@ -74,7 +74,7 @@
     "@typescript-eslint/parser": "2.34.0",
     "babel-eslint": "10.1.0",
     "babel-polyfill": "6.26.0",
-    "codecov": "3.7.0",
+    "codecov": "3.7.2",
     "cypress": "4.11.0",
     "electron": "8.4.0",
     "electron-builder": "22.7.0",
