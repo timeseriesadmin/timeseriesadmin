@@ -10,7 +10,7 @@
     "@material-ui/icons": "4.9.1",
     "@types/classnames": "2.2.10",
     "@types/jest": "25.2.3",
-    "@types/lodash": "4.14.158",
+    "@types/lodash": "4.14.159",
     "@types/mui-datatables": "2.14.2",
     "@types/node": "12.12.53",
     "@types/papaparse": "5.0.6",
