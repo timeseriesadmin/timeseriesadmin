@@ -1,6 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { withStyles, Theme } from '@material-ui/core/styles';
 import MUIDataTable from 'mui-datatables';
+import { unparse } from 'papaparse';
 
 import TableToolbar from './TableToolbar';
 import orderBy from 'lodash/orderBy';
@@ -114,6 +115,18 @@ const ResultsTable: FC<Props> = ({
               rowsPerPageOptions: [20, 100, 500, 1000, 5000],
               disableToolbarSelect: true,
               onRowsDelete: (): boolean => false,
+              onDownload: (
+                buildHead: (columns: any) => string,
+                buildBody: (data: any) => string,
+                columns: any[],
+                data: any[],
+              ): string => {
+                const headers = columns.map((column) => column.label);
+                const rows = data.map((row) => row.data);
+                rows.unshift(headers);
+
+                return unparse(rows);
+              },
             }}
           />
         </MuiThemeProvider>
