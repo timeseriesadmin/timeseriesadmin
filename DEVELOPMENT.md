@@ -17,10 +17,8 @@ Coverage reports are uploaded to Codecov service.
 
 ## Branching strategy
 
-- master - currently released code
-- develop - current state of development
+- master - current state of development (releases are tagged)
 - feature/\* - feature branch
-- chore/\* - package updates and other maintenance tasks
 
 ## Build development environment
 
