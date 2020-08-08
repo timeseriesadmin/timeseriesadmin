@@ -6,6 +6,10 @@
 
 - fix CSV download bug regarding negative numbers
 
+#### :rocket: New Features
+
+- info about ignored SSL error in connections panel
+
 ## v0.1.9
 
 ### :bug: Bug Fix

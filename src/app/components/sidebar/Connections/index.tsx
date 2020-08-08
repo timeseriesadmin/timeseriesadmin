@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from 'react-apollo';
 import { List, ListItem, Button, Typography } from '@material-ui/core';
@@ -68,32 +68,38 @@ export const DELETE_CONNECTION = gql`
 type Props = {
   classes: any;
 };
-const Connections = ({ classes }: Props) => {
+const Connections = ({ classes }: Props): ReactNode => {
   const { loading, error, data } = useQuery(GET_CONNECTIONS);
   const [deleteConnection] = useMutation(DELETE_CONNECTION);
   const [updateForm] = useMutation(SET_FORM_QUERY);
 
-  const handleDelete = (connectionId: any) => () =>
+  const handleDelete = (connectionId: string) => () =>
     deleteConnection({ variables: { id: connectionId } });
 
-  return loading ? (
-    <div className={classes.noList}>Loading...</div>
-  ) : !data || !data.connections || data.connections.length === 0 ? (
-    <div className={classes.noList}>
-      No saved connections. <br />
-      Add one using SAVE CONNECTION DATA button.
-    </div>
-  ) : error ? (
-    <div className={classes.noList}>Error!</div>
-  ) : (
+  if (loading) {
+    return <div className={classes.noList}>Loading...</div>;
+  }
+  if (!data || !data.connections || data.connections.length === 0) {
+    return (
+      <div className={classes.noList}>
+        No saved connections. <br />
+        Add one using SAVE CONNECTION DATA button.
+      </div>
+    );
+  }
+  if (error) {
+    return <div className={classes.noList}>Error!</div>;
+  }
+  return (
     <List className={classes.list}>
       {data.connections.map(
         (
           conn: {
-            url: React.ReactNode;
-            db: React.ReactNode;
-            u: React.ReactNode;
-            id: any;
+            url: string;
+            db: string;
+            u: string;
+            id: string;
+            unsafeSsl: boolean;
           },
           index: string | number | undefined,
         ) => (
@@ -119,6 +125,15 @@ const Connections = ({ classes }: Props) => {
                   style={{ fontSize: 12 }}
                 >
                   user: {conn.u}
+                </Typography>
+              )}
+              {conn.unsafeSsl && (
+                <Typography
+                  variant="body1"
+                  color="textSecondary"
+                  style={{ fontSize: 12 }}
+                >
+                  SSL errors ignored
                 </Typography>
               )}
             </Button>
