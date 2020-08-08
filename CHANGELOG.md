@@ -1,5 +1,11 @@
 ## master
 
+## v0.1.10
+
+### :bug: Bug Fix
+
+- fix CSV download bug regarding negative numbers
+
 ## v0.1.9
 
 ### :bug: Bug Fix
