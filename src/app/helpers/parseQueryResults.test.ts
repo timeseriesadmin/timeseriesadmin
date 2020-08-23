@@ -7,7 +7,8 @@ describe('parseQueryResults()', () => {
 ,,"weather,location=eu"
 ,,"weather,location=us"
 test,,"weather,location=us-midwest"
-,123,"weather,location123=eu"`;
+,123,"weather,location123=eu"
+test123,,asd="""as-d"""`;
 
     // when
     const parsed = parseQueryResults(data);
@@ -18,6 +19,7 @@ test,,"weather,location=us-midwest"
       { key: 'weather,location=us', name: '', tags: '' },
       { key: 'weather,location=us-midwest', name: 'test', tags: '' },
       { key: 'weather,location123=eu', name: '', tags: '123' },
+      { key: 'asd="as-d"', name: 'test123', tags: '' },
     ]);
   });
 

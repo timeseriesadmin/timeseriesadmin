@@ -1,7 +1,10 @@
 import { parse } from 'papaparse';
 
 export function parseQueryResults(data: string): any {
-  const parsed = parse(data, {
+  // Influx escapes double quotes with two additional double quotes
+  const unescapedData = data.replace(/"""/g, '"');
+
+  const parsed = parse(unescapedData, {
     header: true,
     skipEmptyLines: 'greedy', // skip empty and whitespace lines
   });

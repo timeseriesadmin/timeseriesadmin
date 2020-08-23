@@ -33,7 +33,10 @@ const Explorer: React.FC<Props> = ({ classes, form }: Props) => (
               )}
             >
               <ExplorerItem
-                params={{ ...form, q: `SHOW MEASUREMENTS ON ${database.name}` }}
+                params={{
+                  ...form,
+                  q: `SHOW MEASUREMENTS ON "${database.name}"`,
+                }}
                 label="Measurements"
               >
                 {(data: {}[]): ReactNode =>
