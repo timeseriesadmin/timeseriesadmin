@@ -4,6 +4,12 @@
 
 ### :bug: Bug Fix
 
+- fix hyphens support in measurement names in the Explorer panel
+
+## v0.1.10
+
+### :bug: Bug Fix
+
 - fix CSV download bug regarding negative numbers
 
 #### :rocket: New Features
