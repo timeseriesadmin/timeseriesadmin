@@ -14,7 +14,7 @@
     "@types/mui-datatables": "2.14.2",
     "@types/node": "12.12.54",
     "@types/papaparse": "5.0.6",
-    "@types/react": "16.9.46",
+    "@types/react": "16.9.47",
     "@types/react-dom": "16.9.8",
     "@types/react-inspector": "4.0.1",
     "@types/webpack-env": "1.15.2",
