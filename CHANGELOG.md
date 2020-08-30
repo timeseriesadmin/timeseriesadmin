@@ -1,5 +1,15 @@
 ## master
 
+## v0.1.11
+
+### :bug: Bug Fix
+
+- fix different time formats for timestamp = 0
+
+### :rocket: New Features
+
+- improve errors display to help debug future issues (no more white screen)
+
 ## v0.1.10
 
 ### :bug: Bug Fix
@@ -12,7 +22,7 @@
 
 - fix CSV download bug regarding negative numbers
 
-#### :rocket: New Features
+### :rocket: New Features
 
 - info about ignored SSL error in connections panel
 
