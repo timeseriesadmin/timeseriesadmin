@@ -1,6 +1,6 @@
 ## master
 
-## v0.1.11
+## v0.1.12
 
 ### :bug: Bug Fix
 
@@ -11,7 +11,7 @@
 - improve errors display to help debug future issues (no more white screen)
 - use ISO 8601 to format time
 
-## v0.1.10
+## v0.1.11
 
 ### :bug: Bug Fix
 
