@@ -106,7 +106,7 @@ const ResultsTable: FC<Props> = ({
             data={tableData}
             columns={columns.map((columnKey) => ({
               name: columnKey,
-              label: columnKey,
+              label: columnKey === 'time' ? 'time (UTC)' : columnKey,
             }))}
             options={{
               customSort,

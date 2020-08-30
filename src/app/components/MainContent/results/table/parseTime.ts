@@ -1,26 +1,19 @@
-import format from 'date-fns/format';
 import { TimeFormat } from 'app/contexts/SettingsContext';
 
-const currentDate = new Date();
-
 export const parseTime = (date: string, timeFormat: TimeFormat): string => {
-  const tzOffset = currentDate.getTimezoneOffset();
-
   const paddedTimestamp = date.padStart(7, '0');
-  const timestampNumber =
-    parseInt(paddedTimestamp.slice(0, -6), 10) + tzOffset * 60 * 1000;
+  const isoDate = new Date(
+    parseInt(paddedTimestamp.slice(0, -6), 10),
+  ).toISOString();
 
   switch (timeFormat) {
     case 's':
-      return format(timestampNumber, 'yyyy-MM-dd HH:mm:ss');
+      return isoDate.slice(0, -5) + 'Z';
     case 'ms':
-      return format(timestampNumber, 'yyyy-MM-dd HH:mm:ss.SSS');
+      return isoDate;
     case 'ns':
-      return (
-        format(timestampNumber, 'yyyy-MM-dd HH:mm:ss.SSS') +
-        paddedTimestamp.slice(-6)
-      );
+      return isoDate.slice(0, -1) + paddedTimestamp.slice(-6) + 'Z';
     default:
-      return `${timestampNumber}`;
+      return `${parseInt(paddedTimestamp, 10)}`;
   }
 };

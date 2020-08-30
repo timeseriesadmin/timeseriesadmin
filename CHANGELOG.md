@@ -9,6 +9,7 @@
 ### :rocket: New Features
 
 - improve errors display to help debug future issues (no more white screen)
+- use ISO 8601 to format time
 
 ## v0.1.10
 
