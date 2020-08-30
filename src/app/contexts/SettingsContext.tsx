@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 
+export type TimeFormat = 's' | 'ms' | 'ns' | 'timestamp';
 export type SettingsContext = {
   compactLayout: boolean;
-  timeFormat: string;
+  timeFormat: TimeFormat;
   setCompactLayout: (compactLayout: boolean) => void;
-  setTimeFormat: (timeFormat: string) => void;
+  setTimeFormat: (timeFormat: TimeFormat) => void;
 };
 
 export const SETTINGS_CONTEXT_DEFAULT = {
   compactLayout: false,
-  timeFormat: 'timestamp',
+  timeFormat: 'timestamp' as TimeFormat,
   isDrawerOpen: true,
   setCompactLayout: function (compactLayout: boolean): void {
     this.compactLayout = compactLayout;
   },
-  setTimeFormat: function (timeFormat: string): void {
+  setTimeFormat: function (timeFormat: TimeFormat): void {
     this.timeFormat = timeFormat;
   },
   setDrawerOpen: function (isOpen: boolean): void {
@@ -28,7 +29,7 @@ export const SettingsContext = React.createContext<SettingsContext>(
 
 export const SettingsContextProvider: React.FC<any> = ({ children }: any) => {
   const [compactLayout, setCompactLayout] = useState(false);
-  const [timeFormat, setTimeFormat] = useState('timestamp');
+  const [timeFormat, setTimeFormat] = useState<TimeFormat>('timestamp');
 
   return (
     <SettingsContext.Provider

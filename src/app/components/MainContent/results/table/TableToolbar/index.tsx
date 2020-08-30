@@ -8,13 +8,15 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
+import { TimeFormat } from 'app/contexts/SettingsContext';
+
 import styles from './style';
 
 interface Props {
   title: string;
   classes: any;
   hasTime: boolean;
-  timeFormat: 's' | 'ms' | 'ns' | 'timestamp';
+  timeFormat: TimeFormat;
   handleFormatChange:
     | ((
         event: ChangeEvent<{ name?: string | undefined; value: unknown }>,
@@ -23,7 +25,7 @@ interface Props {
     | undefined;
 }
 
-const TableToolbar = ({
+const TableToolbar: React.FC<Props> = ({
   classes,
   title,
   timeFormat,
