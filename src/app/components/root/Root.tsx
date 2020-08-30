@@ -5,11 +5,14 @@ import theme from '../theme';
 
 import { App } from '../App';
 import client from '../../apollo';
+import { ErrorBoundary } from './errorBoundary/ErrorBoundary';
 
 export const Root: React.FC = () => (
-  <ApolloProvider client={client}>
-    <MuiThemeProvider theme={theme}>
-      <App />
-    </MuiThemeProvider>
-  </ApolloProvider>
+  <ErrorBoundary>
+    <ApolloProvider client={client}>
+      <MuiThemeProvider theme={theme}>
+        <App />
+      </MuiThemeProvider>
+    </ApolloProvider>
+  </ErrorBoundary>
 );
