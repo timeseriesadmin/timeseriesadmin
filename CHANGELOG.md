@@ -4,6 +4,12 @@
 
 ### :bug: Bug Fix
 
+- fix https://github.com/timeseriesadmin/timeseriesadmin/issues/463 by updating mui-datatables
+
+## v0.1.12
+
+### :bug: Bug Fix
+
 - fix different time formats for timestamp = 0
 
 ### :rocket: New Features
