@@ -100,7 +100,7 @@ describe('Response', () => {
           cy.get('tr').should('have.length', 1 + 1 + 20); // header + footer + content
         });
       cy.findByLabelText('Next Page').click();
-      for (let i = 20; i < 40; i++) {
+      for (let i = 60; i < 80; i++) {
         cy.findByText(`${i + 1}`).should('exist');
       }
       cy.findByLabelText('Previous Page').click(); // go back to default 1st page
