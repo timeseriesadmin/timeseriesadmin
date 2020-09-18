@@ -1,7 +1,7 @@
 import { parseQueryResults } from './parseQueryResults';
 
 describe('parseQueryResults()', () => {
-  test('success', async () => {
+  test('standard and qouted tag values', async () => {
     // given
     const data = `name,tags,key
 ,,"weather,location=eu"
@@ -20,6 +20,26 @@ test123,,asd="""as-d"""`;
       { key: 'weather,location=us-midwest', name: 'test', tags: '' },
       { key: 'weather,location123=eu', name: '', tags: '123' },
       { key: 'asd="as-d"', name: 'test123', tags: '' },
+    ]);
+  });
+
+  test('dotted tags', async () => {
+    // given
+    const data = `name,tags,time,"""my.tag""","""other.tag"""
+test123,,1465839830100400200,123,asdf.xcv`;
+
+    // when
+    const parsed = parseQueryResults(data);
+
+    // then
+    expect(parsed).toStrictEqual([
+      {
+        name: 'test123',
+        'my.tag': '123',
+        'other.tag': 'asdf.xcv',
+        tags: '',
+        time: '1465839830100400200',
+      },
     ]);
   });
 
