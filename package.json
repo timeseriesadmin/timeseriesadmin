@@ -39,7 +39,7 @@
     "react-inspector": "5.0.1",
     "react-popper": "1.3.7",
     "react-scripts": "3.4.0",
-    "react-use": "13.27.1",
+    "react-use": "15.3.8",
     "typescript": "3.9.7"
   },
   "scripts": {
