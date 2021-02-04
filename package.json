@@ -27,7 +27,7 @@
     "final-form": "4.20.1",
     "graphql": "14.7.0",
     "graphql-tag": "2.11.0",
-    "history": "4.10.1",
+    "history": "5.0.0",
     "lodash": "4.17.20",
     "mui-datatables": "2.15.0",
     "papaparse": "5.2.0",
