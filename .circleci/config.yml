@@ -21,7 +21,7 @@ jobs: # a collection of steps
 
   run_tests:
     docker:
-      - image: circleci/node:10.23.2
+      - image: circleci/node:10.24.1
         environment:
           TERM: xterm
     steps:
