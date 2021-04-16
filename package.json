@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "@apollo/react-testing": "3.1.4",
-    "@testing-library/cypress": "6.0.1",
+    "@testing-library/cypress": "7.0.6",
     "@testing-library/react": "10.4.9",
     "@types/qs": "6.9.6",
     "@typescript-eslint/eslint-plugin": "2.34.0",
