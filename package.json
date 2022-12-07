@@ -32,7 +32,7 @@
     "lodash": "4.17.19",
     "mui-datatables": "3.4.1",
     "papaparse": "5.2.0",
-    "qs": "6.9.4",
+    "qs": "6.9.7",
     "react": "16.13.1",
     "react-apollo": "3.1.5",
     "react-dom": "16.13.1",
