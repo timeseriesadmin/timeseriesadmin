@@ -24,7 +24,7 @@
     "axios": "0.24.0",
     "compare-versions": "3.6.0",
     "date-fns": "2.24.0",
-    "final-form": "4.20.4",
+    "final-form": "4.20.10",
     "graphql": "14.7.0",
     "graphql-tag": "2.12.6",
     "history": "4.10.1",
