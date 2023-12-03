@@ -72,7 +72,7 @@
     "@types/qs": "6.9.7",
     "@typescript-eslint/eslint-plugin": "2.34.0",
     "@typescript-eslint/parser": "2.34.0",
-    "babel-eslint": "10.1.0",
+    "@babel/eslint-parser": "7.11.0",
     "babel-polyfill": "6.26.0",
     "codecov": "3.8.3",
     "cypress": "4.12.1",
